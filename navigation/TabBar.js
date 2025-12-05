@@ -32,11 +32,12 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
             position: 'absolute',
             backgroundColor: '#7f9C88',
             borderRadius: 28,
-            height: dimensions.height - 18,
+            height: dimensions.height - 24,
             width: buttonWidth,
           },
-          position === 0 && [{ left: 10 }, { width: buttonWidth - 6 }],
-          position === 2 && [{ marginLeft: -6 }, { width: buttonWidth - 6 }],
+          position === 0 && [{ left: 14 }, { width: buttonWidth - 14 }],
+          position === 1 && [{ left: 4 }, { width: buttonWidth - 10 }],
+          position === 2 && [{ marginLeft: -2 }, { width: buttonWidth - 14 }],
         ]}
       />
       {state.routes.map((route, index) => {
@@ -87,7 +88,6 @@ export const styles = StyleSheet.create({
     borderRadius: 35,
     // borderBottomRightRadius: 35,
     // borderBottomLeftRadius: 35,
-    elevation: 10,
     padding: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -96,20 +96,4 @@ export const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOpacity: 0.2,
   },
-  // tabButton: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   backgroundColor: 'red',
-  //   fontSize: 20,
-  //   flex: 1,
-  //   height: '90%',
-  //   borderRadius: 28,
-  //   marginHorizontal: 8,
-  // },
-  // label: {
-  //   fontSize: 14,
-  //   fontWeight: 600,
-  //   color: '#2E2F2F',
-  //   marginTop: 4,
-  // },
 });

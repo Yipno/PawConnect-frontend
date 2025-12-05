@@ -21,7 +21,8 @@ export default function Button({ title, bg, onPress, textColor, width }) {
       onPress={onPress}
       style={{ width: width || 360 }}>
       <Animated.View
-        style={[styles.btn, { backgroundColor: bg || colors.darkSage }, animatedStyle]}>
+        className='h-16 rounded-2xl justify-center items-center'
+        style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle]}>
         <Text style={[styles.text, { color: textColor || colors.offwhite }]}>{title}</Text>
       </Animated.View>
     </Pressable>

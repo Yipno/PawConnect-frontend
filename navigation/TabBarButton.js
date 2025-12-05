@@ -35,7 +35,7 @@ export default function TabBarButton({ icon, onPress, isFocused, color, label })
   return (
     <Pressable onPress={onPress} style={styles.tabButton}>
       <Animated.View style={animatedIconStyle}>
-        <Ionicons name={icon} size={32} color={color} />
+        <Ionicons name={icon} size={32} color={color} style={isFocused && styles.icons} />
       </Animated.View>
       <Animated.Text style={[styles.label, animatedTextStyle]}>{label}</Animated.Text>
     </Pressable>
@@ -43,31 +43,11 @@ export default function TabBarButton({ icon, onPress, isFocused, color, label })
 }
 //isFocused && { backgroundColor: '#7f9C88'
 export const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    height: 100,
-    backgroundColor: '#faf9f7',
-    position: 'absolute',
-    bottom: 30,
-    left: 30,
-    right: 30,
-    borderRadius: 35,
-    // borderBottomRightRadius: 35,
-    // borderBottomLeftRadius: 35,
-    elevation: 10,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowRadius: 10,
-    shadowOpacity: 0.1,
-  },
   tabButton: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 20,
-    flex: 1,
     height: '90%',
     borderRadius: 28,
     marginHorizontal: 8,
@@ -77,5 +57,10 @@ export const styles = StyleSheet.create({
     fontWeight: 600,
     color: '#2E2F2F',
     marginTop: 4,
+  },
+  icons: {
+    shadowOffset: { width: 1, height: 3 },
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
   },
 });
