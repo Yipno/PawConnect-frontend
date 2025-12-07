@@ -3,13 +3,14 @@ import { Pressable, Text, StyleSheet } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-export default function Button({ title, bg, onPress, textColor, width }) {
+export default function Button({ title, bg, onPress, textColor, width, border }) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
 
+  const borders = border ? ['border-[3px]', `border-${border}`] : [];
   return (
     <Pressable
       onPressIn={() => {
@@ -19,9 +20,16 @@ export default function Button({ title, bg, onPress, textColor, width }) {
         scale.value = withSpring(1);
       }}
       onPress={onPress}
-      style={{ width: width || 360 }}>
+      style={{
+        width: width || 360,
+        shadowOffset: { width: 2, height: 3 },
+        shadowColor: 'grey',
+        shadowOpacity: 0.4,
+      }}>
       <Animated.View
-        className='h-16 my-2 rounded-2xl justify-center items-center'
+        className={`h-16 my-2 rounded-2xl justify-center items-center bg-deepSage text-deepSage ${borders.join(
+          ' '
+        )}`}
         style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle]}>
         <Text style={[styles.text, { color: textColor || colors.offwhite }]}>{title}</Text>
       </Animated.View>

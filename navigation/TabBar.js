@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.3)',
     borderWidth: 1,
     position: 'absolute',
-    bottom: 30,
+    bottom: 20,
     left: 30,
     right: 30,
     borderRadius: 35,
