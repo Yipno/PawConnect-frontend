@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors,
       fontSize: typography,
+      fontFamily: { manrope: ['Manrope'] },
       keyframes: {
         float: {
           '0%': { transform: 'translateY(0px)' },

@@ -1,7 +1,8 @@
 export default {
-  h1: ['40px', { fontWeight: '700' }],
-  h2: ['36px', { fontWeight: '600' }],
-  h3: ['32px', { fontWeight: '500' }],
-  body: [18],
-  small: ['12px'],
+  h1: [40, { fontWeight: '700' }],
+  h2: [36, { fontWeight: '600' }],
+  h3: [24, { fontWeight: '600' }],
+  h4: [20, { fontWeight: '600' }],
+  body: [17],
+  small: [14],
 };

@@ -1,10 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { useFonts } from 'expo-font';
 import { StyleSheet, Text, View } from 'react-native';
 import './global.css';
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App() {
+  const loaded = useFonts({ Manrope: require('./assets/fonts/Manrope-VariableFont.ttf') });
+
   return (
     <NavigationContainer>
       <AppNavigator />
