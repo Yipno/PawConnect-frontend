@@ -16,7 +16,7 @@ export default function Reports() {
         alignItems: 'center',
       }}
       className='bg-offwhite'>
-      <Text className='text-h1 font-manrope'>Reports</Text>
+      <Text className='text-h1 font-manrope'>Signalements</Text>
       <ScrollView style={{ flex: 1, width: '100%' }}>
         <Card
           title='Chien attaché et surtout trop long'
@@ -31,6 +31,7 @@ export default function Reports() {
         <Card />
         <Card />
         <Card />
+        <View style={{ marginBottom: 120 }} />
       </ScrollView>
     </SafeAreaView>
   );
