@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import SquaredButton from '../components/ui/SquaredButton';
 
 export default function Profile() {
   const { colors } = useTheme();
@@ -15,7 +16,6 @@ export default function Profile() {
         backgroundColor: colors.offwhite,
       }}>
       <Input label='FirstName' />
-      <Input label='LastName' />
       <Input label='Email' placeholder='example@pawconnect...' type='email' icon='mail' />
       <Input label='Password' placeholder='••••••••' type='password' icon='key' />
       <Button title='Click Me' onPress={() => alert('click')} />
@@ -26,6 +26,12 @@ export default function Profile() {
         title='Click Me'
         onPress={() => alert('click')}
       />
+      <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
+        <SquaredButton />
+        <SquaredButton title='FAQ' icon='help-circle' />
+        <SquaredButton title='Paramètres' icon='cog' />
+        <SquaredButton title='Animaux' icon='paw' />
+      </View>
     </SafeAreaView>
   );
 }
