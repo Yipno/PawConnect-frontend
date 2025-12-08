@@ -4,14 +4,24 @@ import { useFonts } from 'expo-font';
 import { StyleSheet, Text, View } from 'react-native';
 import './global.css';
 import AppNavigator from './navigation/AppNavigator';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import user from './reducers/user';
+import animals from './reducers/animals';
+
+const store = configureStore({
+  reducer: { user, animals },
+});
 
 export default function App() {
   const loaded = useFonts({ Manrope: require('./assets/fonts/Manrope-VariableFont.ttf') });
 
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </Provider>
   );
 }
 
