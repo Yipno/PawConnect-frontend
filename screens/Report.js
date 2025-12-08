@@ -1,10 +1,13 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
 
 export default function Reports() {
   const handleClick = () => {
-    alert('ca marche');
+    Alert.alert('Card pressed', 'This will open full screen modal with all infos of this report', [
+      { text: 'Cancel', style: 'destructive', onPress: () => Alert.alert('Cancel Pressed') },
+      { text: 'Understood', onPress: () => console.log('OK') },
+    ]);
   };
 
   return (
