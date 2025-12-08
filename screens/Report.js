@@ -1,8 +1,12 @@
 import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
 export default function Reports() {
+  let [admin, setAdmin] = useState(false);
+
   const handleClick = () => {
     Alert.alert('Card pressed', 'This will open full screen modal with all infos of this report', [
       { text: 'Cancel', style: 'destructive', onPress: () => Alert.alert('Cancel Pressed') },
@@ -18,7 +22,8 @@ export default function Reports() {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      className='bg-offwhite'>
+      className='bg-offwhite'
+    >
       <Text className='text-h1 font-manrope'>Signalements</Text>
       <ScrollView style={{ flex: 1, width: '100%' }}>
         <Card
