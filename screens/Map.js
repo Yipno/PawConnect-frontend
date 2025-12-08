@@ -6,96 +6,34 @@ import useTheme from '../hooks/useTheme';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
-//import { useDispatch, useSelector } from 'react-redux';
-//import { login } from "../reducers/user";
+// import { useDispatch, useSelector } from 'react-redux';
+// import { login } from "../reducers/user";
 
 export default function MapScreen() {
-  // THEME COLORS
   const { colors } = useTheme();
 
-  // GET USER DATA FROM REDUCER
-  //const user = useSelector((state) => state.user.value);
+  // GET DATA FROM REDUCER
+  // const user = useSelector((state) => state.user.value);
 
   // TEST DATA USER
   const userData = { lastname: 'Doe', firstname: 'John', role: 'civil' };
+
+  // TEST DATA MARKER OK
+    const markerData = [
+    { name: "Asso1", latitude: 48.859, longitude: 2.347 },
+    { name: "Asso2", latitude: 45.758, longitude: 4.835 },
+    { name: "Asso3", latitude: 43.282, longitude: 5.405 },
+  ];
+
+  const markers = markerData.map((data, i) => {
+    return <Marker key={i} coordinate={{ latitude: data.latitude, longitude: data.longitude }} title={data.name} />;
+  });
 
   // USER LOCATION
   const [currentLocation, setCurrentLocation] = useState(null);
   console.log('current loc', currentLocation);
   const mapRef = useRef(null);
 
-  // GET USER PERMISSION & LOCATION - TEST CANASKAGAIN KO
-  /*
-  useEffect(() => {
-    handleLocationPermission();
-  }, []);
-
-  const handleLocationPermission = async () => {
-    const {result, canAskAgain } = await Location.requestForegroundPermissionsAsync();
-    const status = result?.status;
-    console.log("result 0", result);
-    console.log("ask", canAskAgain);
-
-    if (status === 'granted') {
-      const location = await Location.getCurrentPositionAsync({});
-      console.log(location);
-      console.log('coords', location.coords);
-      setCurrentLocation(location.coords);
-      return;
-    }
-
-    if (status !== 'granted' && canAskAgain) {
-      Alert.alert(
-          'Permission refusée',
-          'Veuillez accepter de partager votre localisation pour utiliser Paw Connect',
-          [
-            {
-              text: 'Paramétrer',
-              onPress: () => {handleLocationPermission()}}
-          ]
-        );
-        console.log("paramétrer")
-        console.log("status", status);
-        return;
-    }
-  };*/
-
-  /*
-  // GET USER PERMISSION & LOCATION - TEST APP SETTINGS
-  useEffect(() => {
-    (async () => {
-      const result = await Location.requestForegroundPermissionsAsync();
-      const status = result?.status;
-
-      if (status !== 'granted') {
-        Alert.alert(
-          'Permission refusée',
-          'Veuillez accepter de partager votre localisation pour utiliser Paw Connect',
-          [
-            {
-              text: 'Paramétrer',
-              onPress: () => {
-                // OPENS APP SETTINGS
-                if (Platform.OS === 'ios') {
-                  Linking.openURL('app-settings:');
-                } else {
-                  Linking.openSettings();
-                }
-              },
-            },
-          ]
-        );
-        console.log('error');
-      } else {
-        const location = await Location.getCurrentPositionAsync({});
-        console.log(location);
-        console.log('coords', location.coords);
-        setCurrentLocation(location.coords);
-      }
-    })();
-  }, []);
-
-  */
 
   // GET USER PERMISSION & LOCATION OK - SANS GESTION DU REFUS
   useEffect(() => {
@@ -139,8 +77,24 @@ export default function MapScreen() {
     console.log('update', currentLocation);
   };
 
+ 
+  // DISPLAY MARKER DEPENDING ROLE
+  /*
+  let userMarker;
+  if (userData.role === 'civil') {
+    userMarker = (
+      {establishmentsMarkers}
+    );
+  } else {
+    userMarker =(
+      {animalsMarkers});
+  };*/
+
+  // DISPLAY MAP DEPENDING ROLE
   let userMap;
   // OK console.log('user.role', userData.role);
+
+  // USER MAP (PENDING : MARKERS + NAVIGATION TO REPORT)
   if (userData.role === 'civil') {
     userMap = (
       <>
@@ -156,7 +110,9 @@ export default function MapScreen() {
           }}
           showsUserLocation
           showsMyLocationButton={false}
-        ></MapView>
+        >
+         {markers}
+        </MapView>
         <View className='absolute flex-col bottom-40 right-10'>
           <TouchableOpacity
             className='rounded-full bg-white items-center justify-center size-10 start-96 bottom-5'
@@ -174,6 +130,8 @@ export default function MapScreen() {
       </>
     );
   } else {
+
+  // ESTABLISHMENTS MAP (PENDING : MARKERS)
     userMap = (
       <>
         <MapView
@@ -199,7 +157,9 @@ export default function MapScreen() {
     );
   }
 
-  return <View style={{ flex: 1 }}>{userMap}</View>;
+  return (
+  <View style={{ flex: 1 }}>{userMap}</View>
+  );
 }
 
 const styles = StyleSheet.create({});
