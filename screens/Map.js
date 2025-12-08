@@ -56,7 +56,7 @@ export default function MapScreen() {
         }}
         showsUserLocation
         showsMyLocationButton
-        // MOVES MYLOCATIONBUTTON (à revoir)
+        // MOVES MYLOCATIONBUTTON (bouton non natif à créer)
         mapPadding={{ top: 30, right: 0, bottom: 0, left: 0 }}
       >
         {currentLocation && <Marker coordinate={currentLocation} title='Votre position' />}
