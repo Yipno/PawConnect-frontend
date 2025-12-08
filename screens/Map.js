@@ -7,6 +7,8 @@ import { useEffect, useState, useRef } from 'react';
 export default function MapScreen() {
   const [currentLocation, setCurrentLocation] = useState(null);
   console.log('current loc', currentLocation);
+  const mapRef = useRef(null);
+
   const [tempCoordinates, setTempCoordinates] = useState(null);
   const [newPlace, setNewPlace] = useState('');
 
@@ -25,31 +27,35 @@ export default function MapScreen() {
     })();
   }, []);
 
-  // DISPLAY INITIAL REGION WITH NO USER LOCATION
-  const defaultRegion = {
-    latitude: 48.866667,
-    longitude: 2.333333,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
+  // CENTERED MAP ON USER LOCATION WITH USEREF & ANIMATETOREGION
+  useEffect(() => {
+    if (currentLocation && mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        },
+        500
+      );
+    }
+  }, [currentLocation]);
 
   return (
     <View style={{ flex: 1 }}>
       <MapView
+      ref={mapRef}
         mapType='standard'
         style={{ flex: 1 }}
-        initialRegion={
-          currentLocation
-            ? {
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }
-            : defaultRegion
-        }
-        showsUserLocation={true}
-        showsMyLocationButton={true}
+        initialRegion={{
+          latitude: 48.866667,
+          longitude: 2.333333,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+        showsUserLocation
+        showsMyLocationButton
         // MOVES MYLOCATIONBUTTON (à revoir)
         mapPadding={{ top: 30, right: 0, bottom: 0, left: 0 }}
       >
