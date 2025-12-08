@@ -16,7 +16,7 @@ export default function Input({ label, placeholder, type = 'text', icon, onChang
           className='absolute top-[10px] left-[6px]'
           name={iconName || 'person-circle-outline'}
           size={26}
-          color={'#9b9b9b'}
+          color='#9b9b9b'
         />
         <TextInput
           placeholder={placeholder || 'Placeholder'}
