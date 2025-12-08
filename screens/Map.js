@@ -34,7 +34,6 @@ export default function MapScreen() {
   console.log('current loc', currentLocation);
   const mapRef = useRef(null);
 
-
   // GET USER PERMISSION & LOCATION OK - SANS GESTION DU REFUS
   useEffect(() => {
     (async () => {
