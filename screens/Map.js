@@ -77,7 +77,6 @@ export default function MapScreen() {
     console.log('update', currentLocation);
   };
 
- 
   // DISPLAY MARKER DEPENDING ROLE
   /*
   let userMarker;
