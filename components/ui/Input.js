@@ -11,12 +11,12 @@ export default function Input({
   value,
   error,
 }) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(type === 'password');
   const [isFocused, setIsFocused] = useState(false);
   // set the keyboard for the type of input
   const keyboardType =
     type === 'email' ? 'email-address' : type === 'number' ? 'numeric' : 'default';
-  const secureTextEntry = !isVisible;
+  const secureTextEntry = isVisible;
   const iconName = icon && icon + '-outline';
 
   return (
@@ -24,7 +24,7 @@ export default function Input({
       <Text className='font-manrope left-3 text-text'>{label || 'Label'}</Text>
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${
-          isFocused ? 'border-softOrange border-2' : 'border-deepSage'
+          isFocused ? 'border-softOrange border-[2px]' : 'border-deepSage'
         } ${error ? 'border-red-600' : 'border-deepSage'}`}>
         <Ionicons
           className='mr-3'
@@ -37,7 +37,7 @@ export default function Input({
           placeholderTextColor='#9b9b9b'
           keyboardType={keyboardType}
           secureTextEntry={secureTextEntry}
-          autoCapitalize={type === 'email' ? 'none' : 'sentences'}
+          autoCapitalize={type === 'text' ? 'words' : 'none'}
           className={`h-full flex-1 text-body font-manrope`}
           onChangeText={onChangeText}
           value={value}
@@ -47,7 +47,7 @@ export default function Input({
         {type === 'password' && (
           <Pressable className='ml-3' onPress={() => setIsVisible(!isVisible)}>
             <Ionicons
-              name={isVisible ? 'eye-outline' : 'eye-off-outline'}
+              name={isVisible ? 'eye-off-outline' : 'eye-outline'}
               size={26}
               className=''
               color='#9b9b9b'
