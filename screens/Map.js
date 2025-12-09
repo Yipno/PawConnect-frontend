@@ -29,7 +29,7 @@ export default function MapScreen({ navigation }) {
     { name: 'Asso3', latitude: 43.282, longitude: 5.405 },
   ];
 
-  // SEND DATA TO REDUCER
+  // SEND DATA TO ANIMALS REDUCER
   const handleData = () => {
     const newAnimal = {
       location: {
@@ -49,18 +49,17 @@ export default function MapScreen({ navigation }) {
       history: [],
     };
     dispatch(getReports(newAnimal));
-    console.log('reducers', animals);
+    // console.log('reducers', animals);
     if (animals.length > 0) {
       // console.log('animals reducers: ', animals);
       console.log('animals date: ', animals[0].date);
       console.log('animals type: ', animals[0].animalType);
       console.log('animal lat: ', animals[0].location.lat);
       console.log('animal long: ', animals[0].location.long);
-      console.log('animal state: ', animals[0].state.toString());
     }
   };
 
-  // CALCULATE DISTANCE BETWEEN USER AND MARKER
+  // CALCULATE DISTANCE BETWEEN USER (AGENT) AND (MARKER)
   const toRadius = (deg) => {
     return deg * (Math.PI / 180);
   };
@@ -84,9 +83,9 @@ export default function MapScreen({ navigation }) {
   const updateDistances = (userCoordinates) => {
     const newLocations = animals.map((data) => {
       const animalLocation = {
-      latitude: data.location.lat,
-      longitude: data.location.long,
-    };
+        latitude: data.location.lat,
+        longitude: data.location.long,
+      };
       return { ...data, distance: convertCoordsToKm(userCoordinates, animalLocation) };
     });
 
@@ -101,7 +100,7 @@ export default function MapScreen({ navigation }) {
         <Marker
           key={i}
           coordinate={{ latitude: data.latitude, longitude: data.longitude }}
-          title={data.animalType}
+          title={data.name}
           description={data.distance}
         />
       );
@@ -113,7 +112,7 @@ export default function MapScreen({ navigation }) {
           key={i}
           coordinate={{ latitude: data.location.lat, longitude: data.location.long }}
           title={data.animalType}
-          description={data.distance}
+          description={`${data.distance} km`}
         />
       );
     });
@@ -135,7 +134,6 @@ export default function MapScreen({ navigation }) {
         // OK console.log('coords', location.coords);
         setCurrentLocation(location.coords);
         updateDistances(location.coords);
-
       }
     })();
   }, []);
@@ -168,44 +166,17 @@ export default function MapScreen({ navigation }) {
     console.log('update', currentLocation);
   };
 
-  // DISPLAY MARKER DEPENDING ROLE
-  /*
-  let userMarker;
-  if (userData.role === 'civil') {
-    userMarker = (
-      {establishmentsMarkers}
-    );
-  } else {
-    userMarker =(
-      {animalsMarkers});
-  };*/
-
   // DISPLAY MAP DEPENDING ROLE
   let userMap;
   // console.log('user.role', user.role);
 
-  // USER MAP (PENDING : MARKERS)
+  // USER MAP
   if (user.role === 'civil') {
     userMap = (
       <>
-        <MapView
-          ref={mapRef}
-          mapType='standard'
-          style={{ flex: 1 }}
-          initialRegion={{
-            latitude: 48.866667,
-            longitude: 2.333333,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-          showsUserLocation
-          showsMyLocationButton={false}
-        >
-          {markers}
-        </MapView>
         <View className='absolute flex-col bottom-40 right-16'>
           <TouchableOpacity
-            className='rounded-full bg-white items-center justify-center size-10 start-72 bottom-5'
+            className='rounded-full bg-white items-center justify-center size-10 start-80 bottom-5'
             onPress={updateUserLocation}
           >
             <Ionicons name='locate-sharp' size={32} color='black' />
@@ -215,30 +186,15 @@ export default function MapScreen({ navigation }) {
             bg={colors.softOrange}
             textColor={colors.offwhite}
             title='Signaler un animal'
-            onPress={() => handleData()}
+            onPress={() => navigation.navigate('Signalements')}
           />
         </View>
       </>
     );
   } else {
-    // ESTABLISHMENTS MAP (PENDING : MARKERS)
+    // ESTABLISHMENTS MAP
     userMap = (
       <>
-        <MapView
-          ref={mapRef}
-          mapType='standard'
-          style={{ flex: 1 }}
-          initialRegion={{
-            latitude: 48.866667,
-            longitude: 2.333333,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-          showsUserLocation
-          showsMyLocationButton={false}
-        >
-          {markers}
-        </MapView>
         <TouchableOpacity
           className='absolute rounded-full bottom-40 right-10 bg-white items-center'
           onPress={() => (updateUserLocation(), handleData())}
@@ -249,7 +205,26 @@ export default function MapScreen({ navigation }) {
     );
   }
 
-  return <View className='flex-1'>{userMap}</View>;
+  return (
+    <View className='flex-1'>
+      <MapView
+        ref={mapRef}
+        mapType='standard'
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: 48.866667,
+          longitude: 2.333333,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+        showsUserLocation
+        showsMyLocationButton={false}
+      >
+        {markers}
+      </MapView>
+      {userMap}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({});
