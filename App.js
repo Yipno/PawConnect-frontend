@@ -8,6 +8,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import user from './reducers/user';
 import animals from './reducers/animals';
+import 'react-redux';
 
 const store = configureStore({
   reducer: { user, animals },
