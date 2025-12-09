@@ -5,7 +5,8 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import SquaredButton from '../components/ui/SquaredButton';
 
-export default function Profile() {
+
+export default function Profile({ navigation }) {
   const { colors } = useTheme();
 
   const handleClick = () => {
@@ -42,7 +43,7 @@ export default function Profile() {
         <SquaredButton onPress={handleClick} />
         <SquaredButton title='FAQ' icon='help-circle' />
         <SquaredButton title='Paramètres' icon='cog' />
-        <SquaredButton title='Animaux' icon='paw' />
+        <SquaredButton title='Mes signalements' icon='paw'  onPress={() => navigation.navigate('MyReports')} />
       </View>
     </SafeAreaView>
   );
