@@ -8,6 +8,7 @@ import AuthNavigator from './AuthNavigator';
 export default function RootNavigator() {
   const user = useSelector(state => state.user.value);
   return (
+    // Verification si token dans redux => Go dans l'appli sinon => route Auth
     <NavigationContainer>{user.token ? <AppNavigator /> : <AuthNavigator />}</NavigationContainer>
   );
 }

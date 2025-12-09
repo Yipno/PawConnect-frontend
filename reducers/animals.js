@@ -28,5 +28,5 @@ const animalsSlice = createSlice({
   },
 });
 
-export const { getReports, updateReport } = animalsSlice.actions;
+export const { getReports, updateReport, deleteReport } = animalsSlice.actions;
 export default animalsSlice.reducer;

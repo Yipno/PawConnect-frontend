@@ -16,6 +16,7 @@ export default function App() {
   const loaded = useFonts({ Manrope: require('./assets/fonts/Manrope-VariableFont.ttf') });
 
   return (
+    // RootNavigator => NAVIGATEUR RACINE qui a acces au reducer
     <Provider store={store}>
       <RootNavigator />
     </Provider>
