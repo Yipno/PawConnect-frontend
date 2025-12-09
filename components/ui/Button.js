@@ -3,7 +3,7 @@ import { Pressable, Text, StyleSheet } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-export default function Button({ title, bg, onPress, textColor, width, border }) {
+export default function Button({ title, bg, onPress, textColor, width, border, margin }) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
@@ -30,8 +30,12 @@ export default function Button({ title, bg, onPress, textColor, width, border })
         className={`h-16 my-2 rounded-2xl justify-center items-center bg-deepSage text-deepSage ${borders.join(
           ' '
         )}`}
-        style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle]}>
-        <Text style={[styles.text, { color: textColor || colors.offwhite }]}>{title}</Text>
+        style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle, margin]}>
+        <Text
+          style={{ color: textColor || colors.offwhite }}
+          className='font-manrope font-bold text-h3'>
+          {title}
+        </Text>
       </Animated.View>
     </Pressable>
   );
@@ -50,9 +54,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 3,
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 600,
   },
 });
