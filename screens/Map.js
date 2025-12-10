@@ -186,7 +186,7 @@ export default function MapScreen({ navigation }) {
 
       setLocations(newLocations);
     }
-  }, [user?.role, currentLocation]);
+  }, [user?.role, animals, currentLocation]);
 
   console.log('location', locations);
 
