@@ -1,7 +1,8 @@
 import { View, Text, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Input({ label, placeholder, type = 'text', icon, onChangeText, value }) {
+export default function Input({ label, placeholder, type = 'text', icon, onChangeText, value,
+ }) {
   // set the keyboard for the type of input
   const keyboardType =
     type === 'email' ? 'email-address' : type === 'number' ? 'numeric' : 'default';

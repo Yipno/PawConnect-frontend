@@ -5,6 +5,11 @@ export default function HomeScreen() {
   return (
     <SafeAreaView>
       <Text>HomeScreen</Text>
+
+      <Button
+        title="Aller à SignUp"
+        onPress={() => navigation.navigate('SignUp')}
+      />
     </SafeAreaView>
   );
 }
