@@ -16,7 +16,7 @@ export default function Input({
   // set the keyboard for the type of input
   const keyboardType =
     type === 'email' ? 'email-address' : type === 'number' ? 'numeric' : 'default';
-  const secureTextEntry = !isVisible;
+  const secureTextEntry = isVisible;
   const iconName = icon && icon + '-outline';
 
   return (
@@ -25,7 +25,8 @@ export default function Input({
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${
           isFocused ? 'border-softOrange border-2' : 'border-deepSage'
-        } ${error ? 'border-red-600' : 'border-deepSage'}`}>
+        } ${error ? 'border-red-600' : 'border-deepSage'}`}
+      >
         <Ionicons
           className='mr-3'
           name={iconName || 'person-circle-outline'}
