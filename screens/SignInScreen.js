@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import { login } from '../reducers/user';
+import { getReports } from '../reducers/animals';
 import { useState } from 'react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -25,6 +26,7 @@ export default function SignInScreen({ navigation }) {
     if (isLoading) return; // Prevent double tap
     setErrors({ email: '', password: '' });
     setBackendError('');
+
     setIsLoading(true);
     // check if fields are filled
     let checkFields = {};
@@ -64,6 +66,16 @@ export default function SignInScreen({ navigation }) {
         return;
       }
       // ADD HERE FETCH OF REPORTS AND DISPATCH TO REDUX
+      /* 
+        const response = await fetch(`${BACKEND}/animals/${user.token}`);
+        const data = await response.json();
+        if(!response.ok) {
+        setBackendError(data.error || 'Erreur lors de la recuperation des reports');
+        setIsLoading(false);
+        return;
+        }
+        dispatch(getReports(data.reports))
+      */
       dispatch(login(data.user));
       setIsLoading(false);
       setEmail('');

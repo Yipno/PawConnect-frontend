@@ -4,8 +4,12 @@ import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import SquaredButton from '../components/ui/SquaredButton';
+import CustomModal from '../components/ui/CustomModal';
+import { useState } from 'react';
 
 export default function Profile() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
   const { colors } = useTheme();
 
   const handleClick = () => {
@@ -26,7 +30,31 @@ export default function Profile() {
         justifyContent: 'start',
         alignItems: 'center',
         backgroundColor: colors.offwhite,
-      }}>
+      }}
+    >
+
+       {/* TEST : Modal classique et full screen */}
+      <View className='w-full flex items-center mt-6'>
+        <Button title='Modal classique' onPress={() => setModalVisible(true)} />
+      </View>
+
+      <View className='w-full flex items-center mt-6'>
+        <Button title='Modal Full Screen' onPress={() => setFullscreenModalVisible(true)} />
+      </View>
+
+      <CustomModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        title='Modal classique'
+        content={<Text>Message de ma modale </Text>}
+      />
+      <CustomModal
+        visible={fullscreenModalVisible}
+        onClose={() => setFullscreenModalVisible(false)}
+        title='Modal fullscreen'
+        content={<Text>Cette modale prend tout l'écran </Text>}
+        fullscreen={true}
+      />
       <Input label='FirstName' />
       <Input label='Email' placeholder='example@pawconnect...' type='email' icon='mail' />
       <Input label='Password' placeholder='••••••••' type='password' icon='key' />
@@ -42,7 +70,7 @@ export default function Profile() {
         <SquaredButton onPress={handleClick} />
         <SquaredButton title='FAQ' icon='help-circle' />
         <SquaredButton title='Paramètres' icon='cog' />
-        <SquaredButton title='Animaux' icon='paw' />
+        <SquaredButton title='Mes signalements' icon='paw'  onPress={() => navigation.navigate('MyReports')} />
       </View>
     </SafeAreaView>
   );

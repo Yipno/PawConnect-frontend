@@ -9,8 +9,8 @@ const animalsSlice = createSlice({
   initialState,
   reducers: {
     getReports: (state, action) => {
-      state.value = action.payload;
-      console.log('reports acquired');
+      state.value = action.payload ;
+      console.log('reports acquired', action.payload);
     },
     updateReport: (state, action) => {
       const { id, updatedStatus, newHistory } = action.payload;
@@ -28,5 +28,5 @@ const animalsSlice = createSlice({
   },
 });
 
-export const { getReports, updateReport } = animalsSlice.actions;
+export const { getReports, updateReport, deleteReport } = animalsSlice.actions;
 export default animalsSlice.reducer;
