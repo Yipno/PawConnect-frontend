@@ -16,7 +16,7 @@ import Input from '../components/ui/Input';
 import { login } from '../reducers/user';
 import { BASE_URL } from '@env';
 
-export default function SignUp() {
+export default function SignUp({navigation}) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
 
@@ -253,7 +253,7 @@ export default function SignUp() {
             textColor={colors.deepSage}
             border='deepSage'
             title='Se connecter'
-            onPress={() => alert('click')}
+            onPress={() => navigation.navigate('SignIn')}
           />
         </SafeAreaView>
       </ScrollView>
