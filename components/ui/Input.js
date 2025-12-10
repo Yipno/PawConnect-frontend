@@ -2,7 +2,6 @@ import { View, Text, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 
-<<<<<<< HEAD
 export default function Input({
   label,
   placeholder,
@@ -14,10 +13,6 @@ export default function Input({
 }) {
   const [isVisible, setIsVisible] = useState(type === 'password');
   const [isFocused, setIsFocused] = useState(false);
-=======
-export default function Input({ label, placeholder, type = 'text', icon, onChangeText, value,
- }) {
->>>>>>> SignUp-frontend
   // set the keyboard for the type of input
   const keyboardType =
     type === 'email' ? 'email-address' : type === 'number' ? 'numeric' : 'default';

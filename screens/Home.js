@@ -6,7 +6,6 @@ import useTheme from '../hooks/useTheme';
 export default function HomeScreen({ navigation }) {
   const { colors } = useTheme();
   return (
-<<<<<<< HEAD
     <SafeAreaView className='flex-1 justify-evenly items-center bg-offwhite'>
       <View className='h-1/3 w-11/12 items-center'>
         <Text className='text-h1 text-center font-manrope'>Bienvenue sur</Text>
@@ -27,15 +26,6 @@ export default function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate('SignUp')}
         />
       </View>
-=======
-    <SafeAreaView>
-      <Text>HomeScreen</Text>
-
-      <Button
-        title="Aller à SignUp"
-        onPress={() => navigation.navigate('SignUp')}
-      />
->>>>>>> SignUp-frontend
     </SafeAreaView>
   );
 }

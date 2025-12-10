@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReports } from '../reducers/animals';
+import 'moment/locale/fr';
+moment.locale('fr');
 
 export default function MyReports() {
   const BACKEND_ADDRESS = process.env.EXPO_PUBLIC_BACKEND_ADDRESS;
@@ -19,7 +21,7 @@ export default function MyReports() {
           _id: '1',
           animalType: 'chien',
           desc: 'perdu',
-          date: new Date(),
+          date: new Date(Date.now() - 3600 * 1000),
           location: { lat: 0, long: 0 },
           status: 'nouveau',
           photoUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800',
@@ -74,7 +76,10 @@ const [reports, setReports] = useState([]);
               key={report._id}
               title={report.animalType}
               description={report.desc}
-              date={moment(report.date).format('DD/MM/YYYY')}
+  // Pour l’instant, on utilise directement report.date avec Moment.
+// Ça fonctionne en test, mais si un jour le backend renvoie une date en string,
+// il faudra peut-être convertir en new Date() pour éviter des erreurs.
+              date={moment(report.date).fromNow()}
               place={`${report.location.lat}, ${report.location.long}`}
               priority={report.status}
               photoUrl={report.photoUrl}
