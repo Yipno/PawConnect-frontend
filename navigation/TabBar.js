@@ -42,6 +42,10 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
       />
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
+
+
+
+
         const isFocused = state.index === index;
         const onPress = () => {
           tabPositionX.value = withSpring(buttonWidth * index, { damping: 100, stiffness: 1600 });
