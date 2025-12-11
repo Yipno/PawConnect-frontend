@@ -1,4 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View, Alert, Platform, Linking } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  Platform,
+  Linking,
+  TextInput,
+} from 'react-native';
 import SquaredButton from '../components/ui/SquaredButton';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/ui/Button';
@@ -6,12 +15,26 @@ import useTheme from '../hooks/useTheme';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
+
+import Input from '../components/ui/Input';
+import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
+import { useNavigation } from '@react-navigation/native';
+
 // import { useDispatch, useSelector } from 'react-redux';
 // import { login } from "../reducers/user";
 
 export default function MapScreen() {
   const { colors } = useTheme();
-
+  const [reportVisible, setReportVisible] = useState(false);
+  const [cameraVisible, setCameraVisible] = useState(false);
+  const navigation = useNavigation();
+  const [animalType, setAnimalType] = useState('');
+  const [isInjured, setIsInjured] = useState(false);
+  const [isHealthy, setIsHealthy] = useState(false);
+  const [isAngry, setIsAngry] = useState(false);
+  const [isSocial, setIsSocial] = useState(false);
+  const [reportTitle, setReportTitle] = useState('');
+  const [description, setDescription] = useState('');
   // GET DATA FROM REDUCER
   // const user = useSelector((state) => state.user.value);
 
@@ -19,19 +42,25 @@ export default function MapScreen() {
   const userData = { lastname: 'Doe', firstname: 'John', role: 'civil' };
 
   // TEST DATA MARKER OK
-    const markerData = [
-    { name: "Asso1", latitude: 48.859, longitude: 2.347 },
-    { name: "Asso2", latitude: 45.758, longitude: 4.835 },
-    { name: "Asso3", latitude: 43.282, longitude: 5.405 },
+  const markerData = [
+    { name: 'Asso1', latitude: 48.859, longitude: 2.347 },
+    { name: 'Asso2', latitude: 45.758, longitude: 4.835 },
+    { name: 'Asso3', latitude: 43.282, longitude: 5.405 },
   ];
 
   const markers = markerData.map((data, i) => {
-    return <Marker key={i} coordinate={{ latitude: data.latitude, longitude: data.longitude }} title={data.name} />;
+    return (
+      <Marker
+        key={i}
+        coordinate={{ latitude: data.latitude, longitude: data.longitude }}
+        title={data.name}
+      />
+    );
   });
 
   // USER LOCATION
   const [currentLocation, setCurrentLocation] = useState(null);
-  console.log('current loc', currentLocation);
+  // console.log('current loc', currentLocation.latitude, currentLocation.longitude);
   const mapRef = useRef(null);
 
   // GET USER PERMISSION & LOCATION OK - SANS GESTION DU REFUS
@@ -107,29 +136,29 @@ export default function MapScreen() {
             longitudeDelta: 0.01,
           }}
           showsUserLocation
-          showsMyLocationButton={false}
-        >
-         {markers}
+          showsMyLocationButton={false}>
+          {markers}
         </MapView>
         <View className='absolute flex-col bottom-40 right-10'>
           <TouchableOpacity
             className='rounded-full bg-white items-center justify-center size-10 start-96 bottom-5'
-            onPress={updateUserLocation}
-          >
+            onPress={updateUserLocation}>
             <Ionicons name='locate-sharp' size={32} color='black' />
           </TouchableOpacity>
-            <Button
-              bg={colors.softOrange}
-              textColor={colors.offwhite}
-              title='Signaler un animal'
-              onPress={() => alert('signalement')}
-            />
+          {/* //! BOUTON SIGNALEMENT ICI */}
+          <Button
+            bg={colors.danger}
+            textColor={colors.offwhite}
+            title='Signaler un animal'
+            // ouvre la page de signalement avec la position actuelle
+            onPress={() => navigation.navigate('Report', { currentLocation })}
+          />
+          {/* //! Bouton signalement */}
         </View>
       </>
     );
   } else {
-
-  // ESTABLISHMENTS MAP (PENDING : MARKERS)
+    // ESTABLISHMENTS MAP (PENDING : MARKERS)
     userMap = (
       <>
         <MapView
@@ -143,12 +172,10 @@ export default function MapScreen() {
             longitudeDelta: 0.01,
           }}
           showsUserLocation
-          showsMyLocationButton={false}
-        ></MapView>
+          showsMyLocationButton={false}></MapView>
         <TouchableOpacity
           className='absolute rounded-full bottom-40 right-10 bg-white items-center'
-          onPress={updateUserLocation}
-        >
+          onPress={updateUserLocation}>
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
       </>
@@ -156,7 +183,9 @@ export default function MapScreen() {
   }
 
   return (
-  <View style={{ flex: 1 }}>{userMap}</View>
+    <>
+      <View style={{ flex: 1 }}>{userMap}</View>
+    </>
   );
 }
 

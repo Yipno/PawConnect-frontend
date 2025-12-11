@@ -2460,6 +2460,13 @@ expo-asset@~12.0.10:
     "@expo/image-utils" "^0.8.7"
     expo-constants "~18.0.10"
 
+expo-camera@^17.0.10:
+  version "17.0.10"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-17.0.10.tgz#b3a217f0eb811a6e3522c2aff9f42be578aa6456"
+  integrity sha512-w1RBw83mAGVk4BPPwNrCZyFop0VLiVSRE3c2V9onWbdFwonpRhzmB4drygG8YOUTl1H3wQvALJHyMPTbgsK1Jg==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-constants@~18.0.10:
   version "18.0.10"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-18.0.10.tgz#92d4490d51193fc94bd40590453ce9cab4faf6fb"
@@ -4284,6 +4291,11 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
+react-native-advanced-checkbox@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-advanced-checkbox/-/react-native-advanced-checkbox-2.0.6.tgz#85157e313d6b4bf9eb6bd379abf075d2d541cc75"
+  integrity sha512-ATf8Eg3Ph9sQbmCQLbqCWZFWy7mgH6eeMX4h4laRgqsYMl0IInqUKbN18DnEyGYFs/XBD6VAeRZJFUprYRtcBg==
+
 react-native-css-interop@0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/react-native-css-interop/-/react-native-css-interop-0.2.1.tgz#2d08ad4a971babeba17af4b731ba542eef79ed08"
@@ -4295,6 +4307,11 @@ react-native-css-interop@0.2.1:
     debug "^4.3.7"
     lightningcss "~1.27.0"
     semver "^7.6.3"
+
+react-native-input-select@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/react-native-input-select/-/react-native-input-select-2.1.8.tgz#62a37e67022edecacccaee79450674cffc3a9dc2"
+  integrity sha512-5Gnmpz/9ExCrUcwdCuD21WWwOBRGN8+hUDAbpEd0+wqAOcz2bAVjnJyLTJBjY+CQXKLzqrV9sER4jmSFophb4Q==
 
 react-native-is-edge-to-edge@^1.2.1:
   version "1.2.1"

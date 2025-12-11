@@ -6,8 +6,11 @@ import Input from '../components/ui/Input';
 import SquaredButton from '../components/ui/SquaredButton';
 import CustomModal from '../components/ui/CustomModal';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { logout } from '../reducers/user';
 
 export default function Profile() {
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
   const { colors } = useTheme();
@@ -30,10 +33,8 @@ export default function Profile() {
         justifyContent: 'start',
         alignItems: 'center',
         backgroundColor: colors.offwhite,
-      }}
-    >
-
-       {/* TEST : Modal classique et full screen */}
+      }}>
+      {/* TEST : Modal classique et full screen */}
       <View className='w-full flex items-center mt-6'>
         <Button title='Modal classique' onPress={() => setModalVisible(true)} />
       </View>
@@ -55,10 +56,7 @@ export default function Profile() {
         content={<Text>Cette modale prend tout l'écran </Text>}
         fullscreen={true}
       />
-      <Input label='FirstName' />
-      <Input label='Email' placeholder='example@pawconnect...' type='email' icon='mail' />
-      <Input label='Password' placeholder='••••••••' type='password' icon='key' />
-      <Button title='Click Me' onPress={() => alert('click')} />
+      <Button bg={colors.danger} title='Log Out' onPress={() => dispatch(logout())} />
       <Button
         bg={colors.offwhite}
         textColor={colors.deepSage}
