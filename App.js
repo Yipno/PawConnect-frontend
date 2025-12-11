@@ -6,10 +6,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import user from './reducers/user';
 import animals from './reducers/animals';
+import establishments from './reducers/establishments';
 import RootNavigator from './navigation/RootNavigator';
 
 const store = configureStore({
-  reducer: { user, animals },
+  reducer: { user, animals, establishments },
 });
 
 export default function App() {
