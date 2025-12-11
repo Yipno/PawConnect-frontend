@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
-import { animalsData } from '../data/animalsData';
 import { animalsData } from '../data/reportsData';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
