@@ -24,9 +24,15 @@ export default function Input({
       <Text className='font-manrope left-3 text-text'>{label || 'Label'}</Text>
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${
+<<<<<<< HEAD
           isFocused ? 'border-softOrange border-2' : 'border-deepSage'
         } ${error ? 'border-red-600' : 'border-deepSage'}`}
       >
+=======
+          isFocused ? 'border-softOrange border-[2px]' : 'border-deepSage'
+        } ${error ? 'border-red-600' : 'border-deepSage'}`}>
+
+>>>>>>> b4c1b30003b5707716a7a6f9276ffca279270570
         <Ionicons
           className='mr-3'
           name={iconName || 'person-circle-outline'}
@@ -38,7 +44,7 @@ export default function Input({
           placeholderTextColor='#9b9b9b'
           keyboardType={keyboardType}
           secureTextEntry={secureTextEntry}
-          autoCapitalize={type === 'text' ? 'words' : 'none'}
+          autoCapitalize={type === 'text' ? 'sentences' : 'none'}
           className={`h-full flex-1 text-body font-manrope`}
           onChangeText={onChangeText}
           value={value}
