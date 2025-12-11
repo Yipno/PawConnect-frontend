@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
-import { reportsData } from '../data/reportsData';
+import { animalsData } from '../data/reportsData';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ export default function Reports() {
   const [important, setImportant] = useState(false);
   const [urgent, setUrgent] = useState(false);
   const [data, setData] = useState([]);
+  const [status, setStatus] = useState([]);
 
   const dispatch = useDispatch();
   const reports = useSelector((state) => state.animals.value);
@@ -30,32 +31,53 @@ export default function Reports() {
 
   let adminView = '';
   useEffect(() => {
-    dispatch(getReports(reportsData));
+    dispatch(getReports(animalsData));
   }, []);
 
   useEffect(() => {
     console.log(userRole);
   }, []);
 
-  // Effet qui met à jour les données affichées en fonction des filtres de priorité
-  useEffect(() => {
-    if (modere) {
-      const filtrer = reports.filter((r) => r.priority === 'Modéré');
-      setData(filtrer);
-    } else if (important) {
-      const filtrer = reports.filter((r) => r.priority === 'Important');
-      setData(filtrer);
-    } else if (urgent) {
-      const filtrer = reports.filter((r) => r.priority === 'Urgent');
-      setData(filtrer);
-    } else {
-      // Si aucun filtre de priorité n'est activé, on affiche tous les reports
-      setData(reports);
-    }
-  }, [modere, important, urgent, reports]);
 
-  // Gestion des boutons "Nouveaux / En cours / Clôturés"
-  // Pour l'instant ils ne filtrent pas encore les données, mais ils modifient bien l'état visuel
+  useEffect(() => {
+  let result = [...reports];
+
+  // Filtre PRIORITÉ (Modéré / Important / Urgent)
+  if (modere) {
+    result = result.filter(r => r.priority === 'Modéré');
+  }
+  if (important) {
+    result = result.filter(r => r.priority === 'Important');
+  }
+  if (urgent) {
+    result = result.filter(r => r.priority === 'Urgent');
+  }
+
+  // Filtre STATUT (Nouveaux / En cours / Clôturés)
+  if (nouveaux) {
+    // "Nouveaux" = status "nouveau"
+    result = result.filter(r => r.status === 'nouveau');
+  }
+  if (enCours) {
+    // "En cours" = status "en cours"
+    result = result.filter(r => r.status === 'en cours');
+  }
+  if (clotures) {
+    // "Clôturés" = status "terminé" dans les données
+    result = result.filter(r => r.status === 'terminé');
+  }
+
+  setData(result);
+}, [
+  reports,
+  modere,
+  important,
+  urgent,
+  nouveaux,
+  enCours,
+  clotures,
+]);
+
   const nouveauxPress = () => {
     setNouveaux((prev) => !prev);
     setEnCours(false);
@@ -126,48 +148,6 @@ export default function Reports() {
       {/* Vue réservée aux agents : boutons de statut + bouton Filtres */}
       {userRole === 'agent' && (
         <View className="flex-col items-center">
-          {/* Boutons Nouveaux / En cours / Clôturés */}
-          <View className="flex-row gap-4 p-4">
-            <TouchableOpacity
-              className={
-                nouveaux
-                  ? 'flex-col items-center justify-center bg-deepSage rounded-2xl w-[110px] h-12'
-                  : 'flex-col items-center justify-center bg-gray rounded-2xl w-[110px] h-12'
-              }
-              onPress={nouveauxPress}
-            >
-              <Text className={nouveaux ? 'text-white text-2xl' : 'text-black text-2xl'}>
-                Nouveaux
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className={
-                enCours
-                  ? 'flex-col items-center justify-center bg-deepSage rounded-2xl w-[110px] h-12'
-                  : 'flex-col items-center justify-center bg-gray rounded-2xl w-[110px] h-12'
-              }
-              onPress={enCoursPress}
-            >
-              <Text className={enCours ? 'text-white text-2xl' : 'text-black text-2xl'}>
-                En cours
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className={
-                clotures
-                  ? 'flex-col items-center justify-center bg-deepSage rounded-2xl w-[110px] h-12'
-                  : 'flex-col items-center justify-center bg-gray rounded-2xl w-[110px] h-12'
-              }
-              onPress={cloturesPress}
-            >
-              <Text className={clotures ? 'text-white text-2xl' : 'text-black text-2xl'}>
-                Cloturés
-              </Text>
-            </TouchableOpacity>
-          </View>
-
           {/* Bouton Filtres (ouvre le menu déroulant en overlay) */}
           <View className="mt-2 w-[350px]">
             <TouchableOpacity
@@ -195,11 +175,11 @@ export default function Reports() {
         <View
           style={{
             position: 'absolute',
-            top: 140, // à ajuster pour l’aligner visuellement sous le bouton "Filtres"
+            top: 180, 
             left: 0,
             right: 0,
             zIndex: 50,
-            elevation: 50, // nécessaire sur Android pour que le zIndex soit pris en compte
+            elevation: 50, 
           }}
           className="items-center"
         >
@@ -247,10 +227,52 @@ export default function Reports() {
             </TouchableOpacity>
 
             <TouchableOpacity
+              className={
+                nouveaux
+                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
+                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
+              }
+              onPress={() => {
+                nouveauxPress();
+                setFiltre(false);
+              }}
+            >
+              <Text className={nouveaux ? 'text-white' : 'text-black'}>Nouveaux</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              className={
+                enCours
+                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
+                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
+              }
+              onPress={() => {
+                enCoursPress();
+                setFiltre(false);
+              }}
+            >
+              <Text className={enCours ? 'text-white' : 'text-black'}>En cours</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              className={
+                clotures
+                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
+                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
+              }
+              onPress={() => {
+                cloturesPress();
+                setFiltre(false);
+              }}
+            >
+              <Text className={clotures ? 'text-white' : 'text-black'}>Cloturés</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
               className="bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2"
               onPress={() => setFiltre(false)}
             >
-              <Text className="text-white text-lg">Fermer</Text>
+              <Text className="text-black text-lg">Fermer</Text>
             </TouchableOpacity>
           </View>
         </View>

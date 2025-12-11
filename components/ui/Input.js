@@ -24,14 +24,9 @@ export default function Input({
       <Text className='font-manrope left-3 text-text'>{label || 'Label'}</Text>
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${
-<<<<<<< HEAD
           isFocused ? 'border-softOrange border-2' : 'border-deepSage'
         } ${error ? 'border-red-600' : 'border-deepSage'}`}
       >
-=======
-          isFocused ? 'border-softOrange border-[2px]' : 'border-deepSage'
-        } ${error ? 'border-red-600' : 'border-deepSage'}`}>
->>>>>>> b487ca356ddcb9db19575258ae1a950a4ff7edfd
         <Ionicons
           className='mr-3'
           name={iconName || 'person-circle-outline'}
