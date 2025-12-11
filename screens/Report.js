@@ -33,6 +33,11 @@ export default function Reports() {
     dispatch(getReports(animalsData));
   }, []);
 
+  //Modal state
+  const [modalVisible, setModalVisible] = useState(false);
+  const [dataReport, setDataReport] = useState(null);
+
+  // fetch reports from data (local file) and store them in redux
   useEffect(() => {
     console.log(userRole);
   }, []);
@@ -105,6 +110,7 @@ export default function Reports() {
       { text: 'Cancel', style: 'destructive', onPress: () => Alert.alert('Cancel Pressed') },
       { text: 'Understood', onPress: () => console.log('OK') },
     ]);
+    */
   };
 
   return (
