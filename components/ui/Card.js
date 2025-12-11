@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
-export default function Card({ title, description, date, place, priority, photoUrl, onPress }) {
+export default function Card({ title, desc, date, place, priority, photoUrl, onPress }) {
   const priorityColors = {
     Urgent: ['border-red-600', 'bg-red-200'],
     Important: ['border-orange-400', 'bg-orange-200'],
@@ -42,7 +42,7 @@ export default function Card({ title, description, date, place, priority, photoU
               {title || 'Card'}
             </Text>
             <Text numberOfLines={6} ellipsizeMode='tail' className='text-small text-text mx-2 mt-1'>
-              {description ||
+              {desc ||
                 'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.'}
             </Text>
           </View>

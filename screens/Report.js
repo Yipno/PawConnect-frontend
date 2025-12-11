@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
-import { reportsData } from '../data/reportsData';
+import { animalsData } from '../data/animalsData';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -20,17 +20,17 @@ export default function Reports() {
   const [data, setData] = useState([]);
 
   const dispatch = useDispatch();
-  const reports = useSelector((state) => state.animals.value);
+  const reports = useSelector(state => state.animals.value);
 
-  const userRole = useSelector((state) => state.user.value.role);
+  const userRole = useSelector(state => state.user.value.role);
 
-  const url = process.env.EXPO_PUBLIC_BACKEND
+  const url = process.env.EXPO_PUBLIC_BACKEND;
 
-  let cartes = []
+  let cartes = [];
 
   let adminView = '';
   useEffect(() => {
-    dispatch(getReports(reportsData));
+    dispatch(getReports(animalsData));
   }, []);
 
   useEffect(() => {
@@ -40,13 +40,13 @@ export default function Reports() {
   // Effet qui met à jour les données affichées en fonction des filtres de priorité
   useEffect(() => {
     if (modere) {
-      const filtrer = reports.filter((r) => r.priority === 'Modéré');
+      const filtrer = reports.filter(r => r.priority === 'Modéré');
       setData(filtrer);
     } else if (important) {
-      const filtrer = reports.filter((r) => r.priority === 'Important');
+      const filtrer = reports.filter(r => r.priority === 'Important');
       setData(filtrer);
     } else if (urgent) {
-      const filtrer = reports.filter((r) => r.priority === 'Urgent');
+      const filtrer = reports.filter(r => r.priority === 'Urgent');
       setData(filtrer);
     } else {
       // Si aucun filtre de priorité n'est activé, on affiche tous les reports
@@ -57,58 +57,54 @@ export default function Reports() {
   // Gestion des boutons "Nouveaux / En cours / Clôturés"
   // Pour l'instant ils ne filtrent pas encore les données, mais ils modifient bien l'état visuel
   const nouveauxPress = () => {
-    setNouveaux((prev) => !prev);
+    setNouveaux(prev => !prev);
     setEnCours(false);
     setClotures(false);
   };
 
   const enCoursPress = () => {
-    setEnCours((prev) => !prev);
+    setEnCours(prev => !prev);
     setNouveaux(false);
     setClotures(false);
   };
 
   const cloturesPress = () => {
-    setClotures((prev) => !prev);
+    setClotures(prev => !prev);
     setNouveaux(false);
     setEnCours(false);
   };
 
   // Toggle d’ouverture / fermeture du menu des filtres
   const handleFiltre = () => {
-    setFiltre((prev) => !prev);
+    setFiltre(prev => !prev);
   };
 
   // Handlers des filtres de priorité
   // Ici on ne permet qu'un seul filtre actif à la fois
   const handleModere = () => {
-    setModere((prev) => !prev);
+    setModere(prev => !prev);
     setImportant(false);
     setUrgent(false);
   };
 
   const handleImportant = () => {
-    setImportant((prev) => !prev);
+    setImportant(prev => !prev);
     setModere(false);
     setUrgent(false);
   };
 
   const handleUrgent = () => {
-    setUrgent((prev) => !prev);
+    setUrgent(prev => !prev);
     setModere(false);
     setImportant(false);
   };
 
   // Exemple de handler pour une Card cliquée (popup d’alerte)
   const handleClick = () => {
-    Alert.alert(
-      'Card pressed',
-      'This will open full screen modal with all infos of this report',
-      [
-        { text: 'Cancel', style: 'destructive', onPress: () => Alert.alert('Cancel Pressed') },
-        { text: 'Understood', onPress: () => console.log('OK') },
-      ]
-    );
+    Alert.alert('Card pressed', 'This will open full screen modal with all infos of this report', [
+      { text: 'Cancel', style: 'destructive', onPress: () => Alert.alert('Cancel Pressed') },
+      { text: 'Understood', onPress: () => console.log('OK') },
+    ]);
   };
 
   return (
@@ -118,24 +114,22 @@ export default function Reports() {
         flex: 1,
         position: 'relative', // important pour que l’overlay des filtres se base sur ce container
       }}
-      className="bg-offwhite"
-    >
+      className='bg-offwhite'>
       {/* Titre de la page */}
-      <Text className="text-h1 font-manrope text-center mt-4">Signalements</Text>
+      <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
 
       {/* Vue réservée aux agents : boutons de statut + bouton Filtres */}
       {userRole === 'agent' && (
-        <View className="flex-col items-center">
+        <View className='flex-col items-center'>
           {/* Boutons Nouveaux / En cours / Clôturés */}
-          <View className="flex-row gap-4 p-4">
+          <View className='flex-row gap-4 p-4'>
             <TouchableOpacity
               className={
                 nouveaux
                   ? 'flex-col items-center justify-center bg-deepSage rounded-2xl w-[110px] h-12'
                   : 'flex-col items-center justify-center bg-gray rounded-2xl w-[110px] h-12'
               }
-              onPress={nouveauxPress}
-            >
+              onPress={nouveauxPress}>
               <Text className={nouveaux ? 'text-white text-2xl' : 'text-black text-2xl'}>
                 Nouveaux
               </Text>
@@ -147,8 +141,7 @@ export default function Reports() {
                   ? 'flex-col items-center justify-center bg-deepSage rounded-2xl w-[110px] h-12'
                   : 'flex-col items-center justify-center bg-gray rounded-2xl w-[110px] h-12'
               }
-              onPress={enCoursPress}
-            >
+              onPress={enCoursPress}>
               <Text className={enCours ? 'text-white text-2xl' : 'text-black text-2xl'}>
                 En cours
               </Text>
@@ -160,8 +153,7 @@ export default function Reports() {
                   ? 'flex-col items-center justify-center bg-deepSage rounded-2xl w-[110px] h-12'
                   : 'flex-col items-center justify-center bg-gray rounded-2xl w-[110px] h-12'
               }
-              onPress={cloturesPress}
-            >
+              onPress={cloturesPress}>
               <Text className={clotures ? 'text-white text-2xl' : 'text-black text-2xl'}>
                 Cloturés
               </Text>
@@ -169,13 +161,12 @@ export default function Reports() {
           </View>
 
           {/* Bouton Filtres (ouvre le menu déroulant en overlay) */}
-          <View className="mt-2 w-[350px]">
+          <View className='mt-2 w-[350px]'>
             <TouchableOpacity
-              className="border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4"
-              onPress={handleFiltre}
-            >
+              className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
+              onPress={handleFiltre}>
               <Text>Filtres</Text>
-              <Ionicons name="chevron-down-outline" color="#000000" size={20} />
+              <Ionicons name='chevron-down-outline' color='#000000' size={20} />
             </TouchableOpacity>
           </View>
         </View>
@@ -183,7 +174,7 @@ export default function Reports() {
 
       {/* Liste des signalements sous forme de cartes */}
       <ScrollView style={{ flex: 1, width: '100%' }}>
-        {data.map((r) => (
+        {data.map(r => (
           <Card key={r.id} {...r} onPress={handleClick} />
         ))}
         {/* Marge en bas pour éviter que le dernier élément soit collé à la bottom bar éventuelle */}
@@ -201,9 +192,8 @@ export default function Reports() {
             zIndex: 50,
             elevation: 50, // nécessaire sur Android pour que le zIndex soit pris en compte
           }}
-          className="items-center"
-        >
-          <View className="bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg">
+          className='items-center'>
+          <View className='bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg'>
             <TouchableOpacity
               className={
                 modere
@@ -213,8 +203,7 @@ export default function Reports() {
               onPress={() => {
                 handleModere();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={modere ? 'text-white' : 'text-black'}>Modéré</Text>
             </TouchableOpacity>
 
@@ -227,8 +216,7 @@ export default function Reports() {
               onPress={() => {
                 handleImportant();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={important ? 'text-white' : 'text-black'}>Important</Text>
             </TouchableOpacity>
 
@@ -241,16 +229,14 @@ export default function Reports() {
               onPress={() => {
                 handleUrgent();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={urgent ? 'text-white' : 'text-black'}>Urgent</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              className="bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2"
-              onPress={() => setFiltre(false)}
-            >
-              <Text className="text-white text-lg">Fermer</Text>
+              className='bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2'
+              onPress={() => setFiltre(false)}>
+              <Text className='text-white text-lg'>Fermer</Text>
             </TouchableOpacity>
           </View>
         </View>

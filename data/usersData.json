@@ -1,0 +1,113 @@
+[
+  {
+    "_id": "64fa1c2b9a12ef001c11a001",
+    "lastName": "Martin",
+    "firstName": "Julie",
+    "email": "julie.martin@example.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "u1x8f3m2a9p4b7z6",
+    "createdAt": "2025-01-05T10:12:00Z",
+    "role": "civil",
+    "establishmentRef": null
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11a002",
+    "lastName": "Bernard",
+    "firstName": "Lucas",
+    "email": "lucas.bernard@example.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "q7d9c4t2v8m1f6s3",
+    "createdAt": "2025-01-06T08:45:00Z",
+    "role": "civil",
+    "establishmentRef": null
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11a003",
+    "lastName": "Durand",
+    "firstName": "Emma",
+    "email": "emma.durand@example.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "p3k6n9w2t1h4b8j5",
+    "createdAt": "2025-01-03T14:22:00Z",
+    "role": "civil",
+    "establishmentRef": null
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11a004",
+    "lastName": "Moreau",
+    "firstName": "Theo",
+    "email": "theo.moreau@example.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "s4e1d7m3x9l2p0a8",
+    "createdAt": "2025-01-07T11:00:00Z",
+    "role": "civil",
+    "establishmentRef": null
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11a005",
+    "lastName": "Lefevre",
+    "firstName": "Clara",
+    "email": "clara.lefevre@example.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "z9v2m7h3q8p1x4k5",
+    "createdAt": "2025-01-04T09:50:00Z",
+    "role": "civil",
+    "establishmentRef": null
+  },
+
+  {
+    "_id": "64fa1c2b9a12ef001c11b100",
+    "lastName": "Roche",
+    "firstName": "Antoine",
+    "email": "antoine.roche@pro-service.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "k1d4s8m9c3p7q2e6",
+    "createdAt": "2025-01-02T08:40:00Z",
+    "role": "agent",
+    "establishmentRef": "64fa1c2b9a12ef001c11e001"
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11b101",
+    "lastName": "Garcia",
+    "firstName": "Sonia",
+    "email": "sonia.garcia@pro-service.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "m8f2q6w4k9n1d3s7",
+    "createdAt": "2025-01-01T12:20:00Z",
+    "role": "agent",
+    "establishmentRef": "64fa1c2b9a12ef001c11e001"
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11b102",
+    "lastName": "Petit",
+    "firstName": "Romain",
+    "email": "romain.petit@pro-service.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "w9x1a7k3b6p2s4n8",
+    "createdAt": "2025-01-03T15:55:00Z",
+    "role": "agent",
+    "establishmentRef": "64fa1c2b9a12ef001c11e002"
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11b103",
+    "lastName": "Muller",
+    "firstName": "Alicia",
+    "email": "alicia.muller@pro-service.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "b3k7f1h9m4p6s2q8",
+    "createdAt": "2025-01-08T10:10:00Z",
+    "role": "agent",
+    "establishmentRef": "64fa1c2b9a12ef001c11e002"
+  },
+  {
+    "_id": "64fa1c2b9a12ef001c11b104",
+    "lastName": "Fabre",
+    "firstName": "Nicolas",
+    "email": "nicolas.fabre@pro-service.com",
+    "password": "$2b$10$N6CBNloBFe.BUVN5/0zaueeUx0BInfjB6xaAsJrvIvljr9LucKWEW",
+    "token": "e4q1m7c2n9p5s3k8",
+    "createdAt": "2025-01-09T14:05:00Z",
+    "role": "agent",
+    "establishmentRef": "64fa1c2b9a12ef001c11e003"
+  }
+]
