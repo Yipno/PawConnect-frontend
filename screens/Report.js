@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
-import ReportDetail from '../components/module/ReportDetail';
+import ReportDetail from '../components/module/ReportDetailAgent';
 
 export default function Reports() {
   // États des filtres
@@ -25,13 +25,26 @@ export default function Reports() {
   // Données filtrées affichées
   const [data, setData] = useState([]);
 
+  //Description agent
+  const [description, setDescription] = useState('');
+
   const dispatch = useDispatch();
   const reports = useSelector((state) => state.animals.value);
   const userRole = useSelector((state) => state.user.value.role);
+  const userId = useSelector((state) => state.user.value._id);
 
+  const url = process.env.EXPO_PUBLIC_BACKEND;
   //Charge les données de base dans Redux au montage
   useEffect(() => {
-    dispatch(getReports(animalsData));
+    fetch(`${url}/animals`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result === true) {
+          dispatch(getReports(data.data));
+        } else {
+          console.log('Erreur API');
+        }
+      });
   }, [dispatch]);
 
   // Effet qui applique TOUS les filtres combinés
@@ -120,6 +133,37 @@ export default function Reports() {
     console.log('Report: ', report);
   };
 
+  //function pour récupérer la description et le statut pour l'envoyer en base de donnée
+  const handleActualiser = ({ description, cours, cloturer }) => {
+    const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
+    if (!status || !dataReport) return;
+    console.log('ENVOYÉ AU BACKEND =>', { status, description });
+    fetch(`${url}/animals/${dataReport._id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        status,
+        description,
+        userId,
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.result) {
+          //recharge les signalements
+          fetch(`${url}/animals`)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.result) dispatch(getReports(data.data));
+            });
+
+          setModalVisible(false);
+          setDescription('');
+        } else {
+          console.log(json.message);
+        }
+      });
+  };
 
   return (
     <SafeAreaView
@@ -162,7 +206,11 @@ export default function Reports() {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         report={dataReport}
-      />
+        agent={userRole}
+        description={description}
+        onChangeDescription={setDescription}
+        onActualiser={handleActualiser}
+      ></ReportDetail>
 
       {/* Menu des filtres affiché en overlay au-dessus des cartes */}
       {filtre && (

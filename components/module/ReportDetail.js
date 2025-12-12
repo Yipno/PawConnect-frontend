@@ -10,10 +10,9 @@ export default function ReportDetail({ visible, onClose, report }) {
       content={
         report ? (
           <View>
-  
             <View className='w-full aspect-[4/3] mb-4'>
               <Image
-                source={{ uri: report.photoUrl }}
+                source={{ url: report.photoUrl }}
                 className='w-full h-full rounded-2xl object-cover'
               />
             </View>
