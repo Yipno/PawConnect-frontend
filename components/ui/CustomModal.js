@@ -45,15 +45,23 @@ export default function CustomModal({
           />
 
           {/* Titre */}
-          {title && <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>{title}</Text>}
+          {title && (
+            <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>
+              {title}
+            </Text>
+          )}
 
           {/* Contenu */}
           <View className='mb-4'>
-            {content || <Text className='text-center' style={{ color: colors.text }}>Default content</Text>}
+            {content || (
+              <Text className='text-center' style={{ color: colors.text }}>
+                Default content
+              </Text>
+            )}
           </View>
           {/* Boutons (optionnels) */}
           {button && (
-            <View className='flex-row justify-center items-center mt-4 space-x-4'>{buttons}</View>
+            <View className='flex justify-center items-center mt-4 space-x-4 '>{button}</View>
           )}
         </View>
       </View>
