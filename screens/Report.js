@@ -3,8 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
 import { animalsData } from '../data/reportsData';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -64,15 +63,7 @@ export default function Reports() {
     }
 
     setData(result);
-  }, [
-    reports,
-    modere,
-    important,
-    urgent,
-    nouveaux,
-    enCours,
-    clotures,
-  ]);
+  }, [reports, modere, important, urgent, nouveaux, enCours, clotures]);
 
   //Gestion des boutons "statut"
   const nouveauxPress = () => {
@@ -117,17 +108,17 @@ export default function Reports() {
     setFiltre((prev) => !prev);
   };
 
-  // Exemple de handler pour une Card cliquée
-  const handleClick = () => {
-    Alert.alert(
-      'Card pressed',
-      'This will open full screen modal with all infos of this report',
-      [
-        { text: 'Cancel', style: 'destructive', onPress: () => Alert.alert('Cancel Pressed') },
-        { text: 'Understood', onPress: () => console.log('OK') },
-      ]
-    );
+  //Modal State
+  const [modalVisible, setModalVisible] = useState(false);
+  const [dataReport, setDataReport] = useState(null);
+
+  // Open Modal on Card Click
+  const handleClick = (report) => {
+    setDataReport(report);
+    setModalVisible(true);
+    console.log('Report: ', report);
   };
+
 
   return (
     <SafeAreaView
@@ -136,22 +127,22 @@ export default function Reports() {
         flex: 1,
         position: 'relative', // pour que l’overlay des filtres se base sur ce container
       }}
-      className="bg-offwhite"
+      className='bg-offwhite'
     >
       {/* Titre de la page */}
-      <Text className="text-h1 font-manrope text-center mt-4">Signalements</Text>
+      <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
 
       {/* Vue réservée aux agents : bouton Filtres */}
       {userRole === 'agent' && (
-        <View className="flex-col items-center">
+        <View className='flex-col items-center'>
           {/* Bouton Filtres (ouvre le menu déroulant en overlay) */}
-          <View className="mt-2 w-[350px]">
+          <View className='mt-2 w-[350px]'>
             <TouchableOpacity
-              className="border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4"
+              className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
               onPress={handleFiltre}
             >
               <Text>Filtres</Text>
-              <Ionicons name="chevron-down-outline" color="#000000" size={20} />
+              <Ionicons name='chevron-down-outline' color='#000000' size={20} />
             </TouchableOpacity>
           </View>
         </View>
@@ -160,11 +151,17 @@ export default function Reports() {
       {/* Liste des signalements sous forme de cartes */}
       <ScrollView style={{ flex: 1, width: '100%' }}>
         {data.map((r, index) => (
-          <Card key={index} {...r} onPress={handleClick} />
+          <Card key={index} {...r} onPress={() => handleClick(r)} />
         ))}
         {/* Marge en bas pour éviter que le dernier élément soit collé à une éventuelle bottom bar */}
         <View style={{ marginBottom: 120 }} />
       </ScrollView>
+
+      <ReportDetail
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        report={dataReport}
+      />
 
       {/* Menu des filtres affiché en overlay au-dessus des cartes */}
       {filtre && (
@@ -177,9 +174,9 @@ export default function Reports() {
             zIndex: 50,
             elevation: 50,
           }}
-          className="items-center"
+          className='items-center'
         >
-          <View className="bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg">
+          <View className='bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg'>
             {/* Filtres de priorité */}
             <TouchableOpacity
               className={
@@ -267,10 +264,10 @@ export default function Reports() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              className="bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2"
+              className='bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2'
               onPress={() => setFiltre(false)}
             >
-              <Text className="text-white text-lg">Fermer</Text>
+              <Text className='text-white text-lg'>Fermer</Text>
             </TouchableOpacity>
           </View>
         </View>
