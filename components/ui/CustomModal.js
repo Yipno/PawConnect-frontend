@@ -24,48 +24,43 @@ export default function CustomModal({
       transparent
       animationType={animationType || 'slide'}
       onRequestClose={onClose}
-      presentationStyle='overFullScreen'
     >
-      {/* Overlay */}
-      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
-        {/* Click outside to close (optionnel) */}
-        {!isFull && <Pressable style={{ flex: 1 }} onPress={onClose} />}
-
-        {/* Sheet / Fullscreen container */}
+      <View className='flex-1 justify-center items-center bg-black/50'>
         <View
-          style={{
-            flex: isFull ? 1 : 0,
-            alignSelf: isFull ? 'stretch' : 'center',
-            width: isFull ? '100%' : '91.666%',
-            maxHeight: isFull ? '100%' : '80%',
-            backgroundColor: colors.offwhite,
-            borderRadius: isFull ? 0 : 12,
-            overflow: 'hidden',
-            paddingTop: isFull ? insets.top : 0,
-            paddingBottom: isFull ? insets.bottom : 0,
-          }}
+          className={`rounded-lg justify-center items-center ${
+            fullscreen
+              ? 'w-full h-full p-6 items-center'
+              : 'w-11/12 min-h-[300px] p-12 justify-center items-center'
+          }`}
+          style={{ backgroundColor: colors.offwhite }}
         >
-          {/* Header */}
-          <View
+          {/* Croix de fermeture */}
+          <Ionicons
+            name='close'
+            size={28}
+            color={colors.text}
+            onPress={onClose}
             style={{
-              height: 56,
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingHorizontal: 16,
-              borderBottomWidth: 1,
-              borderBottomColor: 'rgba(0,0,0,0.08)',
+              position: 'absolute',
+              top: 16,
+              right: 16,
             }}
-          >
-            <View style={{ width: 28 }} />
-            <View style={{ flex: 1, alignItems: 'center' }}>
-              {!!title && (
-                <Text style={{ color: colors.text, fontSize: 18, fontWeight: '700' }}>{title}</Text>
-              )}
-            </View>
+          />
 
-            <Pressable onPress={onClose} hitSlop={10}>
-              <Ionicons name='close' size={28} color={colors.text} />
-            </Pressable>
+          {/* Titre */}
+          {title && (
+            <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>
+              {title}
+            </Text>
+          )}
+
+          {/* Contenu */}
+          <View className='mb-4'>
+            {content || (
+              <Text className='text-center' style={{ color: colors.text }}>
+                Default content
+              </Text>
+            )}
           </View>
 
           {/* Content */}
@@ -83,20 +78,7 @@ export default function CustomModal({
 
           {/* Footer buttons */}
           {button && (
-            <View
-              style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                bottom: isFull ? insets.bottom : 0,
-                padding: 16,
-                borderTopWidth: 1,
-                borderTopColor: 'rgba(0,0,0,0.08)',
-                backgroundColor: colors.offwhite,
-              }}
-            >
-              <View style={{ flexDirection: 'row', justifyContent: 'center' }}>{button}</View>
-            </View>
+            <View className='flex-row justify-center items-center mt-4 space-x-4'>{buttons}</View>
           )}
         </View>
 
