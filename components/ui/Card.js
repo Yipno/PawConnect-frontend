@@ -1,14 +1,15 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
-export default function Card({ title, description, date, place, priority, photoUrl, onPress }) {
-  const priorityColors = {
-    Urgent: ['border-red-600', 'bg-red-200'],
-    Important: ['border-orange-400', 'bg-orange-200'],
-    Modéré: ['border-blue-500', 'bg-blue-200'],
+export default function Card({ title, desc, date, place, priority, photoUrl, onPress }) {
+  const priorityValues = {
+    URGENT: { label: 'Urgent', color: ['border-red-600', 'bg-red-200'] },
+    IMPORTANT: { label: 'Important', color: ['border-orange-400', 'bg-orange-200'] },
+    MODERE: { label: 'Modéré', color: ['border-blue-500', 'bg-blue-200'] },
+    FAIBLE: { label: 'Faible', color: ['border-green-500', 'bg-green-200'] },
   };
 
-  const priorityTag = priorityColors[priority] || ['border-gray-400', 'bg-gray-200'];
+  const priorityColor = priorityValues[priority]?.color || ['border-gray-400', 'bg-gray-200'];
 
   return (
     <TouchableOpacity onPress={onPress}>
@@ -28,10 +29,10 @@ export default function Card({ title, description, date, place, priority, photoU
             height={10}
           />
           <View
-            className={`h-1/6 border-[1px] rounded-2xl items-center justify-center ${priorityTag.join(
+            className={`h-1/6 border-[1px] rounded-2xl items-center justify-center ${priorityColor.join(
               ' '
             )}`}>
-            <Text>{priority || 'Priority'}</Text>
+            <Text>{priorityValues[priority]?.label || 'Priority'}</Text>
           </View>
         </View>
         <View className='w-3/5'>
@@ -42,7 +43,7 @@ export default function Card({ title, description, date, place, priority, photoU
               {title || 'Card'}
             </Text>
             <Text numberOfLines={6} ellipsizeMode='tail' className='text-small text-text mx-2 mt-1'>
-              {description ||
+              {desc ||
                 'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.'}
             </Text>
           </View>

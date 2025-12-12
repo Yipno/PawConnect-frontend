@@ -12,6 +12,10 @@ const animalsSlice = createSlice({
       state.value = action.payload;
       console.log('reports acquired');
     },
+    addReport: (state, action) => {
+      state.value.unshift(action.payload);
+      console.log('report added to redux');
+    },
     updateReport: (state, action) => {
       const { id, updatedStatus, newHistory } = action.payload;
 
@@ -28,5 +32,5 @@ const animalsSlice = createSlice({
   },
 });
 
-export const { getReports, updateReport, deleteReport } = animalsSlice.actions;
+export const { getReports, addReport, updateReport, deleteReport } = animalsSlice.actions;
 export default animalsSlice.reducer;

@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
-import { reportsData } from '../data/reportsData';
+// import { reportsData } from '../data/reportsData';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -12,7 +12,17 @@ export default function Reports() {
   const reports = useSelector(state => state.animals.value);
 
   useEffect(() => {
-    dispatch(getReports(reportsData));
+    const fetchReports = async () => {
+      try {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND}/animals`);
+        const data = await response.json();
+        dispatch(getReports(data.reports));
+      } catch (error) {
+        console.error('Error fetching reports:', error);
+      }
+    };
+    fetchReports();
+    // dispatch(getReports(reportsData));
   }, []);
 
   const handleClick = () => {
@@ -34,7 +44,7 @@ export default function Reports() {
       <Text className='text-h1 font-manrope'>Signalements</Text>
       <ScrollView style={{ flex: 1, width: '100%' }}>
         {reports.map(r => (
-          <Card key={r.id} {...r} />
+          <Card key={r._id} {...r} />
         ))}
         <Card
           title='Chien attaché et surtout trop long'
@@ -50,5 +60,3 @@ export default function Reports() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({});

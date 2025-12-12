@@ -55,31 +55,35 @@ export default function CameraScreen({ navigation }) {
       {photo ? (
         <ImageBackground
           source={{ uri: photo.uri }}
-          style={{ flex: 1, justifyContent: 'flex-end' }}>
+          style={{ flex: 1, justifyContent: 'space-between' }}>
           <View
-            className='flex-2 justify-end items-center mx-6 p-2 mb-4 rounded-2xl'
+            className='flex-2 justify-end items-center mx-20 p-2 mt-20 rounded-2xl'
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
             <Text className='text-h2 text-center text-offwhite font-extrabold font-manrope'>
               Voulez vous utiliser cette photo ?
             </Text>
           </View>
-          <View className='flex-2 flex-row justify-between items-end mb-8 mx-16'>
+          <View className='flex-2 flex-row justify-between items-end mb-14 mx-10'>
             <TouchableOpacity
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-              className='items-center p-4 rounded-2xl'
+              className='w-40 items-center p-4 rounded-2xl'
               onPress={() => setPhoto(null)}>
               <Ionicons name='trash-outline' size={60} color='#dc2626' />
-              <Text className='text-center text-red-600 font-manrope'>Reprendre</Text>
+              <Text className='text-center text-2xl text-red-600 font-bold font-manrope'>
+                Reprendre
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-              className='items-center p-4 rounded-2xl'
+              className='w-40 items-center p-4 rounded-2xl'
               onPress={() => {
                 onPhotoTaken(photo.uri);
                 navigation.goBack();
               }}>
-              <Ionicons name='checkmark-circle-outline' size={60} color='#16a34a' />
-              <Text className='text-center text-2xl text-green-600 font-manrope'>Utiliser</Text>
+              <Ionicons name='checkmark-circle-outline' size={60} color='#22c52e' />
+              <Text className='text-center text-2xl text-green-500 font-bold font-manrope'>
+                Utiliser
+              </Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
