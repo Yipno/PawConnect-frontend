@@ -20,40 +20,44 @@ export default function CustomModal({
       visible={visible}
       transparent
       animationType={animationType || 'slide'}
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <View className='flex-1 justify-center items-center bg-black/50'>
         <View
-          className={`rounded-lg justify-center items-center ${
-            fullscreen
-              ? 'w-full h-full p-6 items-center'
-              : 'w-11/12 min-h-[300px] p-12 justify-center items-center'
+          className={`rounded-2xl items-center ${
+            fullscreen ? 'w-full h-full p-6 pt-12' : 'w-11/12 min-h-[300px] p-12'
           }`}
-          style={{ backgroundColor: colors.offwhite }}
-        >
+          style={{ backgroundColor: colors.offwhite }}>
           {/* Croix de fermeture */}
           <Ionicons
             name='close'
-            size={28}
+            size={36}
             color={colors.text}
             onPress={onClose}
             style={{
               position: 'absolute',
-              top: 16,
+              top: fullscreen ? 54 : 16,
               right: 16,
             }}
           />
 
           {/* Titre */}
-          {title && <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>{title}</Text>}
+          {title && (
+            <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>
+              {title}
+            </Text>
+          )}
 
-          {/* Contenu */}
+          {/* Contenu (supporte soit `content` prop soit `children`) */}
           <View className='mb-4'>
-            {content || <Text className='text-center' style={{ color: colors.text }}>Default content</Text>}
+            {content || children || (
+              <Text className='text-center' style={{ color: colors.text }}>
+                {content}
+              </Text>
+            )}
           </View>
           {/* Boutons (optionnels) */}
           {button && (
-            <View className='flex-row justify-center items-center mt-4 space-x-4'>{buttons}</View>
+            <View className='flex-row justify-center items-center mt-4 space-x-4'>{button}</View>
           )}
         </View>
       </View>

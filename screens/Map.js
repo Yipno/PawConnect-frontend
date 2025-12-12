@@ -38,8 +38,11 @@ export default function MapScreen({ navigation }) {
       if (status === 'granted') {
         const location = await Location.getCurrentPositionAsync({});
         // OK console.log('coords', location.coords);
-        setCurrentLocation({latitude: location.coords.latitude, longitude: location.coords.longitude});
-        console.log("currentloc", currentLocation);
+        setCurrentLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+        console.log('currentloc', currentLocation);
       } else {
         Alert.alert(
           'Permission refusée',
@@ -101,8 +104,8 @@ export default function MapScreen({ navigation }) {
   /*--- 2. MARKERS SETUP ---*/
 
   // GET DATA FROM REDUCER
-  const user = useSelector((state) => state.user.value);
-  const animals = useSelector((state) => state.animals.value);
+  const user = useSelector(state => state.user.value);
+  const animals = useSelector(state => state.animals.value);
   // const establishments = useSelector((state) => state.establishments.value);
 
   // MARKER LOCATION
@@ -162,7 +165,7 @@ export default function MapScreen({ navigation }) {
         return { ...data, distance: distanceLabel };
       });
       */
-      const newLocations = markerData.map((data) => {
+      const newLocations = markerData.map(data => {
         const establishmentLocation = {
           latitude: data.lat,
           longitude: data.long,
@@ -175,7 +178,7 @@ export default function MapScreen({ navigation }) {
 
       // DISTANCE FOR AGENT TO ANIMALS
     } else {
-      const newLocations = animals.map((data) => {
+      const newLocations = animals.map(data => {
         const animalLocation = {
           latitude: data.location.lat,
           longitude: data.location.long,
@@ -197,7 +200,7 @@ export default function MapScreen({ navigation }) {
   // CIVIL USER MARKERS: ESTABLISHMENTS
   if (user.role === 'civil') {
     // WAITING FOR ESTABLISHMENTS DATA TO UPDATE (LINE 127)
-    // TEST DATA MAPPING ON MARKERDATA 
+    // TEST DATA MAPPING ON MARKERDATA
     markers = markerData.map((data, i) => {
       const distance = currentLocation
         ? getDistanceLabel(currentLocation, { latitude: data.lat, longitude: data.long })
@@ -214,7 +217,7 @@ export default function MapScreen({ navigation }) {
   } else {
     // AGENT MARKERS: ANIMALS
     markers = locations
-      .filter((e) => e.status === 'nouveau')
+      .filter(e => e.status === 'nouveau')
       .map((data, i) => {
         return (
           <Marker
@@ -233,8 +236,7 @@ export default function MapScreen({ navigation }) {
       <View className='absolute flex-col bottom-40 right-14'>
         <TouchableOpacity
           className='rounded-full bg-white items-center justify-center size-10 start-80 bottom-5'
-          onPress={onPressLocation}
-        >
+          onPress={onPressLocation}>
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
         <Button
@@ -250,8 +252,7 @@ export default function MapScreen({ navigation }) {
       <View className='absolute flex-col bottom-40 right-14'>
         <TouchableOpacity
           className='absolute rounded-full bottom-40 right-10 bg-white items-center'
-          onPress={onPressLocation}
-        >
+          onPress={onPressLocation}>
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
         <Button
@@ -278,8 +279,7 @@ export default function MapScreen({ navigation }) {
           longitudeDelta: 0.01,
         }}
         showsUserLocation
-        showsMyLocationButton={false}
-      >
+        showsMyLocationButton={false}>
         {markers}
       </MapView>
       {userMapButtons}

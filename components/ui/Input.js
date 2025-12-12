@@ -10,6 +10,8 @@ export default function Input({
   onChangeText,
   value,
   error,
+  autoCorrect,
+  ...props
 }) {
   const [isVisible, setIsVisible] = useState(type === 'password');
   const [isFocused, setIsFocused] = useState(false);
@@ -24,9 +26,8 @@ export default function Input({
       <Text className='font-manrope left-3 text-text'>{label || 'Label'}</Text>
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${
-          isFocused ? 'border-softOrange border-2' : 'border-deepSage'
-        } ${error ? 'border-red-600' : 'border-deepSage'}`}
-      >
+          error ? 'border-error' : isFocused ? 'border-softOrange border-[2px]' : 'border-deepSage'
+        }`}>
         <Ionicons
           className='mr-3'
           name={iconName || 'person-circle-outline'}
@@ -44,20 +45,21 @@ export default function Input({
           value={value}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          autoCorrect={autoCorrect || false}
+          {...props}
         />
         {type === 'password' && (
           <Pressable className='ml-3' onPress={() => setIsVisible(!isVisible)}>
             <Ionicons
               name={isVisible ? 'eye-off-outline' : 'eye-outline'}
               size={26}
-              className=''
               color='#9b9b9b'
             />
           </Pressable>
         )}
       </View>
       {error && (
-        <Text className='left-1 text-small font-semibold font-manrope text-red-600'>{error}</Text>
+        <Text className='left-1 text-small font-semibold font-manrope text-error'>{error}</Text>
       )}
     </View>
   );

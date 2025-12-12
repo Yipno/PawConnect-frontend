@@ -10,4 +10,5 @@ export default {
   softOrange: '#f4a76a',
   peachAccent: '#f7c8a5',
   danger: '#E74C3C',
+  error: '#dc2626',
 };

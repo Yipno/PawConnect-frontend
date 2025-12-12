@@ -2,13 +2,14 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 export default function Card({ title, desc, date, place, priority, photoUrl, onPress }) {
-  const priorityColors = {
-    Urgent: ['border-red-600', 'bg-red-200'],
-    Important: ['border-orange-400', 'bg-orange-200'],
-    Modéré: ['border-blue-500', 'bg-blue-200'],
+  const priorityValues = {
+    urgent: { label: 'Urgent', color: ['border-red-600', 'bg-red-200'] },
+    important: { label: 'Important', color: ['border-orange-400', 'bg-orange-200'] },
+    modere: { label: 'Modéré', color: ['border-blue-500', 'bg-blue-200'] },
+    faible: { label: 'Faible', color: ['border-green-500', 'bg-green-200'] },
   };
 
-  const priorityTag = priorityColors[priority] || ['border-gray-400', 'bg-gray-200'];
+  const priorityColor = priorityValues[priority]?.color || ['border-gray-400', 'bg-gray-200'];
 
   return (
     <TouchableOpacity onPress={onPress}>
@@ -18,8 +19,7 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
           shadowOffset: { width: 2, height: 2 },
           shadowColor: 'grey',
           shadowOpacity: 0.3,
-        }}
-      >
+        }}>
         <View className='w-2/5'>
           <Image
             source={photoUrl ? { uri: photoUrl } : require('../../assets/placeholder.jpg')}
@@ -29,19 +29,17 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
             height={10}
           />
           <View
-            className={`h-1/6 border-[1px] rounded-2xl items-center justify-center ${priorityTag.join(
+            className={`h-1/6 border-[1px] rounded-2xl items-center justify-center ${priorityColor.join(
               ' '
-            )}`}
-          >
-            <Text>{priority || 'Priority'}</Text>
+            )}`}>
+            <Text>{priorityValues[priority]?.label || 'Priority'}</Text>
           </View>
         </View>
         <View className='w-3/5'>
           <View className=' h-4/5 overflow-hidden'>
             <Text
               numberOfLines={1}
-              className='text-h4 my-0 mx-2 text-text font-manrope leading-tight'
-            >
+              className='text-h4 my-0 mx-2 text-text font-manrope leading-tight'>
               {title || 'Card'}
             </Text>
             <Text numberOfLines={6} ellipsizeMode='tail' className='text-small text-text mx-2 mt-1'>
