@@ -244,40 +244,40 @@ export default function ReportScreen() {
             <View className='justify-center w-1/2'>
               <AdvancedCheckbox
                 label='Blessé'
-                value={animalState.includes('BLESSE')}
-                onValueChange={checked => toggleState('BLESSE', checked)}
+                value={animalState.includes('blesse')}
+                onValueChange={checked => toggleState('blesse', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Affaibli'
-                value={animalState.includes('AFFAIBLI')}
-                onValueChange={checked => toggleState('AFFAIBLI', checked)}
+                value={animalState.includes('affaibli')}
+                onValueChange={checked => toggleState('affaibli', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='En danger'
-                value={animalState.includes('DANGER')}
-                onValueChange={checked => toggleState('DANGER', checked)}
+                value={animalState.includes('danger')}
+                onValueChange={checked => toggleState('danger', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Coincé'
-                value={animalState.includes('COINCE')}
-                onValueChange={checked => toggleState('COINCE', checked)}
+                value={animalState.includes('coince')}
+                onValueChange={checked => toggleState('coince', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Bébés'
-                value={animalState.includes('PETITS')}
-                onValueChange={checked => toggleState('PETITS', checked)}
+                value={animalState.includes('petits')}
+                onValueChange={checked => toggleState('petits', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -286,40 +286,40 @@ export default function ReportScreen() {
             <View className='justify-center w-1/2'>
               <AdvancedCheckbox
                 label='Agressif'
-                value={animalState.includes('AGRESSIF')}
-                onValueChange={checked => toggleState('AGRESSIF', checked)}
+                value={animalState.includes('agressif')}
+                onValueChange={checked => toggleState('agressif', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Peureux'
-                value={animalState.includes('PEUREUX')}
-                onValueChange={checked => toggleState('PEUREUX', checked)}
+                value={animalState.includes('peureux')}
+                onValueChange={checked => toggleState('peureux', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Animal jeune'
-                value={animalState.includes('JEUNE')}
-                onValueChange={checked => toggleState('JEUNE', checked)}
+                value={animalState.includes('jeune')}
+                onValueChange={checked => toggleState('jeune', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Sociable'
-                value={animalState.includes('SOCIABLE')}
-                onValueChange={checked => toggleState('SOCIABLE', checked)}
+                value={animalState.includes('sociable')}
+                onValueChange={checked => toggleState('sociable', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
 
               <AdvancedCheckbox
                 label='Bonne santé'
-                value={animalState.includes('SAIN')}
-                onValueChange={checked => toggleState('SAIN', checked)}
+                value={animalState.includes('sain')}
+                onValueChange={checked => toggleState('sain', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
