@@ -49,15 +49,15 @@ export default function CustomModal({
 
           {/* Contenu (supporte soit `content` prop soit `children`) */}
           <View className='mb-4'>
-            {content || children || (
+            {content || (
               <Text className='text-center' style={{ color: colors.text }}>
-                {content}
+                Default content
               </Text>
             )}
           </View>
           {/* Boutons (optionnels) */}
           {button && (
-            <View className='flex-row justify-center items-center mt-4 space-x-4'>{button}</View>
+            <View className='flex justify-center items-center mt-4 space-x-4 '>{button}</View>
           )}
         </View>
       </View>

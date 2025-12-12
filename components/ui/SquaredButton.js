@@ -4,13 +4,14 @@ import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-na
 import useTheme from '../../hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function SquaredButton({ title, onPress, icon }) {
+export default function SquaredButton({ title, onPress, icon, style }) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
   const iconName = icon && icon + '-outline';
+  const defaultStyle = { height: 150 };
 
   return (
     <Pressable
@@ -26,12 +27,16 @@ export default function SquaredButton({ title, onPress, icon }) {
         shadowColor: 'grey',
         shadowOpacity: 0.4,
       }}
-      className='w-[40%] h-auto my-3'>
+      className='w-[40%] h-auto my-3'
+    >
       <Animated.View
         className={`w-full py-8 rounded-2xl justify-center items-center bg-deepSage`}
-        style={animatedStyle}>
+        style={[animatedStyle, defaultStyle, style]}
+      >
         <Ionicons name={iconName || 'person-outline'} size={54} color={colors.offwhite} />
-        <Text className='font-manrope text-h3 text-offwhite'>{title || 'Profile'}</Text>
+        <Text className='font-manrope text-h4 text-offwhite text-center font-bold mt-1'>
+          {title || 'Profile'}
+        </Text>
       </Animated.View>
     </Pressable>
   );
