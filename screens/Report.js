@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
+import ReportDetail from '../components/module/ReportDetail';
 
 export default function Reports() {
   // États des filtres

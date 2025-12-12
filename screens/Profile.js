@@ -5,12 +5,18 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import SquaredButton from '../components/ui/SquaredButton';
 import CustomModal from '../components/ui/CustomModal';
+import Establishments from '../components/ui/Establishments';
 import { useState } from 'react';
+
 
 export default function Profile() {
   const [modalVisible, setModalVisible] = useState(false);
   const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
   const { colors } = useTheme();
+
+  // ORGANISATION MODAL
+  const [orgaModalVisible, setOrgaModalVisible] = useState(false);
+
 
   const handleClick = () => {
     Alert.alert(
@@ -67,7 +73,13 @@ export default function Profile() {
         onPress={() => alert('click')}
       />
       <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
-        <SquaredButton onPress={handleClick} />
+        <SquaredButton onPress={() => setOrgaModalVisible(true)} />
+          <CustomModal
+        visible={orgaModalVisible}
+        onClose={() => setOrgaModalVisible(false)}
+        content={<Establishments/>}
+        fullscreen={true}
+      />
         <SquaredButton title='FAQ' icon='help-circle' />
         <SquaredButton title='Paramètres' icon='cog' />
         <SquaredButton title='Mes signalements' icon='paw'  onPress={() => navigation.navigate('MyReports')} />
