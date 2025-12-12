@@ -26,13 +26,23 @@ export default function Reports() {
   const [data, setData] = useState([]);
 
   const dispatch = useDispatch();
-  const reports = useSelector((state) => state.animals.value);
-  const userRole = useSelector((state) => state.user.value.role);
+  const reports = useSelector(state => state.animals.value);
+  const userRole = useSelector(state => state.user.value.role);
 
   //Charge les données de base dans Redux au montage
   useEffect(() => {
-    dispatch(getReports(animalsData));
-  }, [dispatch]);
+    const fetchReports = async () => {
+      try {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND}/animals`);
+        const data = await response.json();
+        dispatch(getReports(data.reports));
+      } catch (error) {
+        console.error('Error fetching reports:', error);
+      }
+    };
+    fetchReports();
+    // dispatch(getReports(reportsData));
+  }, []);
 
   // Effet qui applique TOUS les filtres combinés
   useEffect(() => {
@@ -40,13 +50,13 @@ export default function Reports() {
 
     //Filtre PRIORITÉ
     if (modere) {
-      result = result.filter((r) => r.priority === 'Modéré');
+      result = result.filter(r => r.priority === 'modere');
     }
     if (important) {
-      result = result.filter((r) => r.priority === 'Important');
+      result = result.filter(r => r.priority === 'important');
     }
     if (urgent) {
-      result = result.filter((r) => r.priority === 'Urgent');
+      result = result.filter(r => r.priority === 'urgent');
     }
 
     //Filtre STATUT
@@ -54,13 +64,13 @@ export default function Reports() {
     // - "En cours"    => status === 'en cours'
     // - "Clôturés"    => status === 'terminé'
     if (nouveaux) {
-      result = result.filter((r) => r.status === 'nouveau');
+      result = result.filter(r => r.status === 'nouveau');
     }
     if (enCours) {
-      result = result.filter((r) => r.status === 'en cours');
+      result = result.filter(r => r.status === 'en cours');
     }
     if (clotures) {
-      result = result.filter((r) => r.status === 'terminé');
+      result = result.filter(r => r.status === 'terminé');
     }
 
     setData(result);
@@ -68,45 +78,45 @@ export default function Reports() {
 
   //Gestion des boutons "statut"
   const nouveauxPress = () => {
-    setNouveaux((prev) => !prev);
+    setNouveaux(prev => !prev);
     setEnCours(false);
     setClotures(false);
   };
 
   const enCoursPress = () => {
-    setEnCours((prev) => !prev);
+    setEnCours(prev => !prev);
     setNouveaux(false);
     setClotures(false);
   };
 
   const cloturesPress = () => {
-    setClotures((prev) => !prev);
+    setClotures(prev => !prev);
     setNouveaux(false);
     setEnCours(false);
   };
 
   //Gestion des filtres de priorité
   const handleModere = () => {
-    setModere((prev) => !prev);
+    setModere(prev => !prev);
     setImportant(false);
     setUrgent(false);
   };
 
   const handleImportant = () => {
-    setImportant((prev) => !prev);
+    setImportant(prev => !prev);
     setModere(false);
     setUrgent(false);
   };
 
   const handleUrgent = () => {
-    setUrgent((prev) => !prev);
+    setUrgent(prev => !prev);
     setModere(false);
     setImportant(false);
   };
 
   //Toggle ouverture / fermeture du menu Filtres
   const handleFiltre = () => {
-    setFiltre((prev) => !prev);
+    setFiltre(prev => !prev);
   };
 
   //Modal State
@@ -114,12 +124,11 @@ export default function Reports() {
   const [dataReport, setDataReport] = useState(null);
 
   // Open Modal on Card Click
-  const handleClick = (report) => {
+  const handleClick = report => {
     setDataReport(report);
     setModalVisible(true);
     console.log('Report: ', report);
   };
-
 
   return (
     <SafeAreaView
@@ -128,8 +137,7 @@ export default function Reports() {
         flex: 1,
         position: 'relative', // pour que l’overlay des filtres se base sur ce container
       }}
-      className='bg-offwhite'
-    >
+      className='bg-offwhite'>
       {/* Titre de la page */}
       <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
 
@@ -140,8 +148,7 @@ export default function Reports() {
           <View className='mt-2 w-[350px]'>
             <TouchableOpacity
               className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
-              onPress={handleFiltre}
-            >
+              onPress={handleFiltre}>
               <Text>Filtres</Text>
               <Ionicons name='chevron-down-outline' color='#000000' size={20} />
             </TouchableOpacity>
@@ -175,8 +182,7 @@ export default function Reports() {
             zIndex: 50,
             elevation: 50,
           }}
-          className='items-center'
-        >
+          className='items-center'>
           <View className='bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg'>
             {/* Filtres de priorité */}
             <TouchableOpacity
@@ -188,8 +194,7 @@ export default function Reports() {
               onPress={() => {
                 handleModere();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={modere ? 'text-white' : 'text-black'}>Modéré</Text>
             </TouchableOpacity>
 
@@ -202,8 +207,7 @@ export default function Reports() {
               onPress={() => {
                 handleImportant();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={important ? 'text-white' : 'text-black'}>Important</Text>
             </TouchableOpacity>
 
@@ -216,8 +220,7 @@ export default function Reports() {
               onPress={() => {
                 handleUrgent();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={urgent ? 'text-white' : 'text-black'}>Urgent</Text>
             </TouchableOpacity>
 
@@ -231,8 +234,7 @@ export default function Reports() {
               onPress={() => {
                 nouveauxPress();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={nouveaux ? 'text-white' : 'text-black'}>Nouveaux</Text>
             </TouchableOpacity>
 
@@ -245,8 +247,7 @@ export default function Reports() {
               onPress={() => {
                 enCoursPress();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={enCours ? 'text-white' : 'text-black'}>En cours</Text>
             </TouchableOpacity>
 
@@ -259,15 +260,13 @@ export default function Reports() {
               onPress={() => {
                 cloturesPress();
                 setFiltre(false);
-              }}
-            >
+              }}>
               <Text className={clotures ? 'text-white' : 'text-black'}>Clôturés</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               className='bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2'
-              onPress={() => setFiltre(false)}
-            >
+              onPress={() => setFiltre(false)}>
               <Text className='text-white text-lg'>Fermer</Text>
             </TouchableOpacity>
           </View>
@@ -276,5 +275,3 @@ export default function Reports() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({});
