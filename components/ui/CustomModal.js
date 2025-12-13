@@ -27,10 +27,8 @@ export default function CustomModal({
     >
       <View className='flex-1 justify-center items-center bg-black/50'>
         <View
-          className={`rounded-lg justify-center items-center ${
-            fullscreen
-              ? 'w-full h-full p-6 items-center'
-              : 'w-11/12 min-h-[300px] p-12 justify-center items-center'
+          className={`rounded-2xl items-center relative ${
+            fullscreen ? 'w-full h-full p-6 pt-12' : 'w-11/12 min-h-[300px] p-12'
           }`}
           style={{ backgroundColor: colors.offwhite }}
         >
@@ -44,6 +42,7 @@ export default function CustomModal({
               position: 'absolute',
               top: 16,
               right: 16,
+              zIndex: 20,
             }}
           />
 
