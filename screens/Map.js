@@ -112,36 +112,36 @@ export default function MapScreen({ navigation }) {
   const [locations, setLocations] = useState([]);
 
   // SEND DATA TO ANIMALS REDUCER
-  const handleData = () => {
-    const newAnimal = [
-      {
-        location: {
-          lat: 43.249954,
-          long: 5.421111,
-        },
-        date: '2025-12-09T10:30:00.000Z',
-        animalType: 'chat',
-        desc: 'Chat errant aperçu près du parc',
-        state: ['affamé'],
-        photoUrl: '',
-        status: 'nouveau',
-        reporter: {
-          $oid: '6936fe386fb328f6ec180ea6',
-        },
-        handlers: [],
-        history: [],
-      },
-    ];
-    dispatch(getReports(newAnimal));
-    // console.log('reducers', animals);
-    if (animals.length > 0) {
-      // console.log('animals reducers: ', animals);
-      console.log('animals date: ', animals[0].date);
-      console.log('animals type: ', animals[0].animalType);
-      console.log('animal lat: ', animals[0].location.lat);
-      console.log('animal long: ', animals[0].location.long);
-    }
-  };
+  // const handleData = () => {
+  //   const newAnimal = [
+  //     {
+  //       location: {
+  //         lat: 43.249954,
+  //         long: 5.421111,
+  //       },
+  //       date: '2025-12-09T10:30:00.000Z',
+  //       animalType: 'chat',
+  //       desc: 'Chat errant aperçu près du parc',
+  //       state: ['affamé'],
+  //       photoUrl: '',
+  //       status: 'nouveau',
+  //       reporter: {
+  //         $oid: '6936fe386fb328f6ec180ea6',
+  //       },
+  //       handlers: [],
+  //       history: [],
+  //     },
+  //   ];
+  //   dispatch(getReports(newAnimal));
+  //   // console.log('reducers', animals);
+  //   if (animals.length > 0) {
+  //     // console.log('animals reducers: ', animals);
+  //     console.log('animals date: ', animals[0].date);
+  //     console.log('animals type: ', animals[0].animalType);
+  //     console.log('animal lat: ', animals[0].location.lat);
+  //     console.log('animal long: ', animals[0].location.long);
+  //   }
+  // };
 
   /*--- 3. DISTANCE CALCULATION ---*/
 
@@ -233,14 +233,16 @@ export default function MapScreen({ navigation }) {
   // DISPLAY USER MAP BUTTONS DEPENDING ROLES
   let userMapButtons =
     user?.role === 'civil' ? (
-      <View className='absolute flex-col bottom-40 right-14'>
-        <TouchableOpacity
-          className='rounded-full bg-white items-center justify-center size-10 start-80 bottom-5'
-          onPress={onPressLocation}>
-          <Ionicons name='locate-sharp' size={32} color='black' />
-        </TouchableOpacity>
+      <View className='absolute w-full items-center bottom-36'>
+        <View className='w-full items-end px-4'>
+          <TouchableOpacity
+            className='rounded-full bg-white items-center justify-center size-12 '
+            onPress={onPressLocation}>
+            <Ionicons name='locate-sharp' size={36} color='black' />
+          </TouchableOpacity>
+        </View>
         <Button
-          width={320}
+          width='w-9/12'
           bg={colors.danger}
           textColor={colors.offwhite}
           title='Signaler un animal'
@@ -249,19 +251,18 @@ export default function MapScreen({ navigation }) {
         />
       </View>
     ) : (
-      <View className='absolute flex-col bottom-40 right-14'>
+      <View className='absolute w-full bottom-36 items-end p-4'>
         <TouchableOpacity
-          className='absolute rounded-full bottom-40 right-10 bg-white items-center'
+          className='rounded-full size-12 bg-white justify-center items-center'
           onPress={onPressLocation}>
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
-        <Button
-          width={320}
+        {/* <Button
           bg={colors.softOrange}
           textColor={colors.offwhite}
           title='Données animaux reducers'
           onPress={handleData}
-        />
+        /> */}
       </View>
     );
 

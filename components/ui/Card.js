@@ -1,5 +1,9 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import moment from 'moment';
+import 'moment/locale/fr';
+moment.locale('fr');
 
 export default function Card({ title, desc, date, place, priority, photoUrl, onPress }) {
   const priorityValues = {
@@ -40,16 +44,24 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
             <Text
               numberOfLines={1}
               className='text-h4 my-0 mx-2 text-text font-manrope leading-tight'>
-              {title || 'Card'}
+              {title || 'Title Card'}
             </Text>
             <Text numberOfLines={6} ellipsizeMode='tail' className='text-small text-text mx-2 mt-1'>
               {desc ||
-                'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.'}
+                'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.'}
             </Text>
           </View>
           <View className='h-1/5 flex-row justify-between items-center mx-2 mt-1'>
-            <Text className='text-small text-text font-manrope '>{place || '500m'}</Text>
-            <Text className='text-small text-text font-manrope'>{date || 'il y a 3h'}</Text>
+            <View className='flex-row items-center'>
+              <Ionicons name='location-outline' size={14} className='mr-1' />
+              <Text className='text-small text-text font-manrope '>{place || '2 km'}</Text>
+            </View>
+            <View className='flex-row items-center'>
+              <Ionicons name='time-outline' size={14} className='mr-1' />
+              <Text className='text-small text-text font-manrope'>
+                {moment(date).fromNow() || ''}
+              </Text>
+            </View>
           </View>
         </View>
       </View>

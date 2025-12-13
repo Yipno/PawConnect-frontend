@@ -20,20 +20,20 @@ export default function Button({ title, bg, onPress, textColor, width, border, m
         scale.value = withSpring(1);
       }}
       onPress={onPress}
+      className={`${width ? width : 'w-10/12'}`}
       style={{
-        width: width || 360,
         shadowOffset: { width: 2, height: 3 },
         shadowColor: 'grey',
         shadowOpacity: 0.4,
       }}>
       <Animated.View
-        className={`h-16 my-2 rounded-2xl justify-center items-center bg-deepSage text-deepSage ${borders.join(
+        className={`h-16 w-full my-2 rounded-2xl justify-center items-center bg-deepSage text-deepSage ${borders.join(
           ' '
         )}`}
         style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle, margin]}>
         <Text
           style={{ color: textColor || colors.offwhite }}
-          className='font-manrope font-bold text-h3'>
+          className='font-manrope font-bold text-h3 '>
           {title}
         </Text>
       </Animated.View>

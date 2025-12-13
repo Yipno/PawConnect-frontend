@@ -23,26 +23,26 @@ export default function Reports() {
   const [clotures, setClotures] = useState(false);
 
   // Données filtrées affichées
-  const [data, setData] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
 
   const dispatch = useDispatch();
   const reports = useSelector(state => state.animals.value);
   const userRole = useSelector(state => state.user.value.role);
-
+  // console.log('reports', reports);
   //Charge les données de base dans Redux au montage
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND}/animals`);
-        const data = await response.json();
-        dispatch(getReports(data.reports));
-      } catch (error) {
-        console.error('Error fetching reports:', error);
-      }
-    };
-    fetchReports();
-    // dispatch(getReports(reportsData));
-  }, []);
+  // useEffect(() => {
+  //   const fetchReports = async () => {
+  //     try {
+  //       const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND}/animals`);
+  //       const data = await response.json();
+  //       dispatch(getReports(data.reports));
+  //     } catch (error) {
+  //       console.error('Error fetching reports:', error);
+  //     }
+  //   };
+  //   fetchReports();
+  //   // dispatch(getReports(reportsData));
+  // }, []);
 
   // Effet qui applique TOUS les filtres combinés
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function Reports() {
       result = result.filter(r => r.status === 'terminé');
     }
 
-    setData(result);
+    setFilteredList(result);
   }, [reports, modere, important, urgent, nouveaux, enCours, clotures]);
 
   //Gestion des boutons "statut"
@@ -127,7 +127,7 @@ export default function Reports() {
   const handleClick = report => {
     setDataReport(report);
     setModalVisible(true);
-    console.log('Report: ', report);
+    // console.log('Report: ', report);
   };
 
   return (
@@ -158,8 +158,8 @@ export default function Reports() {
 
       {/* Liste des signalements sous forme de cartes */}
       <ScrollView style={{ flex: 1, width: '100%' }}>
-        {data.map((r, index) => (
-          <Card key={index} {...r} onPress={() => handleClick(r)} />
+        {filteredList.map(r => (
+          <Card key={r._id} {...r} onPress={() => handleClick(r)} />
         ))}
         {/* Marge en bas pour éviter que le dernier élément soit collé à une éventuelle bottom bar */}
         <View style={{ marginBottom: 120 }} />
