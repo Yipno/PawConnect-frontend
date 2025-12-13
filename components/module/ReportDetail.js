@@ -58,24 +58,26 @@ export default function ReportDetail({ visible, onClose, report }) {
       content={
         report ? (
           <View>
-            <View className='w-full aspect-[4/3] mb-6'>
+            <View className='w-full aspect-[4/3] mb-6 mt-20 max-h-[400px] relative'>
               <Image
                 source={{ uri: report.photoUrl }}
                 className='w-full h-full rounded-2xl object-cover'
+                resizeMode="cover"
                 accessibilityLabel={`Photo du signalement: ${report.title}`}
                 onLoadStart={() => setLoading(true)} // Show loading indicator
                 onLoadEnd={() => setLoading(false)}
                 onError={() => setLoading(false)}
               />
               {loading && (
-                <View className='absolute inset-O flex items-center justify-center z-10'>
+                <View className='absolute inset-0 flex items-center justify-center z-10'>
+                  {/* Loading page */}
                   <ActivityIndicator size='large' color='#FFA000' />
                 </View>
               )}
             </View>
 
             {/* Title */}
-            <Text className='text-xl font-bold mb-4 text-left'>{report.title}</Text>
+            <Text className='text-xl font-bold mb-4 text-left break-words'>{report.title}</Text>
 
             {/* Distance & Date */}
             <View className='w-full flex-row justify-between mb-3'>
@@ -88,7 +90,7 @@ export default function ReportDetail({ visible, onClose, report }) {
             </View>
 
             {/* Tag */}
-            <View className='flex-row gap-2 mb-4'>
+            <View className='flex-row flex-wrap gap-2 mb-4 break-words'>
               {report.state.map((tag, index) => (
                 <View
                   key={index}
@@ -102,7 +104,7 @@ export default function ReportDetail({ visible, onClose, report }) {
             {/* Description */}
             <View>
               <Text
-                className='text-base text-gray-800 leading-normal mb-4'
+                className='text-base text-gray-800 leading-normal mb-4 break-words'
                 style={{ textAlign: 'justify' }}
               >
                 {report.desc}
@@ -111,7 +113,7 @@ export default function ReportDetail({ visible, onClose, report }) {
 
             <View>
               {report.history?.[0] && (
-                <Text className='text-base font-medium text-gray-800 leading-relaxed'>
+                <Text className='text-base font-medium text-gray-800 leading-relaxed break-words'>
                   {`${report.history[0].action} le : ${formatDateHistory(
                     report.history[0].date
                   )} \n par ${report.history[0].handler}`}

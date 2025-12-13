@@ -20,13 +20,15 @@ export default function CustomModal({
       visible={visible}
       transparent
       animationType={animationType || 'slide'}
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+    >
       <View className='flex-1 justify-center items-center bg-black/50'>
         <View
-          className={`rounded-2xl items-center ${
+          className={`rounded-2xl items-center relative ${
             fullscreen ? 'w-full h-full p-6 pt-12' : 'w-11/12 min-h-[300px] p-12'
           }`}
-          style={{ backgroundColor: colors.offwhite }}>
+          style={{ backgroundColor: colors.offwhite }}
+        >
           {/* Croix de fermeture */}
           <Ionicons
             name='close'
@@ -37,6 +39,7 @@ export default function CustomModal({
               position: 'absolute',
               top: fullscreen ? 54 : 16,
               right: 16,
+              zIndex: 20,
             }}
           />
 

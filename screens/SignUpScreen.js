@@ -14,38 +14,75 @@ import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { login } from '../reducers/user';
-import { BASE_URL } from '@env';
 
-export default function SignUp({navigation}) {
+const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
+
+const EMAIL_REGEX =
+  /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
+
+export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
-
-  const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
-
-  const EMAIL_REGEX: RegExp =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const [signUpFirstName, setSignUpFirstName] = useState('');
   const [signUpLastName, setSignUpLastName] = useState('');
   const [signUpEmail, setSignUpEmail] = useState('');
   const [signUpPassword, setSignUpPassword] = useState('');
   const [signUpPasswordConfirm, setSignUpPasswordConfirm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({ email: '', password: '', passwordConfirm: '' });
-  const [backendError, setBackendError] = useState('');
-  //
-  const [accountType, setAccountType] = useState('user');
   const [signUpEstablishment, setSignUpEstablishment] = useState('');
+
+  const [accountType, setAccountType] = useState('user');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    establishment: '',
+  });
+
+  const [backendError, setBackendError] = useState('');
 
   const handleRegister = async () => {
     if (isLoading) return; // Prevent double tap
-    setErrors({ email: '', password: '', passwordConfirm: '', establishment: '' });
+    setErrors({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      establishment: '',
+    });
     setBackendError('');
     setIsLoading(true);
 
-    //check the email compliance
+    //check if fields are completed
+    const checkFields = {};
+
+    if (!signUpFirstName) checkFields.firstName = 'Champ requis.';
+    if (!signUpLastName) checkFields.lastName = 'Champ requis.';
+    if (!signUpEmail) checkFields.email = 'Champ requis.';
+    if (!signUpPassword) checkFields.password = 'Champ requis.';
+    if (!signUpPasswordConfirm) checkFields.passwordConfirm = 'Champ requis.';
+
+    if (
+      accountType === 'pro' &&
+      (!signUpEstablishment || signUpEstablishment.trim().length === 0)
+    ) {
+      checkFields.establishment = "L'établissement est requis pour un compte pro/association.";
+    }
+
+    if (Object.keys(checkFields).length > 0) {
+      setErrors(checkFields);
+      setIsLoading(false);
+      return;
+    }
+
+    //check the email format
     if (!EMAIL_REGEX.test(signUpEmail)) {
-      setErrors((prev) => ({ ...prev, email: 'Email invalide' }));
+      setErrors((prev) => ({ ...prev, email: 'Email invalide.' }));
       setIsLoading(false);
       return;
     }
@@ -60,7 +97,7 @@ export default function SignUp({navigation}) {
       return;
     }
 
-    //check password conformity
+    //check password confirmation
     if (signUpPassword !== signUpPasswordConfirm) {
       setErrors((prev) => ({
         ...prev,
@@ -161,6 +198,7 @@ export default function SignUp({navigation}) {
             placeholder='Votre prénom'
             value={signUpFirstName}
             onChangeText={setSignUpFirstName}
+            error={errors.firstName}
           />
 
           <Input
@@ -168,6 +206,7 @@ export default function SignUp({navigation}) {
             placeholder='Votre nom'
             value={signUpLastName}
             onChangeText={setSignUpLastName}
+            error={errors.lastName}
           />
 
           <Input
