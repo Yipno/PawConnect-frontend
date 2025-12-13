@@ -29,19 +29,13 @@ export default function Reports() {
   const [description, setDescription] = useState('');
 
   const dispatch = useDispatch();
-<<<<<<< HEAD
   const reports = useSelector((state) => state.animals.value);
   const userRole = useSelector((state) => state.user.value.role);
   const userId = useSelector((state) => state.user.value._id);
-=======
-  const reports = useSelector(state => state.animals.value);
-  const userRole = useSelector(state => state.user.value.role);
->>>>>>> 90fd9f6dcb3b5fdada07fb74fe915f0603dbfefd
 
   const url = process.env.EXPO_PUBLIC_BACKEND;
   //Charge les données de base dans Redux au montage
   useEffect(() => {
-<<<<<<< HEAD
     fetch(`${url}/animals`)
       .then((res) => res.json())
       .then((data) => {
@@ -52,20 +46,6 @@ export default function Reports() {
         }
       });
   }, [dispatch]);
-=======
-    const fetchReports = async () => {
-      try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND}/animals`);
-        const data = await response.json();
-        dispatch(getReports(data.reports));
-      } catch (error) {
-        console.error('Error fetching reports:', error);
-      }
-    };
-    fetchReports();
-    // dispatch(getReports(reportsData));
-  }, []);
->>>>>>> 90fd9f6dcb3b5fdada07fb74fe915f0603dbfefd
 
   // Effet qui applique TOUS les filtres combinés
   useEffect(() => {
@@ -153,7 +133,6 @@ export default function Reports() {
     console.log('Report: ', report);
   };
 
-<<<<<<< HEAD
   //function pour récupérer la description et le statut pour l'envoyer en base de donnée
   const handleActualiser = ({ description, cours, cloturer }) => {
     const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
@@ -186,8 +165,6 @@ export default function Reports() {
       });
   };
 
-=======
->>>>>>> 90fd9f6dcb3b5fdada07fb74fe915f0603dbfefd
   return (
     <SafeAreaView
       edges={['top']}
