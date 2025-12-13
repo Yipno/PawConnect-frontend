@@ -1,87 +1,65 @@
 import React from 'react';
-import { Modal, View, Text, ScrollView, Pressable } from 'react-native';
+import { Modal, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function CustomModal({
   visible,
   onClose,
-  title,
   content,
-  button,
   fullscreen = false,
-  animationType,
+  animationType = 'slide',
 }) {
-  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-
-  const isFull = !!fullscreen;
+  const HEADER_HEIGHT = 56;
+  const headerTotalHeight = insets.top + HEADER_HEIGHT;
 
   return (
     <Modal
       visible={visible}
-      transparent
-      animationType={animationType || 'slide'}
+      animationType={animationType}
+      transparent={!fullscreen}
       onRequestClose={onClose}
+      statusBarTranslucent={false}
     >
-      <View className='flex-1 justify-center items-center bg-black/50'>
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
+        {/* HEADER (prend en compte l'encoche) */}
         <View
-          className={`rounded-2xl items-center relative ${
-            fullscreen ? 'w-full h-full p-6 pt-12' : 'w-11/12 min-h-[300px] p-12'
-          }`}
-          style={{ backgroundColor: colors.offwhite }}
+          style={{
+            height: headerTotalHeight,
+            paddingTop: insets.top,
+            borderBottomWidth: 1,
+            borderColor: '#e5e7eb',
+            justifyContent: 'center',
+          }}
         >
-          {/* Croix de fermeture */}
-          <Ionicons
-            name='close'
-            size={28}
-            color={colors.text}
+          {/* Croix à droite, centrée verticalement dans le header */}
+          <TouchableOpacity
             onPress={onClose}
             style={{
               position: 'absolute',
-              top: 16,
               right: 16,
-              zIndex: 20,
+              top: insets.top + (HEADER_HEIGHT - 28) / 2, // 28 = taille icon
+              zIndex: 10,
             }}
-          />
-
-          {/* Titre */}
-          {title && (
-            <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>
-              {title}
-            </Text>
-          )}
-
-          {/* Contenu */}
-          <View className='mb-4'>
-            {content || (
-              <Text className='text-center' style={{ color: colors.text }}>
-                Default content
-              </Text>
-            )}
-          </View>
-
-          {/* Content */}
-          <ScrollView
-            contentContainerStyle={{
-              padding: 16,
-              paddingBottom: button ? 90 : 24,
-            }}
-            keyboardShouldPersistTaps='handled'
           >
-            {content || (
-              <Text style={{ color: colors.text, textAlign: 'center' }}>Default content</Text>
-            )}
-          </ScrollView>
-
-          {/* Footer buttons */}
-          {button && (
-            <View className='flex-row justify-center items-center mt-4 space-x-4'>{buttons}</View>
-          )}
+            <Ionicons name='close' size={28} color='black' />
+          </TouchableOpacity>
         </View>
 
-        {!isFull && <Pressable style={{ flex: 1 }} onPress={onClose} />}
+        {/* CONTENU SCROLLABLE (commence après le header) */}
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{
+            paddingHorizontal: 16,
+            paddingTop: 12,
+            paddingBottom: insets.bottom + 24,
+          }}
+          keyboardShouldPersistTaps='handled'
+          showsVerticalScrollIndicator={false}
+        >
+          {content}
+        </ScrollView>
       </View>
     </Modal>
   );
