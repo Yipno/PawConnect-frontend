@@ -8,6 +8,7 @@ import CustomModal from '../components/ui/CustomModal';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, updateUser } from '../reducers/user';
+import { emptyAnimals } from '../reducers/animals';
 
 export default function Profile() {
   const user = useSelector(state => state.user.value);
@@ -87,6 +88,11 @@ export default function Profile() {
       });
   };
 
+  const logoutUser = () => {
+    dispatch(logout());
+    dispatch(emptyAnimals());
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.offwhite }}>
       <KeyboardAvoidingView
@@ -98,7 +104,7 @@ export default function Profile() {
             alignItems: 'center',
           }}
           keyboardShouldPersistTaps='handled'>
-          <Text className='text-h1 font-manrope font-bold text-deepSage my-4 mb-8'>Menu</Text>
+          <Text className='text-h2 font-manrope font-bold text-deepSage mb-1'>Menu</Text>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
             <SquaredButton
               title={'Mes\nsignalements'}

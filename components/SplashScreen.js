@@ -17,12 +17,12 @@ const rotate = {
   },
 };
 
-export default function SplashScreen() {
+export default function SplashScreen({ text }) {
   const dispatch = useDispatch();
   const { colors } = useTheme();
 
   return (
-    <View className='h-full justify-center items-center bg-offwhite'>
+    <View className='justify-center items-center bg-offwhite'>
       <Animated.View
         style={{
           animationName: rotate,
@@ -33,7 +33,7 @@ export default function SplashScreen() {
         <Ionicons name='cog-outline' size={100} color={'#a3a3a3'} />
       </Animated.View>
       <Text className='text-h3 font-manrope text-neutral-400 font-bold'>
-        Chargement des données...
+        {text || 'Chargement des données...'}
       </Text>
     </View>
   );

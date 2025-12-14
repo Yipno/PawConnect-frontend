@@ -29,8 +29,12 @@ const animalsSlice = createSlice({
       const id = action.payload;
       state.value = state.value.filter(r => r.id !== id);
     },
+    emptyAnimals: state => {
+      state.value = [];
+    },
   },
 });
 
-export const { getReports, addReport, updateReport, deleteReport } = animalsSlice.actions;
+export const { getReports, addReport, updateReport, deleteReport, emptyAnimals } =
+  animalsSlice.actions;
 export default animalsSlice.reducer;

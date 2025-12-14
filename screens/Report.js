@@ -8,6 +8,8 @@ import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
 import ReportDetailAgent from '../components/module/ReportDetailAgent';
 // import ReportDetail from '../components/module/ReportDetail';
+import * as Location from 'expo-location';
+import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
 export default function Reports() {
   // États des filtres
@@ -29,24 +31,12 @@ export default function Reports() {
   //Description agent
   const [description, setDescription] = useState('');
 
+  // Position utilisateur
+  const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude: 0 });
+
   const dispatch = useDispatch();
   const reports = useSelector(state => state.animals.value);
   const userRole = useSelector(state => state.user.value.role);
-  // console.log('reports', reports);
-  //Charge les données de base dans Redux au montage
-  // useEffect(() => {
-  //   const fetchReports = async () => {
-  //     try {
-  //       const response = await fetch(`${process.env.EXPO_PUBLIC_BACKEND}/animals`);
-  //       const data = await response.json();
-  //       dispatch(getReports(data.reports));
-  //     } catch (error) {
-  //       console.error('Error fetching reports:', error);
-  //     }
-  //   };
-  //   fetchReports();
-  //   // dispatch(getReports(reportsData));
-  // }, []);
 
   // Effet qui applique TOUS les filtres combinés
   useEffect(() => {
@@ -135,6 +125,7 @@ export default function Reports() {
   };
 
   //function pour récupérer la description et le statut pour l'envoyer en base de donnée
+  // TODO -> A deplacer dans la modal je pense
   const handleActualiser = ({ description, cours, cloturer }) => {
     const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
     if (!status || !dataReport) return;
@@ -166,6 +157,23 @@ export default function Reports() {
       });
   };
 
+  //add the current location
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission refusée pour accéder à la localisation');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    })();
+  }, []);
+
   return (
     <SafeAreaView
       edges={['top']}
@@ -195,7 +203,15 @@ export default function Reports() {
       {/* Liste des signalements sous forme de cartes */}
       <ScrollView style={{ flex: 1, width: '100%' }}>
         {filteredList.map(r => (
-          <Card key={r._id} {...r} onPress={() => handleClick(r)} />
+          <Card
+            key={r._id}
+            {...r}
+            place={getDistanceBetweenTwoPoints(
+              { latitude: r.location.lat, longitude: r.location.long },
+              currentLocation
+            )}
+            onPress={() => handleClick(r)}
+          />
         ))}
         {/* Marge en bas pour éviter que le dernier élément soit collé à une éventuelle bottom bar */}
         <View style={{ marginBottom: 120 }} />

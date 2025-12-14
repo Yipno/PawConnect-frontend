@@ -109,19 +109,20 @@ export default function SignInScreen({ navigation }) {
   return (
     <>
       {isLoading ? (
-        <SplashScreen />
+        <View className='flex-1 justify-center bg-offwhite'>
+          <SplashScreen />
+        </View>
       ) : (
         <KeyboardAwareScrollView
           enableOnAndroid
           keyboardShouldPersistTaps='handled'
-          contentContainerStyle={{ paddingTop: 60 }}
-          style={{ flex: 1, backgroundColor: colors.offwhite }}>
-          <View className='justify-between items-center bg-offwhite '>
+          contentContainerStyle={{ paddingTop: 60, flexGrow: 1 }}
+          style={{ backgroundColor: colors.offwhite }}>
+          <View className='flex-1 justify-between items-center bg-offwhite'>
             <Text className='text-h2 text-deepSage mt-4'>Se connecter</Text>
-
             {/* BUTTONS DEV MODE  */}
             <Button
-              title={'cheatcode'}
+              title={'cheatcode civil'}
               onPress={() => {
                 setEmail('luke@mi.io');
                 setPassword('007007');
@@ -135,7 +136,7 @@ export default function SignInScreen({ navigation }) {
               }}
             />
 
-            <View className='h-[400px] w-full justify-center items-center my-52'>
+            <View className='flex-1 w-full justify-center items-center pb-20'>
               <Input
                 label='Email'
                 type='email'
@@ -160,8 +161,6 @@ export default function SignInScreen({ navigation }) {
                   {backendError}
                 </Text>
               )}
-
-              {/* BUTTONS CONTAINER */}
 
               <Button
                 margin={{ marginTop: 12 }}

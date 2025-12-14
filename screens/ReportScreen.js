@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import CustomModal from '../components/ui/CustomModal';
+import SplashScreen from '../components/SplashScreen';
 import useTheme from '../hooks/useTheme';
 import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 import { useSelector } from 'react-redux';
@@ -29,6 +31,8 @@ export default function ReportScreen() {
   const [description, setDescription] = useState('');
   const [formError, setFormError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+  const [sendResult, setSendResult] = useState(null);
 
   const openCamera = () => {
     navigation.navigate('Camera', {
@@ -81,19 +85,20 @@ export default function ReportScreen() {
   };
 
   // Confirmation avant envoi
-  const confirmSend = () => {
-    Alert.alert(
-      'Envoi du signalement',
-      'Voulez-vous vraiment envoyer ce signalement ? Vous ne pourrez plus le modifer par la suite.',
-      [
-        { text: 'Annuler', style: 'destructive', onPress: () => setIsLoading(false) },
-        { text: 'Confirmer', onPress: () => sendReport() },
-      ]
-    );
-  };
+  // const confirmSend = () => {
+  //   Alert.alert(
+  //     'Envoi du signalement',
+  //     'Voulez-vous envoyer ce signalement ? Vous ne pourrez plus le modifer par la suite.',
+  //     [
+  //       { text: 'Annuler', style: 'destructive', onPress: () => setIsLoading(false) },
+  //       { text: 'Confirmer', onPress: () => sendReport() },
+  //     ]
+  //   );
+  // };
 
   // Envoi du signalement au backend
   const sendReport = async () => {
+    setShowLoader(true);
     const formData = new FormData();
     formData.append('photoReport', {
       uri: photoUri,
@@ -120,32 +125,44 @@ export default function ReportScreen() {
 
     const report = await response.json();
     if (report.result) {
-      Alert.alert(
-        'Signalement envoyé !',
-        "Merci pour votre signalement. Nous allons l'examiner et prendre les mesures appropriées.",
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              setIsLoading(false);
-              dispatch(addReport(report.animal));
-              navigation.navigate('Map');
-            },
-          },
-        ]
+      setShowLoader(false);
+      setSendResult(
+        <>
+          <Text className='text-deepSage text-h4 text-center'>Signalement envoyé !</Text>
+          <Text className='text-text text-body text-center mt-2'>
+            Merci pour votre signalement. Nous allons l'examiner et prendre les mesures appropriées.
+          </Text>
+          <View className='items-center mt-4'>
+            <Button
+              title='OK'
+              width={'w-3/5'}
+              onPress={() => {
+                setIsLoading(false);
+                dispatch(addReport(report.animal));
+                navigation.navigate('Map');
+              }}
+            />
+          </View>
+        </>
       );
     } else {
-      Alert.alert(
-        'Erreur',
-        "Une erreur est survenue lors de l'envoi du signalement. Veuillez réessayer plus tard.",
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              setIsLoading(false);
-            },
-          },
-        ]
+      setShowLoader(false);
+      setSendResult(
+        <>
+          <Text className='text-danger text-h4 text-center'>Oups...</Text>
+          <Text className='text-text text-body text-center mt-2'>
+            Une erreur est survenue lors de l'envoi du signalement. Veuillez réessayer plus tard...
+          </Text>
+          <View className='items-center mt-4'>
+            <Button
+              title='OK'
+              width={'w-3/5'}
+              onPress={() => {
+                setIsLoading(false);
+              }}
+            />
+          </View>
+        </>
       );
     }
   };
@@ -353,13 +370,44 @@ export default function ReportScreen() {
           </View>
         </View>
       </View>
-      {/* Bouton envoi du signalement */}
+      {/* Bouton envoi du signalement  handleSubmit() &&  */}
       <Button
         title={isLoading ? 'Chargement' : 'Envoyer le signalement'}
-        onPress={() => handleSubmit() && confirmSend()}
+        onPress={() => setIsLoading(true)}
         bg={isLoading && 'lightgray'}
       />
       <View className='h-14' />
+      <CustomModal
+        visible={isLoading}
+        content={
+          <View className='mt-12 justify-center'>
+            {showLoader ? (
+              <SplashScreen text='Envoi des données...' />
+            ) : (
+              <>
+                {sendResult ? (
+                  sendResult
+                ) : (
+                  <>
+                    <Text className='text-h4 text-center text-text font-manrope'>
+                      Voulez vous envoyer ce signalement ? Vous ne pourrez plus le modifier ensuite.
+                    </Text>
+                    <View className='w-full flex-row pt-6 justify-evenly'>
+                      <Button
+                        title='Non'
+                        width={'w-5/12'}
+                        bg={colors.danger}
+                        onPress={() => setIsLoading(false)}
+                      />
+                      <Button title='Oui' width={'w-5/12'} onPress={sendReport} />
+                    </View>
+                  </>
+                )}
+              </>
+            )}
+          </View>
+        }
+      />
     </KeyboardAwareScrollView>
   );
 }
