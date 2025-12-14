@@ -29,18 +29,18 @@ export default function Reports() {
   const [description, setDescription] = useState('');
 
   const dispatch = useDispatch();
-  const reports = useSelector((state) => state.animals.value);
-  const userRole = useSelector((state) => state.user.value.role);
-  const userId = useSelector((state) => state.user.value._id);
+  const reports = useSelector(state => state.animals.value);
+  const userRole = useSelector(state => state.user.value.role);
+  const userId = useSelector(state => state.user.value._id);
 
   const url = process.env.EXPO_PUBLIC_BACKEND;
   //Charge les données de base dans Redux au montage
   useEffect(() => {
     fetch(`${url}/animals`)
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         if (data.result === true) {
-          dispatch(getReports(data.data));
+          dispatch(getReports(data.reports));
         } else {
           console.log('Erreur API');
         }
@@ -130,7 +130,7 @@ export default function Reports() {
   const handleClick = report => {
     setDataReport(report);
     setModalVisible(true);
-    console.log('Report: ', report);
+    // console.log('Report: ', report);
   };
 
   //function pour récupérer la description et le statut pour l'envoyer en base de donnée
@@ -147,13 +147,13 @@ export default function Reports() {
         userId,
       }),
     })
-      .then((res) => res.json())
-      .then((json) => {
+      .then(res => res.json())
+      .then(json => {
         if (json.result) {
           //recharge les signalements
           fetch(`${url}/animals`)
-            .then((res) => res.json())
-            .then((data) => {
+            .then(res => res.json())
+            .then(data => {
               if (data.result) dispatch(getReports(data.data));
             });
 
@@ -207,8 +207,7 @@ export default function Reports() {
         agent={userRole}
         description={description}
         onChangeDescription={setDescription}
-        onActualiser={handleActualiser}
-      ></ReportDetail>
+        onActualiser={handleActualiser}></ReportDetail>
 
       {/* Menu des filtres affiché en overlay au-dessus des cartes */}
       {filtre && (

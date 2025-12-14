@@ -38,7 +38,7 @@ export default function CustomModal({
             onPress={onClose}
             style={{
               position: 'absolute',
-              top: 16,
+              top: fullscreen ? 56 : 16,
               right: 16,
               zIndex: 20,
             }}
@@ -46,7 +46,9 @@ export default function CustomModal({
 
           {/* Titre */}
           {title && (
-            <Text className='text-xl font-bold mb-4 text-center' style={{ color: colors.text }}>
+            <Text
+              className='text-xl font-bold mt-6 mb-4 text-center'
+              style={{ color: colors.text }}>
               {title}
             </Text>
           )}
@@ -60,7 +62,8 @@ export default function CustomModal({
             )}
           </View>
 
-          {/* Content */}
+          {/*!!! COMMENTÉ CAR DOUBLON AVEC LE CODE AU DESSUS */}
+          {/* Content
           <ScrollView
             contentContainerStyle={{
               padding: 16,
@@ -70,12 +73,10 @@ export default function CustomModal({
             {content || (
               <Text style={{ color: colors.text, textAlign: 'center' }}>Default content</Text>
             )}
-          </ScrollView>
+          </ScrollView> */}
 
           {/* Footer buttons */}
-          {button && (
-            <View className='flex-row justify-center items-center mt-4 space-x-4'>{button}</View>
-          )}
+          {button && <View className='justify-center items-center mt-4'>{button}</View>}
         </View>
 
         {!isFull && <Pressable style={{ flex: 1 }} onPress={onClose} />}

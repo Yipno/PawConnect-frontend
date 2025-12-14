@@ -49,7 +49,7 @@ export default function ReportDetail({
       content={
         report ? (
           <View>
-            <View className='w-full aspect-[4/3] mb-4'>
+            <View className='w-full aspect-[4/3] mt-14 mb-4'>
               <Image
                 source={{ uri: report.photoUrl }}
                 className='w-full h-full rounded-2xl object-cover'
@@ -81,8 +81,7 @@ export default function ReportDetail({
                 <View className='flex-col justify-center items-center gap-12 mt-2 w-full'>
                   <TouchableOpacity
                     className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
-                    onPress={onPress}
-                  >
+                    onPress={onPress}>
                     <Text>Statut</Text>
                     <Ionicons name='chevron-down-outline' color='#000000' size={20} />
                   </TouchableOpacity>
@@ -94,8 +93,7 @@ export default function ReportDetail({
                             ? 'rounded-t-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
                             : 'h-12 w-full rounded-t-2xl flex-col justify-center items-center'
                         }
-                        onPress={() => handleCours()}
-                      >
+                        onPress={() => handleCours()}>
                         <Text className={cours ? 'text-white' : 'text-black'}>En cours</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -104,8 +102,7 @@ export default function ReportDetail({
                             ? 'border-gray border-t-[1px] rounded-b-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
                             : 'border-gray border-t-[1px] h-12 w-full flex-col justify-center items-center'
                         }
-                        onPress={() => handleCloturer()}
-                      >
+                        onPress={() => handleCloturer()}>
                         <Text className={cloturer ? 'text-white' : 'text-black'}>Clôturer</Text>
                       </TouchableOpacity>
                     </View>
@@ -115,12 +112,10 @@ export default function ReportDetail({
                     className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4'
                     placeholder='Ajouter une description'
                     onChangeText={onChangeDescription}
-                    value={description}
-                  ></TextInput>
+                    value={description}></TextInput>
                   <TouchableOpacity
                     className='border border-gray bg-deepSage rounded-2xl h-12 w-full flex-col justify-center items-center  px-4'
-                    onPress={() => onActualiser({ description, cours, cloturer })}
-                  >
+                    onPress={() => onActualiser({ description, cours, cloturer })}>
                     <Text className='text-white'>Actualiser</Text>
                   </TouchableOpacity>
                 </View>

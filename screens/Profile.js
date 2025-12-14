@@ -15,7 +15,7 @@ export default function Profile() {
 
   const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
-  const EMAIL_REGEX: RegExp =
+  const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
@@ -91,21 +91,19 @@ export default function Profile() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.offwhite }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView
           contentContainerStyle={{
             paddingBottom: 50,
             alignItems: 'center',
           }}
-          keyboardShouldPersistTaps='handled'
-        >
+          keyboardShouldPersistTaps='handled'>
           <Text className='text-h1 font-manrope font-bold text-deepSage my-4 mb-8'>Menu</Text>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
             <SquaredButton
               title={'Mes\nsignalements'}
               icon='paw'
-              onPress={() => navigation.navigate('MyReports')}
+              // onPress={() => navigation.navigate('MyReports')}
             />
 
             {user.role === 'civil' ? (
