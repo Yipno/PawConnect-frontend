@@ -23,15 +23,13 @@ export default function CustomModal({
       visible={visible}
       transparent
       animationType={animationType || 'slide'}
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <View className='flex-1 justify-center items-center bg-black/50'>
         <View
           className={`rounded-2xl items-center relative ${
             fullscreen ? 'w-full h-full p-6 pt-12' : 'w-11/12 min-h-[300px] p-12'
           }`}
-          style={{ backgroundColor: colors.offwhite }}
-        >
+          style={{ backgroundColor: colors.offwhite }}>
           {/* Croix de fermeture */}
           <Ionicons
             name='close'
@@ -68,8 +66,7 @@ export default function CustomModal({
               padding: 16,
               paddingBottom: button ? 90 : 24,
             }}
-            keyboardShouldPersistTaps='handled'
-          >
+            keyboardShouldPersistTaps='handled'>
             {content || (
               <Text style={{ color: colors.text, textAlign: 'center' }}>Default content</Text>
             )}
@@ -77,7 +74,7 @@ export default function CustomModal({
 
           {/* Footer buttons */}
           {button && (
-            <View className='flex-row justify-center items-center mt-4 space-x-4'>{buttons}</View>
+            <View className='flex-row justify-center items-center mt-4 space-x-4'>{button}</View>
           )}
         </View>
 

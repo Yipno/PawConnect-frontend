@@ -22,7 +22,8 @@ export default function Input({
   const iconName = icon && icon + '-outline';
 
   return (
-    <View className={`w-10/12 ${error ? 'mb-6' : 'mb-2'}`}>
+    // <View className={`w-10/12 ${error ? 'mb-2' : 'mb-2'}`}>
+    <View className='w-10/12 mb-2'>
       <Text className='font-manrope left-3 text-text'>{label || 'Label'}</Text>
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${

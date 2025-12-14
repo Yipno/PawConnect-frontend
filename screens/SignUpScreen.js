@@ -82,14 +82,14 @@ export default function SignUp({ navigation }) {
 
     //check the email format
     if (!EMAIL_REGEX.test(signUpEmail)) {
-      setErrors((prev) => ({ ...prev, email: 'Email invalide.' }));
+      setErrors(prev => ({ ...prev, email: 'Email invalide.' }));
       setIsLoading(false);
       return;
     }
 
     //check password length
     if (signUpPassword.length < 6) {
-      setErrors((prev) => ({
+      setErrors(prev => ({
         ...prev,
         password: 'Votre mot de passe doit contenir au moins 6 caractères',
       }));
@@ -99,7 +99,7 @@ export default function SignUp({ navigation }) {
 
     //check password confirmation
     if (signUpPassword !== signUpPasswordConfirm) {
-      setErrors((prev) => ({
+      setErrors(prev => ({
         ...prev,
         passwordConfirm: 'Les mots de passe ne sont pas identiques',
       }));
@@ -112,7 +112,7 @@ export default function SignUp({ navigation }) {
       accountType === 'pro' &&
       (!signUpEstablishment || signUpEstablishment.trim().length === 0)
     ) {
-      setErrors((prev) => ({
+      setErrors(prev => ({
         ...prev,
         establishment: `L'établissement est requis pour un compte pro/association`,
       }));
@@ -167,28 +167,23 @@ export default function SignUp({ navigation }) {
 
   return (
     <KeyboardAvoidingView
+      className='bg-offwhite'
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView
         contentContainerStyle={{
-          backgroundColor: colors.offwhite,
           paddingBottom: 50, //to avoid cutting of the last input
         }}
-        keyboardShouldPersistTaps='handled'
-      >
+        keyboardShouldPersistTaps='handled'>
         <SafeAreaView
           style={{
             flex: 1,
             justifyContent: 'flex-start',
             alignItems: 'center',
-            backgroundColor: colors.offwhite,
-          }}
-        >
+          }}>
           <Text
             className='text-2xl font-bold text-center mb-4 mt-4'
-            style={{ color: colors.deepSage }}
-          >
+            style={{ color: colors.deepSage }}>
             Créer un compte
           </Text>
 
@@ -246,18 +241,17 @@ export default function SignUp({ navigation }) {
           />
 
           {/* Button Switch type account  */}
-          <View className='flex-row-reverse items-center w-[360px] my-4'>
-            <Text className='text-lg font-semibold' style={{ color: colors.deepSage }}>
-              Pro/Association
-            </Text>
-
+          <View className='flex-row items-center justify-center w-[360px] my-4'>
             <Switch
               className='mr-4'
               value={accountType === 'pro'}
-              onValueChange={(value) => setAccountType(value ? 'pro' : 'user')}
+              onValueChange={value => setAccountType(value ? 'pro' : 'user')}
               thumbColor='#fff'
               trackColor={{ false: '#ccc', true: colors.deepSage }}
             />
+            <Text className='text-lg font-semibold' style={{ color: colors.deepSage }}>
+              Pro/Association
+            </Text>
           </View>
 
           {/* Add Input for Pro/Asso  */}
@@ -286,14 +280,16 @@ export default function SignUp({ navigation }) {
 
           {/* ligne  */}
           <View className='h-[1px] bg-deepSage my-3 w-[360px] mx-auto' />
-
-          <Button
-            bg={colors.offwhite}
-            textColor={colors.deepSage}
-            border='deepSage'
-            title='Se connecter'
-            onPress={() => navigation.navigate('SignIn')}
-          />
+          <View className='items-center'>
+            <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
+            <Button
+              bg={colors.offwhite}
+              textColor={colors.deepSage}
+              border='deepSage'
+              title='Se connecter'
+              onPress={() => navigation.navigate('SignIn')}
+            />
+          </View>
         </SafeAreaView>
       </ScrollView>
     </KeyboardAvoidingView>
