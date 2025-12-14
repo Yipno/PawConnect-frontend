@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   label: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 600,
     color: '#2E2F2F',
     marginTop: 4,

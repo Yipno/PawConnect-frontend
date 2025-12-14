@@ -157,7 +157,7 @@ export default function ReportScreen() {
       contentContainerStyle={{ paddingTop: 40, alignItems: 'center' }}
       style={{ flex: 1, backgroundColor: colors.offwhite }}>
       {/* BOUTONS RETOUR ET INFOS */}
-      <View className='w-full px-2 flex-row items-center justify-between'>
+      <View className='w-full mt-2 px-2 flex-row items-center justify-between'>
         <TouchableOpacity className='flex-row items-center' onPress={() => navigation.goBack()}>
           <Ionicons name='caret-back-outline' size={24} color={colors.textColor} />
           <Text className='text-body font-manrope'>Retour</Text>
@@ -167,7 +167,7 @@ export default function ReportScreen() {
           <Ionicons name='help-circle-outline' size={26} color={colors.textColor} />
         </TouchableOpacity>
       </View>
-      <Text className='text-h3 text-deepSage my-3 font-manrope'>Faire un signalement</Text>
+      <Text className='text-h3 text-deepSage my-2 font-manrope'>Faire un signalement</Text>
       {formError && (
         <Text className='text-error mb-2 font-semibold text-body'>
           {formError || 'Unknown error'}
@@ -358,8 +358,8 @@ export default function ReportScreen() {
         title={isLoading ? 'Chargement' : 'Envoyer le signalement'}
         onPress={() => handleSubmit() && confirmSend()}
         bg={isLoading && 'lightgray'}
-        style={{ marginHorizontal: 'auto' }}
       />
+      <View className='h-14' />
     </KeyboardAwareScrollView>
   );
 }

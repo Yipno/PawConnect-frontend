@@ -8,6 +8,8 @@ import { useState } from 'react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import useTheme from '../hooks/useTheme';
+import SplashScreen from '../components/SplashScreen';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const EMAIL_REGEX =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
@@ -53,33 +55,50 @@ export default function SignInScreen({ navigation }) {
     }
     // post user info for login
     try {
-      const response = await fetch(`${BACKEND}/users/auth`, {
+      const userResponse = await fetch(`${BACKEND}/users/auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
+      const userResult = await userResponse.json();
       // Response status is used as booleen
-      if (!response.ok) {
-        setBackendError(data.error || 'Erreur inattendue');
+      if (!userResponse.ok) {
+        setBackendError(userResult.error || 'Erreur inattendue');
         setIsLoading(false);
         return;
       }
-      // ADD HERE FETCH OF REPORTS AND DISPATCH TO REDUX
-      /* 
-        const response = await fetch(`${BACKEND}/animals/${user.token}`);
-        const data = await response.json();
-        if(!response.ok) {
-        setBackendError(data.error || 'Erreur lors de la recuperation des reports');
-        setIsLoading(false);
-        return;
+
+      // FETCH  REPORTS AND DISPATCH TO REDUX
+      if (userResult.user.role === 'civil') {
+        const animalsResponse = await fetch(`${BACKEND}/animals/${userResult.user.id}`);
+        const animalsResults = await animalsResponse.json();
+        if (!animalsResponse.ok) {
+          setBackendError(
+            animalsResults.error || 'Erreur lors de la recuperation des signalements.'
+          );
+          setIsLoading(false);
+          return;
         }
-        dispatch(getReports(data.reports))
-      */
-      dispatch(login(data.user));
-      setIsLoading(false);
-      setEmail('');
+        console.log(animalsResults);
+        dispatch(getReports(animalsResults.userReports));
+      } else if (userResult.user.role === 'agent') {
+        const animalsResponse = await fetch(`${BACKEND}/animals`);
+        const animalsResults = await animalsResponse.json();
+        if (!animalsResponse.ok) {
+          setBackendError(
+            animalsResults.error || 'Erreur lors de la recuperation des signalements.'
+          );
+          setIsLoading(false);
+          return;
+        }
+        dispatch(getReports(animalsResults.reports));
+      }
+      dispatch(login(userResult.user));
       setPassword('');
+      setEmail('');
+
+      setIsLoading(false);
+      // setIsFetching(true);
     } catch (err) {
       console.log(err);
       setBackendError('Problème de connexion au serveur');
@@ -88,51 +107,78 @@ export default function SignInScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView className='flex-1 justify-between items-center bg-offwhite'>
-      <Text className='text-h2 text-darkSage mt-6'>Se connecter</Text>
-      <View className='h-[400px] w-full justify-evenly items-center mb-52'>
-        <Input
-          label='Email'
-          type='email'
-          icon='mail'
-          placeholder='example@pawconnect.xyz'
-          onChangeText={value => setEmail(value)}
-          value={email}
-          error={errors.email}
-        />
-        <Input
-          label='Password'
-          type='password'
-          icon='key'
-          placeholder='••••••••'
-          onChangeText={value => setPassword(value)}
-          value={password}
-          error={errors.password}
-        />
+    <>
+      {isLoading ? (
+        <SplashScreen />
+      ) : (
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          keyboardShouldPersistTaps='handled'
+          contentContainerStyle={{ paddingTop: 60 }}
+          style={{ flex: 1, backgroundColor: colors.offwhite }}>
+          <View className='justify-between items-center bg-offwhite '>
+            <Text className='text-h2 text-darkSage mt-24'>Se connecter</Text>
+            <Button
+              title={'cheatcode'}
+              onPress={() => {
+                setEmail('luke@mi.io');
+                setPassword('007007');
+              }}
+            />
+            <Button
+              title={'cheatcode agent'}
+              onPress={() => {
+                setEmail('bond@mi.io');
+                setPassword('007007');
+              }}
+            />
 
-        {backendError && (
-          <Text className='text-red-600 font-manrope text-center font-semibold text-body'>
-            {backendError}
-          </Text>
-        )}
-        <Button
-          margin={{ marginTop: 12 }}
-          title={isLoading ? 'Chargement...' : 'Connexion'}
-          bg={isLoading && 'lightgrey'}
-          onPress={handleLogIn}
-        />
-        <View className='border-[1px] border-deepSage w-3/4'></View>
-        <View className='items-center'>
-          <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
-          <Button
-            title='Inscrivez vous'
-            bg={colors.offwhite}
-            textColor={colors.deepSage}
-            border='deepSage'
-            onPress={() => navigation.navigate('SignUp')}
-          />
-        </View>
-      </View>
-    </SafeAreaView>
+            <View className='h-[400px] w-full justify-evenly items-center my-28'>
+              <Input
+                label='Email'
+                type='email'
+                icon='mail'
+                placeholder='example@pawconnect.xyz'
+                onChangeText={value => setEmail(value)}
+                value={email}
+                error={errors.email}
+              />
+              <Input
+                label='Password'
+                type='password'
+                icon='key'
+                placeholder='••••••••'
+                onChangeText={value => setPassword(value)}
+                value={password}
+                error={errors.password}
+              />
+
+              {backendError && (
+                <Text className='text-red-600 font-manrope text-center font-semibold text-body'>
+                  {backendError}
+                </Text>
+              )}
+              <Button
+                margin={{ marginTop: 12 }}
+                title={isLoading ? 'Chargement...' : 'Connexion'}
+                bg={isLoading && 'lightgrey'}
+                onPress={handleLogIn}
+              />
+              <View className='border-[1px] border-deepSage w-3/4'></View>
+              <View className='items-center w-full'>
+                <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
+                <Button
+                  title='Inscrivez vous'
+                  bg={colors.offwhite}
+                  textColor={colors.deepSage}
+                  border='deepSage'
+                  onPress={() => navigation.navigate('SignUp')}
+                />
+              </View>
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
+      )}
+    </>
   );
 }
