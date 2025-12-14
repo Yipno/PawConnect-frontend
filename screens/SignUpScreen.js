@@ -181,10 +181,8 @@ export default function SignUp({ navigation }) {
             justifyContent: 'flex-start',
             alignItems: 'center',
           }}>
-          <Text
-            className='text-2xl font-bold text-center mb-4 mt-4'
-            style={{ color: colors.deepSage }}>
-            Créer un compte
+          <Text className='text-h2 text-center mb-4 mt-4' style={{ color: colors.deepSage }}>
+            S'enregistrer
           </Text>
 
           {/* Formulaire */}
@@ -280,7 +278,7 @@ export default function SignUp({ navigation }) {
 
           {/* ligne  */}
           <View className='h-[1px] bg-deepSage my-3 w-[360px] mx-auto' />
-          <View className='items-center'>
+          <View className='w-full items-center'>
             <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
             <Button
               bg={colors.offwhite}

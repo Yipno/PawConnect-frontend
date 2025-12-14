@@ -191,7 +191,7 @@ export default function MapScreen({ navigation }) {
     }
   }, [user?.role, animals, currentLocation]);
 
-  console.log('location', locations);
+  // console.log('location', locations);
 
   /*--- 4. MAP DISPLAY ---*/
 

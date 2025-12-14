@@ -9,12 +9,12 @@ const animalsSlice = createSlice({
   initialState,
   reducers: {
     getReports: (state, action) => {
-      state.value = action.payload ;
-      console.log('reports acquired', action.payload);
+      state.value = action.payload;
+      // console.log('reports acquired', action.payload);
     },
     addReport: (state, action) => {
       state.value.unshift(action.payload);
-      console.log('report added to redux');
+      // console.log('report added to redux');
     },
     updateReport: (state, action) => {
       const { id, updatedStatus, newHistory } = action.payload;

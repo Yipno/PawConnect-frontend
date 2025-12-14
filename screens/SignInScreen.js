@@ -79,7 +79,7 @@ export default function SignInScreen({ navigation }) {
           setIsLoading(false);
           return;
         }
-        console.log(animalsResults);
+        // console.log(animalsResults);
         dispatch(getReports(animalsResults.userReports));
       } else if (userResult.user.role === 'agent') {
         const animalsResponse = await fetch(`${BACKEND}/animals`);
@@ -117,7 +117,9 @@ export default function SignInScreen({ navigation }) {
           contentContainerStyle={{ paddingTop: 60 }}
           style={{ flex: 1, backgroundColor: colors.offwhite }}>
           <View className='justify-between items-center bg-offwhite '>
-            <Text className='text-h2 text-darkSage mt-24'>Se connecter</Text>
+            <Text className='text-h2 text-deepSage mt-4'>Se connecter</Text>
+
+            {/* BUTTONS DEV MODE  */}
             <Button
               title={'cheatcode'}
               onPress={() => {
@@ -133,7 +135,7 @@ export default function SignInScreen({ navigation }) {
               }}
             />
 
-            <View className='h-[400px] w-full justify-evenly items-center my-28'>
+            <View className='h-[400px] w-full justify-center items-center my-52'>
               <Input
                 label='Email'
                 type='email'
@@ -158,23 +160,24 @@ export default function SignInScreen({ navigation }) {
                   {backendError}
                 </Text>
               )}
+
+              {/* BUTTONS CONTAINER */}
+
               <Button
                 margin={{ marginTop: 12 }}
                 title={isLoading ? 'Chargement...' : 'Connexion'}
                 bg={isLoading && 'lightgrey'}
                 onPress={handleLogIn}
               />
-              <View className='border-[1px] border-deepSage w-3/4'></View>
-              <View className='items-center w-full'>
-                <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
-                <Button
-                  title='Inscrivez vous'
-                  bg={colors.offwhite}
-                  textColor={colors.deepSage}
-                  border='deepSage'
-                  onPress={() => navigation.navigate('SignUp')}
-                />
-              </View>
+              <View className='border-[1px] border-deepSage my-2 w-3/4'></View>
+              <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
+              <Button
+                title='Inscrivez vous'
+                bg={colors.offwhite}
+                textColor={colors.deepSage}
+                border='deepSage'
+                onPress={() => navigation.navigate('SignUp')}
+              />
             </View>
           </View>
         </KeyboardAwareScrollView>

@@ -4,6 +4,11 @@ import CustomModal from '../ui/CustomModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
+import * as Location from 'expo-location';
+import { getDistanceLabel } from '../../helpers/getDistance';
+import moment from 'moment'; //module for Format date
+import 'moment/locale/fr';
+moment.locale('fr');
 
 export default function ReportDetail({
   visible,
@@ -17,6 +22,36 @@ export default function ReportDetail({
   const [statut, setStatut] = useState(false);
   const [cours, setCours] = useState(false);
   const [cloturer, setCloturer] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [distanceLabel, setDistanceLabel] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission refusée pour accéder à la localisation');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    })();
+  }, []);
+
+  // Calculate distance label when current location or report location changes
+  useEffect(() => {
+    if (currentLocation && report?.location) {
+      setDistanceLabel(
+        getDistanceLabel(currentLocation, {
+          latitude: report.location.lat,
+          longitude: report.location.long,
+        })
+      );
+    }
+  }, [currentLocation, report]);
 
   const onPress = () => {
     setStatut(!statut);
@@ -48,8 +83,8 @@ export default function ReportDetail({
       agent=''
       content={
         report ? (
-          <View>
-            <View className='w-full aspect-[4/3] mt-14 mb-4'>
+          <View className='w-11/12 justify-center'>
+            <View className='w-full aspect-[4/3] my-4'>
               <Image
                 source={{ uri: report.photoUrl }}
                 className='w-full h-full rounded-2xl object-cover'
@@ -61,24 +96,37 @@ export default function ReportDetail({
 
             {/* Place & Date */}
             <View className='w-full flex-row justify-between mb-3'>
-              <Text>{report.place}</Text>
-              <Text>{report.date}</Text>
+              {distanceLabel ? (
+                <Text className='mb-2 text-gray-700'>Distance: {distanceLabel}</Text>
+              ) : (
+                <Text className='mb-2 text-gray-500'>Calcul de la distance...</Text>
+              )}
+              <Text>{moment(report.date).format('LLL')}</Text>
             </View>
 
-            {/* Priority */}
+            {/* Priority
             <View className='bg-deepSage/20 border border-deepSage rounded-2xl px-3 py-1 self-start mb-4'>
               <Text>{report.priority}</Text>
+            </View> */}
+
+            {/* Tag */}
+            <View className='flex-row flex-wrap mb-4'>
+              {report.state.map((tag, index) => (
+                <View
+                  key={index}
+                  className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
+                  <Text className='text-white font-bold'>{tag}</Text>
+                </View>
+              ))}
             </View>
 
             {/* Description */}
             <View>
-              <Text className='text-base text-gray-800 leading-5' style={{ textAlign: 'justify' }}>
-                {report.desc}
-              </Text>
+              <Text className='text-base text-gray-800 leading-5 text-justify'>{report.desc}</Text>
             </View>
             {agent === 'agent' && (
               <View>
-                <View className='flex-col justify-center items-center gap-12 mt-2 w-full'>
+                <View className='flex-col justify-center items-center gap-2 mt-2 w-full'>
                   <TouchableOpacity
                     className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
                     onPress={onPress}>
@@ -109,7 +157,7 @@ export default function ReportDetail({
                   )}
 
                   <TextInput
-                    className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4'
+                    className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4 mb-2'
                     placeholder='Ajouter une description'
                     onChangeText={onChangeDescription}
                     value={description}></TextInput>

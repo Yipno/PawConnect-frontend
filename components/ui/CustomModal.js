@@ -27,13 +27,13 @@ export default function CustomModal({
       <View className='flex-1 justify-center items-center bg-black/50'>
         <View
           className={`rounded-2xl items-center relative ${
-            fullscreen ? 'w-full h-full p-6 pt-12' : 'w-11/12 min-h-[300px] p-12'
+            fullscreen ? 'w-full h-full pt-24' : 'w-11/12 min-h-[300px] p-12'
           }`}
           style={{ backgroundColor: colors.offwhite }}>
           {/* Croix de fermeture */}
           <Ionicons
             name='close'
-            size={28}
+            size={34}
             color={colors.text}
             onPress={onClose}
             style={{
@@ -76,7 +76,7 @@ export default function CustomModal({
           </ScrollView> */}
 
           {/* Footer buttons */}
-          {button && <View className='justify-center items-center mt-4'>{button}</View>}
+          {button && <View className='w-full justify-center items-center mt-4'>{button}</View>}
         </View>
 
         {!isFull && <Pressable style={{ flex: 1 }} onPress={onClose} />}

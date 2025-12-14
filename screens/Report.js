@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
-import ReportDetail from '../components/module/ReportDetailAgent';
+import ReportDetailAgent from '../components/module/ReportDetailAgent';
+// import ReportDetail from '../components/module/ReportDetail';
 
 export default function Reports() {
   // États des filtres
@@ -200,14 +201,14 @@ export default function Reports() {
         <View style={{ marginBottom: 120 }} />
       </ScrollView>
 
-      <ReportDetail
+      <ReportDetailAgent
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         report={dataReport}
         agent={userRole}
         description={description}
         onChangeDescription={setDescription}
-        onActualiser={handleActualiser}></ReportDetail>
+        onActualiser={handleActualiser}></ReportDetailAgent>
 
       {/* Menu des filtres affiché en overlay au-dessus des cartes */}
       {filtre && (

@@ -132,7 +132,7 @@ export default function Profile() {
             onClose={() => setFullscreenModalVisible(false)}
             title={'Mon profil'}
             content={
-              <>
+              <View className='w-full'>
                 <Input
                   label={'Nom'}
                   placeholder={'Ecrivez votre nom'}
@@ -200,7 +200,7 @@ export default function Profile() {
                     }
                   />
                 )}
-              </>
+              </View>
             }
             button={
               <>
