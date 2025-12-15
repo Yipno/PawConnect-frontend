@@ -5,8 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
+import { getEstablishments } from '../../reducers/establishments';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
 moment.locale('fr');
@@ -26,8 +28,7 @@ export default function ReportDetail({
   const [currentLocation, setCurrentLocation] = useState(null);
   const [distanceLabel, setDistanceLabel] = useState('');
 
-    const { colors } = useTheme();
-  
+  const { colors } = useTheme();
 
   useEffect(() => {
     (async () => {
@@ -81,34 +82,26 @@ export default function ReportDetail({
 
   // ESTABLISHMENTS DISPLAY
 
+  // ESTABLISHMENTS REDUCER DATA
+  const establishments = useSelector((state) => state.establishments.value);
+
+  console.log('esta', establishments);
+
   // ESTABLISHMENTS MODAL DISPLAY ON CONDITION
   const [reportHasHandlers, setReportHasHandlers] = useState(false);
   const [showOrgaInfo, setShowOrgaInfo] = useState(false);
 
-  // GET REPORT INFO ON MOUNT - NOT WORKING
+  // GET REPORT INFO
   useEffect(() => {
     if (report?.handlers.length > 0) {
       setReportHasHandlers(true);
       console.log('reportdetail', report);
       console.log('animals.handlers', report?.handlers);
-      
+      console.log('esta', establishments);
     }
   }, [report]);
 
   // console.log('hashandlers', reportHasHandlers);
-
-  /*
-  let handledReport;
-  if (reportHasHandlers) {
-    handledReport = {
-    return (
-      <View>
-
-      </View>
-    );
-  }
-  }
-  */
 
   return (
     <CustomModal
@@ -162,21 +155,23 @@ export default function ReportDetail({
               <Text className='text-base text-gray-800 leading-5 text-justify'>{report.desc}</Text>
             </View>
 
-            {/* Affichage organisation */}
-            <View>
+            {/* Display establishments */}
+            <View className="mt-4">
               {reportHasHandlers ? (
                 <View>
-                <Text>Signalement pris en charge par :</Text>
-                <Button
-                          width='w-9/12'
-                          bg={colors.danger}
-                          textColor={colors.offwhite}
-                          title='Lien Asso'
-                        // ouvre la page de l'orga
-                         //  onPress={}
-                        />
-                        </View>
-              ) : (<Text>En attente de prise en charge</Text>) }
+                  <Text>Signalement pris en charge par :</Text>
+                  <Button
+                    width={30}
+                    bg={colors.danger}
+                    textColor={colors.offwhite}
+                    title='Lien Asso'
+                    // ouvre la page de l'orga
+                    // onPress={}
+                  />
+                </View>
+              ) : (
+                <Text>En attente de prise en charge</Text>
+              )}
             </View>
 
             {agent === 'agent' && (
