@@ -1,14 +1,16 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { View, Text, Image, ActivityIndicator } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { View, Text, Image, ActivityIndicator, Button } from 'react-native';
 import CustomModal from '../ui/CustomModal';
+import Establishments from '../ui/Establishments';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
 moment.locale('fr');
 
-export default function ReportDetail({ visible, onClose, report }) {
+export default function ReportDetail({ visible, onClose, report, handled }) {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [distanceLabel, setDistanceLabel] = useState('');
   const [loading, setLoading] = useState(true);
@@ -51,18 +53,39 @@ export default function ReportDetail({ visible, onClose, report }) {
     }
   }, [currentLocation, report]);
 
+  // ESTABLISHMENTS DISPLAY
+
+  // ESTABLISHMENTS MODAL DISPLAY ON CONDITION
+  const [isHandled, setIsHandled] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+
+  // GET REPORT INFO ON MOUNT - NOT WORKING
+  useEffect(() => {
+    if (report.handlers.length > 0) {
+      setIsHandled(true);
+      console.log('report', report);
+      console.log('animals.handlers', report?.handlers);
+      console.log('ishandled', setIsHandled);
+      console.log('ishandled', isHandled);
+    }
+  }, []);
+
+  console.log('ishandled', setIsHandled);
+  console.log('ishandled', isHandled);
+  console.log("handled", handled);
+
   return (
     <CustomModal
       visible={visible}
       onClose={onClose}
       content={
-        report ? (
+        handled ? (
           <View>
             <View className='w-full aspect-[4/3] mb-6 mt-20 max-h-[400px] relative'>
               <Image
                 source={{ url: report.photoUrl }}
                 className='w-full h-full rounded-2xl object-cover'
-                resizeMode="cover"
+                resizeMode='cover'
                 accessibilityLabel={`Photo du signalement: ${report.title}`}
                 onLoadStart={() => setLoading(true)} // Show loading indicator
                 onLoadEnd={() => setLoading(false)}
