@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, Button } from 'react-native';
 import CustomModal from '../ui/CustomModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import useTheme from '../../hooks/useTheme';
 import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
@@ -24,6 +25,9 @@ export default function ReportDetail({
   const [cloturer, setCloturer] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [distanceLabel, setDistanceLabel] = useState('');
+
+    const { colors } = useTheme();
+  
 
   useEffect(() => {
     (async () => {
@@ -74,6 +78,38 @@ export default function ReportDetail({
       setStatut(false);
     }
   }, [visible]);
+
+  // ESTABLISHMENTS DISPLAY
+
+  // ESTABLISHMENTS MODAL DISPLAY ON CONDITION
+  const [reportHasHandlers, setReportHasHandlers] = useState(false);
+  const [showOrgaInfo, setShowOrgaInfo] = useState(false);
+
+  // GET REPORT INFO ON MOUNT - NOT WORKING
+  useEffect(() => {
+    if (report?.handlers.length > 0) {
+      setReportHasHandlers(true);
+      console.log('reportdetail', report);
+      console.log('animals.handlers', report?.handlers);
+      
+    }
+  }, [report]);
+
+  // console.log('hashandlers', reportHasHandlers);
+
+  /*
+  let handledReport;
+  if (reportHasHandlers) {
+    handledReport = {
+    return (
+      <View>
+
+      </View>
+    );
+  }
+  }
+  */
+
   return (
     <CustomModal
       visible={visible}
@@ -114,7 +150,8 @@ export default function ReportDetail({
               {report.state.map((tag, index) => (
                 <View
                   key={index}
-                  className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
+                  className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'
+                >
                   <Text className='text-white font-bold'>{tag}</Text>
                 </View>
               ))}
@@ -124,12 +161,31 @@ export default function ReportDetail({
             <View>
               <Text className='text-base text-gray-800 leading-5 text-justify'>{report.desc}</Text>
             </View>
+
+            {/* Affichage organisation */}
+            <View>
+              {reportHasHandlers ? (
+                <View>
+                <Text>Signalement pris en charge par :</Text>
+                <Button
+                          width='w-9/12'
+                          bg={colors.danger}
+                          textColor={colors.offwhite}
+                          title='Lien Asso'
+                        // ouvre la page de l'orga
+                         //  onPress={}
+                        />
+                        </View>
+              ) : (<Text>En attente de prise en charge</Text>) }
+            </View>
+
             {agent === 'agent' && (
               <View>
                 <View className='flex-col justify-center items-center gap-2 mt-2 w-full'>
                   <TouchableOpacity
                     className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
-                    onPress={onPress}>
+                    onPress={onPress}
+                  >
                     <Text>Statut</Text>
                     <Ionicons name='chevron-down-outline' color='#000000' size={20} />
                   </TouchableOpacity>
@@ -141,7 +197,8 @@ export default function ReportDetail({
                             ? 'rounded-t-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
                             : 'h-12 w-full rounded-t-2xl flex-col justify-center items-center'
                         }
-                        onPress={() => handleCours()}>
+                        onPress={() => handleCours()}
+                      >
                         <Text className={cours ? 'text-white' : 'text-black'}>En cours</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -150,7 +207,8 @@ export default function ReportDetail({
                             ? 'border-gray border-t-[1px] rounded-b-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
                             : 'border-gray border-t-[1px] h-12 w-full flex-col justify-center items-center'
                         }
-                        onPress={() => handleCloturer()}>
+                        onPress={() => handleCloturer()}
+                      >
                         <Text className={cloturer ? 'text-white' : 'text-black'}>Clôturer</Text>
                       </TouchableOpacity>
                     </View>
@@ -160,10 +218,12 @@ export default function ReportDetail({
                     className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4 mb-2'
                     placeholder='Ajouter une description'
                     onChangeText={onChangeDescription}
-                    value={description}></TextInput>
+                    value={description}
+                  ></TextInput>
                   <TouchableOpacity
                     className='border border-gray bg-deepSage rounded-2xl h-12 w-full flex-col justify-center items-center  px-4'
-                    onPress={() => onActualiser({ description, cours, cloturer })}>
+                    onPress={() => onActualiser({ description, cours, cloturer })}
+                  >
                     <Text className='text-white'>Actualiser</Text>
                   </TouchableOpacity>
                 </View>
