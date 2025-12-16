@@ -10,7 +10,7 @@ const establishmentsSlice = createSlice({
   reducers: {
     getEstablishments: (state, action) => {
       state.value = action.payload ;
-      console.log('establishments acquired', action.payload);
+      // console.log('establishments acquired', action.payload);
     },
   },
 });
