@@ -10,6 +10,8 @@ import ReportDetailAgent from '../components/module/ReportDetailAgent';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
+const url = process.env.EXPO_PUBLIC_BACKEND; // URL de l’API backend
+
 export default function Reports() {
   // États des filtres
   const [filtre, setFiltre] = useState(false);
@@ -36,6 +38,7 @@ export default function Reports() {
   const dispatch = useDispatch();
   const reports = useSelector(state => state.animals.value);
   const userRole = useSelector(state => state.user.value.role);
+  const userId = useSelector(state => state.user.value.id);
 
   // Effet qui applique TOUS les filtres combinés
   useEffect(() => {
@@ -128,7 +131,7 @@ export default function Reports() {
   const handleActualiser = ({ description, cours, cloturer }) => {
     const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
     if (!status || !dataReport) return;
-    console.log('ENVOYÉ AU BACKEND =>', { status, description });
+    console.log('ENVOYÉ AU BACKEND =>', { status, description, dataReport, userId });
     fetch(`${url}/animals/${dataReport._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -145,13 +148,13 @@ export default function Reports() {
           fetch(`${url}/animals`)
             .then(res => res.json())
             .then(data => {
-              if (data.result) dispatch(getReports(data.data));
+              if (data.result) dispatch(getReports(data.reports));
             });
 
           setModalVisible(false);
           setDescription('');
         } else {
-          console.log(json.message);
+          console.log('ici', json.message);
         }
       });
   };

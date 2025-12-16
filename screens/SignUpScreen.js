@@ -277,7 +277,7 @@ export default function SignUp({ navigation }) {
           />
 
           {/* ligne  */}
-          <View className='h-[1px] bg-deepSage my-3 w-[360px] mx-auto' />
+          <View className='border-b-2 border-deepSage my-2 w-3/4' />
           <View className='w-full items-center'>
             <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
             <Button

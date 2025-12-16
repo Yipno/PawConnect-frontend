@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/ui/Button';
 import useTheme from '../hooks/useTheme';
@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { getDistanceLabel } from '../helpers/getDistance';
+import NotificationsList from '../components/NotificationsList';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
@@ -20,7 +21,11 @@ const markerData = [
 
 export default function MapScreen({ navigation }) {
   const { colors } = useTheme();
-
+  // NOTIFICATIONS TOGGLE
+  const [showNotifications, setShowNotifications] = useState(false);
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
   const dispatch = useDispatch();
 
   /*--- 1. GEOLOCATION SETUP ---*/
@@ -283,6 +288,19 @@ export default function MapScreen({ navigation }) {
         showsMyLocationButton={false}>
         {markers}
       </MapView>
+      {/* BUTTON TOGGLE NOTIFICATIONS */}
+      <View className='absolute top-16 right-5 flex-row justify-end'>
+        <TouchableOpacity
+          className='bg-white rounded-full items-center justify-center size-16 border border-danger'
+          onPress={toggleNotifications}>
+          <Ionicons name='notifications' size={32} color={colors.danger} />
+        </TouchableOpacity>
+        <View className='absolute top-0 right-0 bg-danger rounded-full items-center justify-center px-1.5 py-0.5'>
+          <Text className='text-offwhite bg-danger font-manrope text-xs font-extrabold'>2</Text>
+        </View>
+      </View>
+      {/* NOTIFICATIONS LIST DISPLAY */}
+      {showNotifications && <NotificationsList />}
       {userMapButtons}
     </View>
   );
