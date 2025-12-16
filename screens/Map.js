@@ -14,16 +14,8 @@ moment.locale('fr');
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
-// TEST DATA MARKER - ESTABLISHMENTS (ATTENTE REDUCER)
-const markerData = [
-  { name: 'Asso1', lat: 48.859, long: 2.347 },
-  { name: 'Asso2', lat: 45.758, long: 4.835 },
-  { name: 'Asso3', lat: 43.282, long: 5.405 },
-];
-
 export default function MapScreen({ navigation }) {
   const { colors } = useTheme();
-
   const dispatch = useDispatch();
 
   /*--- 1. GEOLOCATION SETUP ---*/
@@ -45,7 +37,7 @@ export default function MapScreen({ navigation }) {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         });
-        console.log('currentloc', currentLocation);
+        // console.log('currentloc', currentLocation);
       } else {
         Alert.alert(
           'Permission refusée',
@@ -65,7 +57,7 @@ export default function MapScreen({ navigation }) {
             },
           ]
         );
-        console.log('status', status);
+        // console.log('status', status);
         return;
       }
     })();
@@ -93,7 +85,7 @@ export default function MapScreen({ navigation }) {
     if (currentLocation) {
       centerMap(currentLocation, 400);
     }
-    console.log('useeffect centermap', currentLocation);
+    // console.log('useeffect centermap', currentLocation);
   }, [currentLocation]);
 
   // UPDATES USER LOCATION WHEN ONPRESS LOCATE BUTTON
@@ -101,7 +93,7 @@ export default function MapScreen({ navigation }) {
     if (currentLocation) {
       centerMap(currentLocation);
     }
-    console.log('onpress centermap', currentLocation);
+    // console.log('onpress centermap', currentLocation);
   };
 
   /*--- 2. MARKERS SETUP ---*/
@@ -111,42 +103,11 @@ export default function MapScreen({ navigation }) {
   const animals = useSelector((state) => state.animals.value);
   const establishments = useSelector((state) => state.establishments.value);
 
-  console.log('map - animals', animals);
+  // OK console.log('map - animals', animals);
+  // console.log('map - establishments', establishments);
 
   // MARKER LOCATION
   const [locations, setLocations] = useState([]);
-
-  // SEND DATA TO ANIMALS REDUCER
-  // const handleData = () => {
-  //   const newAnimal = [
-  //     {
-  //       location: {
-  //         lat: 43.249954,
-  //         long: 5.421111,
-  //       },
-  //       date: '2025-12-09T10:30:00.000Z',
-  //       animalType: 'chat',
-  //       desc: 'Chat errant aperçu près du parc',
-  //       state: ['affamé'],
-  //       photoUrl: '',
-  //       status: 'nouveau',
-  //       reporter: {
-  //         $oid: '6936fe386fb328f6ec180ea6',
-  //       },
-  //       handlers: [],
-  //       history: [],
-  //     },
-  //   ];
-  //   dispatch(getReports(newAnimal));
-  //   // console.log('reducers', animals);
-  //   if (animals.length > 0) {
-  //     // console.log('animals reducers: ', animals);
-  //     console.log('animals date: ', animals[0].date);
-  //     console.log('animals type: ', animals[0].animalType);
-  //     console.log('animal lat: ', animals[0].location.lat);
-  //     console.log('animal long: ', animals[0].location.long);
-  //   }
-  // };
 
   /*--- 3. DISTANCE CALCULATION ---*/
 
@@ -161,7 +122,7 @@ export default function MapScreen({ navigation }) {
     if (user.role === 'civil') {
       // REDUCER CODE
 
-      const newLocations = establishments.map((data) => {
+      const newLocations = establishments?.map((data) => {
         const establishmentLocation = {
           latitude: data.location.lat,
           longitude: data.location.long,
@@ -169,21 +130,11 @@ export default function MapScreen({ navigation }) {
         const distanceLabel = getDistanceLabel(currentLocation, establishmentLocation);
         return { ...data, distance: distanceLabel };
       });
-      /*
-      const newLocations = markerData.map(data => {
-        const establishmentLocation = {
-          latitude: data.lat,
-          longitude: data.long,
-        };
-        const distanceLabel = getDistanceLabel(currentLocation, establishmentLocation);
-        return { ...data, distance: distanceLabel };
-      });
-*/
       setLocations(newLocations);
 
       // DISTANCE FOR AGENT TO ANIMALS
     } else {
-      const newLocations = animals.map((data) => {
+      const newLocations = animals?.map((data) => {
         const animalLocation = {
           latitude: data.location.lat,
           longitude: data.location.long,
@@ -204,17 +155,15 @@ export default function MapScreen({ navigation }) {
   let markers;
   // CIVIL USER MARKERS: ESTABLISHMENTS
   if (user.role === 'civil') {
-    // WAITING FOR ESTABLISHMENTS DATA TO UPDATE (LINE 127)
-    // TEST DATA MAPPING ON MARKERDATA
-    markers = establishments.map((data, i) => {
+    markers = establishments?.map((data, i) => {
       const distance = currentLocation
-        ? getDistanceLabel(currentLocation, { latitude: data.lat, longitude: data.long })
+        ? getDistanceLabel(currentLocation, { latitude: data.location.lat, longitude: data.location.long })
         : '';
       return (
         <Marker
           key={i}
-          coordinate={{ latitude: data.lat, longitude: data.long }}
-          title={data.title}
+          coordinate={{ latitude: data.location.lat, longitude: data.location.long }}
+          title={data.name}
           description={distance}
         />
       );
@@ -239,11 +188,12 @@ export default function MapScreen({ navigation }) {
   if (user.role === 'civil') {
     civilReportMarkers = animals.map((data, i) => {
       const hasHandlers = Array.isArray(data.handlers) && data.handlers.length > 0;
-      console.log("hashandlers", hasHandlers);
+      // console.log("hashandlers", hasHandlers);
 
       /* const distance = currentLocation
         ? getDistanceLabel(currentLocation, { latitude: data.lat, longitude: data.long })
-        : ''; */
+        : ''; 
+        */
       return (
         <Marker
           key={i}
