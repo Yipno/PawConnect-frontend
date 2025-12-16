@@ -3,7 +3,8 @@ export default {
   deepSage: '#7f9C88', //primary green
   darkSage: '#596962',
   // neutrals
-  offwhite: '#FAF9F7',
+  offwhite: '#FbF5e8', //ancienne plus blanche '#FAF9F7',
+  test: '#fcf1da', // un peu plus jaune que offwhite
   text: '#2E2F2F',
   gray: '#e6e4df',
   // oranges

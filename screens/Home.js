@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Text, StyleSheet, View, Image } from 'react-native';
+import { Text, StyleSheet, View, Image, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/ui/Button';
@@ -19,29 +19,35 @@ export default function HomeScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView key={refreshKey} className='flex-1 justify-evenly items-center bg-offwhite'>
-      <View className=' w-11/12 items-center border-[1px] border-offwhite'>
-        <Text className='text-h1 text-center text-deepSage font-manrope border-[1px] border-offwhite'>
-          Bienvenue sur
-        </Text>
-        <Image source={require('../assets/logo-temp.png')} className='w-[240px] h-[240px]' />
+    <View key={refreshKey} className='flex-1 justify-between items-center bg-offwhite'>
+      <ImageBackground
+        source={require('../assets/background2.png')}
+        className='w-full h-full absolute'></ImageBackground>
+      <View className=' w-10/12 h-1/3 items-center bg-test/50 rounded-3xl mt-20'>
+        <Text className='text-h1 text-center text-darkSage font-manrope mt-8'>Bienvenue sur</Text>
+        <Text className='text-h1 text-center text-darkSage font-manrope'>PawConnect</Text>
+        {/* <Image source={require('../assets/logo-temp.png')} className='w-[240px] h-[240px]' /> */}
+        <View className='h-1/2 w-11/12 justify-center'>
+          <Text className='h-full font-manrope text-h4 text-darkSage text-center px-20 mt-8'>
+            L'application qui connecte les humains pour sauver les animaux
+          </Text>
+        </View>
       </View>
-      <View className='h-1/4 w-11/12 justify-center border-[1px] border-offwhite'>
-        <Text className='font-manrope text-h4 text-deepSage text-center border-[1px] border-offwhite'>
-          L'application qui connecte les humains pour sauver les animaux
-        </Text>
-      </View>
-      <View className='h-1/3 w-full items-center justify-center'>
-        <Button title='Connection' onPress={() => navigation.navigate('SignIn')} />
+      <View className='h-1/3 w-full items-center justify-end pb-12'>
         <Button
-          bg={colors.offwhite}
+          title='Connection'
+          textColor={colors.test}
+          onPress={() => navigation.navigate('SignIn')}
+        />
+        <Button
+          bg={colors.test}
           textColor={colors.deepSage}
           border='deepSage'
           title={"S'enregistrer"}
           onPress={() => navigation.navigate('SignUp')}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

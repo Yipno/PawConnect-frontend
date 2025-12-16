@@ -43,9 +43,6 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
 
-
-
-
         const isFocused = state.index === index;
         const onPress = () => {
           tabPositionX.value = withSpring(buttonWidth * index, { damping: 100, stiffness: 1600 });
@@ -82,7 +79,7 @@ export const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: 100,
-    backgroundColor: '#faf9f7', //rgba(178, 18, 18, 0.25),
+    backgroundColor: '#fbf5e8', //rgba(178, 18, 18, 0.25),
     borderColor: 'rgba(255,255,255,0.3)',
     borderWidth: 1,
     position: 'absolute',

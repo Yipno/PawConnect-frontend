@@ -127,8 +127,8 @@ export default function Profile() {
 
             <Button
               title='Me déconnecter'
-              bg='#f4a76a'
-              textColor='#FAF9F7'
+              bg={colors.softOrange}
+              textColor={colors.offwhite}
               onPress={() => dispatch(logout())}
             />
           </View>
@@ -212,10 +212,14 @@ export default function Profile() {
               <>
                 <Button
                   title='Modifier mon profil'
-                  textColor='#FAF9F7'
+                  textColor={colors.offwhite}
                   onPress={askUpdateConfirmation}
                 />
-                <Button title='Supprimer mon compte' bg='#E74C3C' textColor='#FAF9F7' />
+                <Button
+                  title='Supprimer mon compte'
+                  bg={colors.error}
+                  textColor={colors.offwhite}
+                />
               </>
             }
             fullscreen={true}

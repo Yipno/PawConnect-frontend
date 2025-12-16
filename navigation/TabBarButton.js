@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAnimatedStyle, useSharedValue, withSpring, interpolate } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import { useEffect } from 'react';
+import useTheme from '../hooks/useTheme';
+const { colors } = useTheme();
 
 export default function TabBarButton({ icon, onPress, isFocused, color, label }) {
   const scale = useSharedValue(0);
@@ -62,5 +64,6 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 3 },
     shadowColor: 'black',
     shadowOpacity: 0.5,
+    color: colors.offwhite,
   },
 });

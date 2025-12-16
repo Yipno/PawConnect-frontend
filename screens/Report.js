@@ -1,7 +1,6 @@
-import { ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity, Modal } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
-import { animalsData } from '../data/reportsData';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
@@ -183,7 +182,9 @@ export default function Reports() {
       }}
       className='bg-offwhite'>
       {/* Titre de la page */}
-      <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
+      <Text className='text-h2 font-manrope text-deepSage font-bold text-center mt-2'>
+        Signalements
+      </Text>
 
       {/* Vue réservée aux agents : bouton Filtres */}
       {userRole === 'agent' && (
@@ -200,22 +201,25 @@ export default function Reports() {
         </View>
       )}
 
-      {/* Liste des signalements sous forme de cartes */}
-      <ScrollView style={{ flex: 1, width: '100%' }}>
-        {filteredList.map(r => (
-          <Card
-            key={r._id}
-            {...r}
-            place={getDistanceBetweenTwoPoints(
-              { latitude: r.location.lat, longitude: r.location.long },
-              currentLocation
-            )}
-            onPress={() => handleClick(r)}
-          />
-        ))}
-        {/* Marge en bas pour éviter que le dernier élément soit collé à une éventuelle bottom bar */}
-        <View style={{ marginBottom: 120 }} />
-      </ScrollView>
+      {/* Liste des signalements sous forme de cartes FlatList fonctionne comme Scrollview + .map en optimisant les performances : Ce qui n'est pas affiché est ignoré */}
+      <View style={{ flex: 1, width: '100%' }}>
+        <FlatList
+          data={filteredList}
+          keyExtractor={item => item._id}
+          renderItem={({ item }) => (
+            <Card
+              {...item}
+              place={getDistanceBetweenTwoPoints(
+                { latitude: item.location.lat, longitude: item.location.long },
+                currentLocation
+              )}
+              onPress={() => handleClick(item)}
+            />
+          )}
+          ListFooterComponent={<View style={{ marginBottom: 120 }} />}
+          // Marge en bas pour éviter que le dernier élément soit collé à une éventuelle bottom bar
+        />
+      </View>
 
       <ReportDetailAgent
         visible={modalVisible}

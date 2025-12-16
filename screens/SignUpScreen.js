@@ -244,7 +244,7 @@ export default function SignUp({ navigation }) {
               className='mr-4'
               value={accountType === 'pro'}
               onValueChange={value => setAccountType(value ? 'pro' : 'user')}
-              thumbColor='#fff'
+              thumbColor='#FAF9F7'
               trackColor={{ false: '#ccc', true: colors.deepSage }}
             />
             <Text className='text-lg font-semibold' style={{ color: colors.deepSage }}>
