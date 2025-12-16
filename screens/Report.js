@@ -146,8 +146,8 @@ export default function Reports() {
           fetch(`${url}/animals`)
             .then((res) => res.json())
             .then((data) => {
-              console.log('data', data);
-              console.log('data.reports', data.reports);
+            //  console.log('data', data);
+            //  console.log('data.reports', data.reports);
 
               if (data.result) dispatch(getReports(data.reports));
             });
