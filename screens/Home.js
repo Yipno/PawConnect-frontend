@@ -19,7 +19,7 @@ export default function HomeScreen({ navigation }) {
         </Text>
       </View>
       <View className='h-1/3 w-full items-center justify-center'>
-        <Button title='Connection' onPress={() => navigation.navigate('SignIn')} />
+        <Button title='Connexion' onPress={() => navigation.navigate('SignIn')} />
         <Button
           bg={colors.offwhite}
           textColor={colors.deepSage}
