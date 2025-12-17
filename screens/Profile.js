@@ -18,9 +18,85 @@ export default function Profile({ navigation }) {
   const user = useSelector(state => state.user.value);
   const dispatch = useDispatch();
 
+  const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
+
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const [profileVisible, setProfileVisible] = useState(false);
   const [resourcesVisible, setResourcesVisible] = useState(false);
   const [faqVisible, setFaqVisible] = useState(false);
+  
+  const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
+  const [form, setForm] = useState({
+    lastname: user.lastName || '',
+    firstname: user.firstName || '',
+    phone: user.phone || '',
+    email: user.email || '',
+    password: '',
+    establishmentRef: user.establishmentRef || '',
+  });
+
+  const { colors } = useTheme();
+
+  useEffect(() => {
+    setForm({
+      lastname: user.lastName || '',
+      firstname: user.firstName || '',
+      email: user.email || '',
+      password: '', // toujours vide pour le password
+      confirmPassword: '',
+      establishmentRef: user.establishmentRef || '',
+    });
+  }, [user]);
+
+  const showModalProfil = () => {
+    setFullscreenModalVisible(true);
+  };
+
+  const askUpdateConfirmation = () => {
+    Alert.alert('Confirmer la modification', 'Voulez-vous enregistrer vos modifications ?', [
+      { text: 'Annuler', style: 'cancel' },
+      { text: 'Modifier', onPress: () => updateProfile() },
+    ]);
+  };
+
+  const updateProfile = () => {
+    if (form.password.length > 0 && form.password !== form.confirmPassword) {
+      Alert.alert('Erreur', 'Les mots de passe ne correspondent pas');
+      return;
+    }
+
+    fetch(`${BACKEND}/users/updateProfile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`, //JWT Token 
+       },
+      body: JSON.stringify({
+
+        firstName: form.firstname,
+        lastName: form.lastname,
+        email: form.email,
+        password: form.password || undefined,
+        establishmentRef: form.establishmentRef,
+      }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.result) {
+          console.log('Profil mis à jour !', data.user);
+
+          dispatch(updateUser(data.user));
+
+          Alert.alert('Profil mis à jour');
+        } else {
+          console.log('Erreur update :', data.error);
+        }
+      })
+      .catch(err => {
+        console.log('Erreur réseau :', err);
+      });
+  };
 
   const logoutUser = () => {
     dispatch(logout());

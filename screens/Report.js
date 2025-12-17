@@ -11,6 +11,9 @@ import ReportDetailAgent from '../components/module/ReportDetailAgent';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
+
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
+
 export default function Reports() {
   // États des filtres
   const [filtre, setFiltre] = useState(false);
@@ -35,8 +38,16 @@ export default function Reports() {
   const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude: 0 });
 
   const dispatch = useDispatch();
-  const reports = useSelector((state) => state.animals.value);
-  const userRole = useSelector((state) => state.user.value.role);
+  const reports = useSelector(((state)) => state.animals.value) || []; //add security for undefined
+  const userRole = useSelector(((state)) => state.user.value.role);
+  const user = useSelector((state) => state.user.value);
+
+  // Debug reports
+  useEffect(() => {
+    console.log('REPORTS (Redux) =>', reports);
+  }, [reports]);
+
+
 
   // Effet qui applique TOUS les filtres combinés
   useEffect(() => {
@@ -119,6 +130,8 @@ export default function Reports() {
 
   // Open Modal on Card Click
   const handleClick = (report) => {
+    console.log('CLICK REPORT =>', report);// debug
+    console.log('CLICK REPORT.state =>', report.state); //debug
     setDataReport(report);
     setModalVisible(true);
     // console.log('Report: ', report);
@@ -130,17 +143,21 @@ export default function Reports() {
     const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
     if (!status || !dataReport) return;
     console.log('ENVOYÉ AU BACKEND =>', { status, description });
-    fetch(`${url}/animals/${dataReport._id}`, {
+    fetch(`${BACKEND_URL}/animals/${dataReport._id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`, //JWT token
+      },
       body: JSON.stringify({
         status,
         description,
-        userId,
       }),
     })
       .then((res) => res.json())
       .then((json) => {
+        console.log('PUT /animals/:id response =>', json); //debug
+
         if (json.result) {
           //recharge les signalements
           fetch(`${url}/animals`)
@@ -153,11 +170,12 @@ export default function Reports() {
             });
           setModalVisible(false);
           setDescription('');
-        } else {
-          console.log(json.message);
-        }
-      });
-  };
+          }
+        })
+        .catch((err) => {
+          console.error('PUT/animals Erreur lors de la mise à jour du signalement =>', err);
+        });
+  };  
 
   //add the current location
   useEffect(() => {
