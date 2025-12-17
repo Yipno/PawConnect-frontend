@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Button, Input } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Button, Input, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,9 +22,11 @@ export default function Establishments({ populatedReport }) {
           />
           <View className='ml-4 justify-center'>
             <Text className='text-h3'>{populatedReport?.establishment.name || 'Name'}</Text>
-            <Text numberOfLines={4} ellipsizeMode='tail' className='underline'>
-              {populatedReport?.establishment.url || 'www.domaine.com'}
-            </Text>
+            <TouchableOpacity onPress={() => Linking.openURL(`${populatedReport?.establishment.url}`)}>
+              <Text numberOfLines={4} ellipsizeMode='tail' className='underline'>
+                {populatedReport?.establishment.url || 'www.domaine.com'}
+              </Text>
+            </TouchableOpacity>
             <Text className=''>
               {`0${populatedReport?.establishment.phone}` || '01 23 45 67 89'}
             </Text>
@@ -37,7 +39,7 @@ export default function Establishments({ populatedReport }) {
             <Text className='text-h4'>Adresse</Text>
             <Text>{`${populatedReport?.establishment.address.street || 'Street'}`}</Text>
             <Text>{`${populatedReport?.establishment.address.zipCode || ''} ${
-              populatedReport.establishment.address.city || 'zipCode City'
+              populatedReport?.establishment.address.city || 'zipCode City'
             }`}</Text>
           </View>
         </View>
