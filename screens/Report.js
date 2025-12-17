@@ -1,13 +1,11 @@
-import { ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity, Modal } from 'react-native';
+import { ScrollView, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
-import { animalsData } from '../data/reportsData';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
 import ReportDetailAgent from '../components/module/ReportDetailAgent';
-// import ReportDetail from '../components/module/ReportDetail';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
@@ -15,74 +13,32 @@ import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
 
 export default function Reports() {
-  // États des filtres
-  const [filtre, setFiltre] = useState(false);
-
-  // Priorité
-  const [modere, setModere] = useState(false);
-  const [important, setImportant] = useState(false);
-  const [urgent, setUrgent] = useState(false);
-
-  // Statut
-  const [nouveaux, setNouveaux] = useState(false);
-  const [enCours, setEnCours] = useState(false);
-  const [clotures, setClotures] = useState(false);
-
-  // Données filtrées affichées
-  const [filteredList, setFilteredList] = useState([]);
-
-  //Description agent
-  const [description, setDescription] = useState('');
-
-  // Position utilisateur
-  const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude: 0 });
-
   const dispatch = useDispatch();
+
   const reports = useSelector((state) => state.animals.value) || []; //add security for undefined
   const userRole = useSelector((state) => state.user.value.role);
   const user = useSelector((state) => state.user.value);
+  const userId =
+    user?._id || user?.id || user?.userId || user?.uid || user?.user?._id || user?.user?.id || null;
 
-  // Debug reports
-  useEffect(() => {
-    console.log('REPORTS (Redux) =>', reports);
-  }, [reports]);
+  /* -------------------- UI STATES -------------------- */
+  const [filtre, setFiltre] = useState(false);
 
+  //Filtres en LISTES (multi)
+  const [selectedPriorities, setSelectedPriorities] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
 
+  // Modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [dataReport, setDataReport] = useState(null);
 
-  // Effet qui applique TOUS les filtres combinés
-  useEffect(() => {
-    let result = [...reports];
+  // Description agent
+  const [description, setDescription] = useState('');
 
-    //Filtre PRIORITÉ
-    if (modere) {
-      result = result.filter((r) => r.priority === 'modere');
-    }
-    if (important) {
-      result = result.filter((r) => r.priority === 'important');
-    }
-    if (urgent) {
-      result = result.filter((r) => r.priority === 'urgent');
-    }
+  // Position user
+  const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude: 0 });
 
-    //Filtre STATUT
-    // - "Nouveaux"    => status === 'nouveau'
-    // - "En cours"    => status === 'en cours'
-    // - "Clôturés"    => status === 'terminé'
-    if (nouveaux) {
-      result = result.filter((r) => r.status === 'nouveau');
-    }
-    if (enCours) {
-      result = result.filter((r) => r.status === 'en cours');
-    }
-    if (clotures) {
-      result = result.filter((r) => r.status === 'terminé');
-    }
-
-    setFilteredList(result);
-  }, [reports, modere, important, urgent, nouveaux, enCours, clotures]);
-
-  //Gestion des boutons "statut"
-  const nouveauxPress = () => {
+  /*const nouveauxPress = () => {
     setNouveaux((prev) => !prev);
     setEnCours(false);
     setClotures(false);
@@ -124,19 +80,8 @@ export default function Reports() {
     setFiltre((prev) => !prev);
   };
 
-  //Modal State
-  const [modalVisible, setModalVisible] = useState(false);
-  const [dataReport, setDataReport] = useState(null);
-
-  // Open Modal on Card Click
-  const handleClick = (report) => {
-    console.log('CLICK REPORT =>', report);// debug
-    console.log('CLICK REPORT.state =>', report.state); //debug
-    setDataReport(report);
-    setModalVisible(true);
-    // console.log('Report: ', report);
   };
-
+  */
   //function pour récupérer la description et le statut pour l'envoyer en base de donnée
   // TODO -> A deplacer dans la modal je pense
   const handleActualiser = ({ description, cours, cloturer }) => {
@@ -177,7 +122,12 @@ export default function Reports() {
         });
   };  
 
-  //add the current location
+  useEffect(() => {
+    fetchReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, url]);
+
+  /* -------------------- GEOLOCATION -------------------- */
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -194,26 +144,72 @@ export default function Reports() {
     })();
   }, []);
 
+  /* -------------------- LISTE FILTRÉE -------------------- */
+  const filteredList = useMemo(() => {
+    let result = [...reports];
+
+    // PRIORITÉS
+    if (selectedPriorities.length > 0) {
+      result = result.filter((r) => selectedPriorities.includes(r?.priority));
+    }
+
+    // STATUTS
+    if (selectedStatuses.length > 0) {
+      result = result.filter((r) => selectedStatuses.includes(r?.status));
+    }
+
+    return result;
+  }, [reports, selectedPriorities, selectedStatuses]);
+
+  /* -------------------- MODAL -------------------- */
+  const handleClick = (report) => {
+    setDataReport(report);
+    setModalVisible(true);
+  };
+
+  /* -------------------- DATA FILTRES -------------------- */
+  const PRIORITIES = [
+    { label: 'Modéré', value: 'modere' },
+    { label: 'Important', value: 'important' },
+    { label: 'Urgent', value: 'urgent' },
+  ];
+
+  const STATUSES = [
+    { label: 'Nouveaux', value: 'nouveau' },
+    { label: 'En cours', value: 'en cours' },
+    { label: 'Clôturés', value: 'terminé' },
+  ];
+
+  const renderFilterButton = ({ label, value }, selectedList, onToggle) => {
+    const isSelected = selectedList.includes(value);
+
+    return (
+      <TouchableOpacity
+        key={value}
+        className={
+          isSelected
+            ? 'bg-deepSage h-12 w-[300px] rounded-2xl justify-center items-center self-center'
+            : 'bg-gray h-12 w-[300px] rounded-2xl justify-center items-center self-center'
+        }
+        onPress={() => onToggle(value)}
+      >
+        <Text className={isSelected ? 'text-white' : 'text-black'}>{label}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  /* -------------------- UI -------------------- */
   return (
-    <SafeAreaView
-      edges={['top']}
-      style={{
-        flex: 1,
-        position: 'relative', // pour que l’overlay des filtres se base sur ce container
-      }}
-      className='bg-offwhite'
-    >
-      {/* Titre de la page */}
+    <SafeAreaView edges={['top']} style={{ flex: 1, position: 'relative' }} className='bg-offwhite'>
       <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
 
-      {/* Vue réservée aux agents : bouton Filtres */}
+      {/* Bouton Filtres (agents uniquement) */}
       {userRole === 'agent' && (
         <View className='flex-col items-center'>
-          {/* Bouton Filtres (ouvre le menu déroulant en overlay) */}
           <View className='mt-2 w-[350px]'>
             <TouchableOpacity
               className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
-              onPress={handleFiltre}
+              onPress={() => setFiltre((prev) => !prev)}
             >
               <Text>Filtres</Text>
               <Ionicons name='chevron-down-outline' color='#000000' size={20} />
@@ -222,34 +218,34 @@ export default function Reports() {
         </View>
       )}
 
-      {/* Liste des signalements sous forme de cartes */}
+      {/* Cartes */}
       <ScrollView style={{ flex: 1, width: '100%' }}>
         {filteredList.map((r) => (
           <Card
-            key={r._id}
+            key={r?._id}
             {...r}
             place={getDistanceBetweenTwoPoints(
-              { latitude: r.location.lat, longitude: r.location.long },
+              { latitude: r.location?.lat, longitude: r.location?.long },
               currentLocation
             )}
             onPress={() => handleClick(r)}
           />
         ))}
-        {/* Marge en bas pour éviter que le dernier élément soit collé à une éventuelle bottom bar */}
         <View style={{ marginBottom: 120 }} />
       </ScrollView>
 
+      {/* Modal détail */}
       <ReportDetailAgent
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={closeModal}
         report={dataReport}
         agent={userRole}
         description={description}
         onChangeDescription={setDescription}
         onActualiser={handleActualiser}
-      ></ReportDetailAgent>
+      />
 
-      {/* Menu des filtres affiché en overlay au-dessus des cartes */}
+      {/* Overlay filtres */}
       {filtre && (
         <View
           style={{
@@ -263,94 +259,27 @@ export default function Reports() {
           className='items-center'
         >
           <View className='bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg'>
-            {/* Filtres de priorité */}
+            {/* Priorités */}
+            {PRIORITIES.map((item) => renderFilterButton(item, selectedPriorities, togglePriority))}
+
+            {/* Statuts */}
+            {STATUSES.map((item) => renderFilterButton(item, selectedStatuses, toggleStatus))}
+
+            {/* Reset */}
             <TouchableOpacity
-              className={
-                modere
-                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-              }
+              className='bg-gray h-10 w-[200px] rounded-2xl justify-center items-center self-center mt-2'
               onPress={() => {
-                handleModere();
+                setSelectedPriorities([]);
+                setSelectedStatuses([]);
                 setFiltre(false);
               }}
             >
-              <Text className={modere ? 'text-white' : 'text-black'}>Modéré</Text>
+              <Text className='text-white text-lg'>Réinitialiser</Text>
             </TouchableOpacity>
 
+            {/* Fermer */}
             <TouchableOpacity
-              className={
-                important
-                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-              }
-              onPress={() => {
-                handleImportant();
-                setFiltre(false);
-              }}
-            >
-              <Text className={important ? 'text-white' : 'text-black'}>Important</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className={
-                urgent
-                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-              }
-              onPress={() => {
-                handleUrgent();
-                setFiltre(false);
-              }}
-            >
-              <Text className={urgent ? 'text-white' : 'text-black'}>Urgent</Text>
-            </TouchableOpacity>
-
-            {/* Filtres de statut */}
-            <TouchableOpacity
-              className={
-                nouveaux
-                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-              }
-              onPress={() => {
-                nouveauxPress();
-                setFiltre(false);
-              }}
-            >
-              <Text className={nouveaux ? 'text-white' : 'text-black'}>Nouveaux</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className={
-                enCours
-                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-              }
-              onPress={() => {
-                enCoursPress();
-                setFiltre(false);
-              }}
-            >
-              <Text className={enCours ? 'text-white' : 'text-black'}>En cours</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className={
-                clotures
-                  ? 'bg-deepSage h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-                  : 'bg-gray h-12 w-[300px] rounded-2xl flex-col justify-center items-center self-center'
-              }
-              onPress={() => {
-                cloturesPress();
-                setFiltre(false);
-              }}
-            >
-              <Text className={clotures ? 'text-white' : 'text-black'}>Clôturés</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              className='bg-gray h-10 w-[200px] rounded-2xl flex-col justify-center items-center self-center mt-2'
+              className='bg-gray h-10 w-[200px] rounded-2xl justify-center items-center self-center'
               onPress={() => setFiltre(false)}
             >
               <Text className='text-white text-lg'>Fermer</Text>
