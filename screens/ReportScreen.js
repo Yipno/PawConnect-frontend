@@ -373,7 +373,10 @@ export default function ReportScreen() {
       {/* Bouton envoi du signalement  handleSubmit() &&  */}
       <Button
         title={isLoading ? 'Chargement' : 'Envoyer le signalement'}
-        onPress={() => setIsLoading(true)}
+        onPress={() => {
+          setIsLoading(true);
+          setSendResult(null);
+        }}
         bg={isLoading && 'lightgray'}
       />
       <View className='h-14' />

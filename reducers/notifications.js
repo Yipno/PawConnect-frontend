@@ -11,11 +11,10 @@ const notifications = createSlice({
   reducers: {
     setNotifications: (state, action) => {
       state.items = action.payload;
-      state.unreadCount = action.payload.filter(n => !n.read).length;
-      console.log('notifications acquired', action.payload);
+      state.unreadCount = state.items.filter(n => !n.read).length;
     },
     markAsRead: (state, action) => {
-      const { notificationId } = action.payload;
+      const notificationId = action.payload;
       const notification = state.items.find(n => n._id === notificationId);
       if (notification && !notification.read) {
         notification.read = true;
