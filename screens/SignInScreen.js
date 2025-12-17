@@ -71,7 +71,7 @@ export default function SignInScreen({ navigation }) {
 
       // FETCH  REPORTS AND DISPATCH TO REDUX
       if (userResult.user.role === 'civil') {
-        const animalsResponse = await fetch(`${BACKEND}/animals/${userResult.user.id}`);
+        const animalsResponse = await fetch(`${BACKEND}/animals/populate/${userResult.user.id}`);
         const animalsResults = await animalsResponse.json();
         const establishmentsResponse = await fetch(`${BACKEND}/establishments`);
         const establishmentsResults = await establishmentsResponse.json();
@@ -84,10 +84,10 @@ export default function SignInScreen({ navigation }) {
           setIsLoading(false);
           return;
         }
-        // console.log(animalsResults);
-        console.log(establishmentsResults);
+        // console.log("animalsResults:", animalsResults);
+        // console.log(establishmentsResults);
 
-        dispatch(getReports(animalsResults.userReports));
+        dispatch(getReports(animalsResults.reports));
         dispatch(getEstablishments(establishmentsResults.result));
       } else if (userResult.user.role === 'agent') {
         const animalsResponse = await fetch(`${BACKEND}/animals/agent/${userResult.user.id}`);
