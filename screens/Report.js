@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
 import ReportDetailAgent from '../components/module/ReportDetailAgent';
-// import ReportDetail from '../components/module/ReportDetail';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
