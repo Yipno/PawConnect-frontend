@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import CustomModal from '../ui/CustomModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -83,93 +83,103 @@ export default function ReportDetail({
       agent=''
       content={
         report ? (
-          <View className='w-11/12 justify-center'>
-            <View className='w-full aspect-[4/3] my-4'>
-              <Image
-                source={{ uri: report.photoUrl }}
-                className='w-full h-full rounded-2xl object-cover'
-              />
-            </View>
+          <ScrollView>
+            <View className='w-11/12 justify-center'>
+              <View className='w-full aspect-[4/3] my-4'>
+                <Image
+                  source={{ uri: report.photoUrl }}
+                  className='w-full h-full rounded-2xl object-cover'
+                />
+              </View>
 
-            {/* Title */}
-            <Text className='text-xl font-bold mb-2 text-left'>{report.title}</Text>
+              {/* Title */}
+              <Text className='text-xl font-bold mb-2 text-left'>{report.title}</Text>
 
-            {/* Place & Date */}
-            <View className='w-full flex-row justify-between mb-3'>
-              {distanceLabel ? (
-                <Text className='mb-2 text-gray-700'>Distance: {distanceLabel}</Text>
-              ) : (
-                <Text className='mb-2 text-gray-500'>Calcul de la distance...</Text>
-              )}
-              <Text>{moment(report.date).format('LLL')}</Text>
-            </View>
+              {/* Place & Date */}
+              <View className='w-full flex-row justify-between mb-3'>
+                {distanceLabel ? (
+                  <Text className='mb-2 text-gray-700'>Distance: {distanceLabel}</Text>
+                ) : (
+                  <Text className='mb-2 text-gray-500'>Calcul de la distance...</Text>
+                )}
+                <Text>{moment(report.date).format('LLL')}</Text>
+              </View>
 
-            {/* Priority
+              {/* Priority
             <View className='bg-deepSage/20 border border-deepSage rounded-2xl px-3 py-1 self-start mb-4'>
               <Text>{report.priority}</Text>
             </View> */}
 
-            {/* Tag */}
-            <View className='flex-row flex-wrap mb-4'>
-              {report.state.map((tag, index) => (
-                <View
-                  key={index}
-                  className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
-                  <Text className='text-white font-bold'>{tag}</Text>
-                </View>
-              ))}
-            </View>
-
-            {/* Description */}
-            <View>
-              <Text className='text-base text-gray-800 leading-5 text-justify'>{report.desc}</Text>
-            </View>
-            {agent === 'agent' && (
-              <View>
-                <View className='flex-col justify-center items-center gap-2 mt-2 w-full'>
-                  <TouchableOpacity
-                    className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
-                    onPress={onPress}>
-                    <Text>Statut</Text>
-                    <Ionicons name='chevron-down-outline' color='#000000' size={20} />
-                  </TouchableOpacity>
-                  {statut && (
-                    <View className='border border-gray rounded-2xl  w-full flex-col justify-center items-center '>
-                      <TouchableOpacity
-                        className={
-                          cours
-                            ? 'rounded-t-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
-                            : 'h-12 w-full rounded-t-2xl flex-col justify-center items-center'
-                        }
-                        onPress={() => handleCours()}>
-                        <Text className={cours ? 'text-white' : 'text-black'}>En cours</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        className={
-                          cloturer
-                            ? 'border-gray border-t-[1px] rounded-b-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
-                            : 'border-gray border-t-[1px] h-12 w-full flex-col justify-center items-center'
-                        }
-                        onPress={() => handleCloturer()}>
-                        <Text className={cloturer ? 'text-white' : 'text-black'}>Clôturer</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-
-                  <TextInput
-                    className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4 mb-2'
-                    placeholder='Ajouter une description'
-                    onChangeText={onChangeDescription}
-                    value={description}></TextInput>
-                  <TouchableOpacity
-                    className='border border-gray bg-deepSage rounded-2xl h-12 w-full flex-col justify-center items-center  px-4'
-                    onPress={() => onActualiser({ description, cours, cloturer })}>
-                    <Text className='text-white'>Actualiser</Text>
-                  </TouchableOpacity>
-                </View>
+              {/* Tag */}
+              <View className='flex-row flex-wrap mb-4'>
+               {Array.isArray(report.state) && report.state.map((tag, index) => (
+              <View
+              key={index}
+               className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'
+                >
+               <Text className='text-white font-bold'>{tag}</Text>
+               </View>
+                ))}
               </View>
-            )}
-          </View>
+
+              {/* Description */}
+              <View>
+                <Text className='text-base text-gray-800 leading-5 text-justify'>
+                  {report.desc}
+                </Text>
+              </View>
+              {agent === 'agent' && (
+                <View>
+                  <View className='flex-col justify-center items-center gap-2 mt-2 w-full'>
+                    <TouchableOpacity
+                      className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
+                      onPress={onPress}
+                    >
+                      <Text>Statut</Text>
+                      <Ionicons name='chevron-down-outline' color='#000000' size={20} />
+                    </TouchableOpacity>
+                    {statut && (
+                      <View className='border border-gray rounded-2xl  w-full flex-col justify-center items-center '>
+                        <TouchableOpacity
+                          className={
+                            cours
+                              ? 'rounded-t-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
+                              : 'h-12 w-full rounded-t-2xl flex-col justify-center items-center'
+                          }
+                          onPress={() => handleCours()}
+                        >
+                          <Text className={cours ? 'text-white' : 'text-black'}>En cours</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          className={
+                            cloturer
+                              ? 'border-gray border-t-[1px] rounded-b-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
+                              : 'border-gray border-t-[1px] h-12 w-full flex-col justify-center items-center'
+                          }
+                          onPress={() => handleCloturer()}
+                        >
+                          <Text className={cloturer ? 'text-white' : 'text-black'}>Clôturer</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+
+                    <TextInput
+                      className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4 mb-2'
+                      placeholder='Ajouter une description'
+                      onChangeText={onChangeDescription}
+                      value={description}
+                    ></TextInput>
+                    <TouchableOpacity
+                      className='border border-gray bg-deepSage rounded-2xl h-12 w-full flex-col justify-center items-center  px-4'
+                      onPress={() => onActualiser({ description, cours, cloturer })}
+                    >
+                      <Text className='text-white'>Actualiser</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            </View>
+          </ScrollView>
         ) : (
           <Text>Aucun détail disponible.</Text>
         )

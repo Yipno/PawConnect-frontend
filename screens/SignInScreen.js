@@ -15,6 +15,8 @@ const EMAIL_REGEX =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
+
+
 export default function SignInScreen({ navigation }) {
   const { colors } = useTheme();
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ export default function SignInScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [backendError, setBackendError] = useState('');
+
 
   const handleLogIn = async () => {
     if (isLoading) return; // Prevent double tap
@@ -68,9 +71,13 @@ export default function SignInScreen({ navigation }) {
         return;
       }
 
+      const token = userResult.token; // JWT token
+
       // FETCH  REPORTS AND DISPATCH TO REDUX
       if (userResult.user.role === 'civil') {
-        const animalsResponse = await fetch(`${BACKEND}/animals/${userResult.user.id}`);
+        const animalsResponse = await fetch(`${BACKEND}/animals/${userResult.user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const animalsResults = await animalsResponse.json();
         if (!animalsResponse.ok) {
           setBackendError(
@@ -82,7 +89,8 @@ export default function SignInScreen({ navigation }) {
         // console.log(animalsResults);
         dispatch(getReports(animalsResults.userReports));
       } else if (userResult.user.role === 'agent') {
-        const animalsResponse = await fetch(`${BACKEND}/animals`);
+        const animalsResponse = await fetch(`${BACKEND}/animals`, { headers: { Authorization: `Bearer ${token}` } 
+        });
         const animalsResults = await animalsResponse.json();
         if (!animalsResponse.ok) {
           setBackendError(
@@ -93,7 +101,9 @@ export default function SignInScreen({ navigation }) {
         }
         dispatch(getReports(animalsResults.reports));
       }
-      dispatch(login(userResult.user));
+      dispatch(login({
+        ...userResult.user,
+        token,}));//put token JWT in redux
       setPassword('');
       setEmail('');
 
@@ -105,6 +115,8 @@ export default function SignInScreen({ navigation }) {
       setIsLoading(false);
     }
   };
+
+
 
   return (
     <>

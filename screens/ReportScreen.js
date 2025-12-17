@@ -19,7 +19,7 @@ export default function ReportScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.value);
+  const user = useSelector((state) => state.user.value);
   const { colors } = useTheme();
 
   const currentLocation = route.params?.currentLocation || null;
@@ -36,15 +36,15 @@ export default function ReportScreen() {
 
   const openCamera = () => {
     navigation.navigate('Camera', {
-      onPhotoTaken: uri => {
+      onPhotoTaken: (uri) => {
         setPhotoUri(uri);
       },
     });
   };
 
   const toggleState = (state, checked) => {
-    setAnimalState(prevState =>
-      checked ? [...prevState, state] : prevState.filter(s => s !== state)
+    setAnimalState((prevState) =>
+      checked ? [...prevState, state] : prevState.filter((s) => s !== state)
     );
   };
 
@@ -99,6 +99,9 @@ export default function ReportScreen() {
   // Envoi du signalement au backend
   const sendReport = async () => {
     setShowLoader(true);
+
+    console.log('Photo URI:', photoUri); //test debug
+
     const formData = new FormData();
     formData.append('photoReport', {
       uri: photoUri,
@@ -114,12 +117,12 @@ export default function ReportScreen() {
       state: animalState,
       title: reportTitle,
       desc: description,
-      token: user.token,
     };
     formData.append('data', JSON.stringify(reportPayload));
 
     const response = await fetch(`${BACKEND_URL}/animals/add`, {
       method: 'POST',
+      headers: { Authorization: `Bearer ${user.token}` }, // JWT token
       body: formData,
     });
 
@@ -172,7 +175,8 @@ export default function ReportScreen() {
       enableOnAndroid
       keyboardShouldPersistTaps='handled'
       contentContainerStyle={{ paddingTop: 40, alignItems: 'center' }}
-      style={{ flex: 1, backgroundColor: colors.offwhite }}>
+      style={{ flex: 1, backgroundColor: colors.offwhite }}
+    >
       {/* BOUTONS RETOUR ET INFOS */}
       <View className='w-full mt-2 px-2 flex-row items-center justify-between'>
         <TouchableOpacity className='flex-row items-center' onPress={() => navigation.goBack()}>
@@ -217,13 +221,15 @@ export default function ReportScreen() {
             />
             <Text
               className='ml-1 text-center text-body font-manrope'
-              style={animalType === 'chat' ? { fontWeight: 'bold' } : { color: colors.text }}>
+              style={animalType === 'chat' ? { fontWeight: 'bold' } : { color: colors.text }}
+            >
               Chat
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             className='flex-row items-center'
-            onPress={() => setAnimalType('chien')}>
+            onPress={() => setAnimalType('chien')}
+          >
             <Ionicons
               name={animalType === 'chien' ? 'radio-button-on-outline' : 'radio-button-off-outline'}
               size={32}
@@ -231,7 +237,8 @@ export default function ReportScreen() {
             />
             <Text
               className='ml-1 text-center text-body font-manrope'
-              style={animalType === 'chien' ? { fontWeight: 'bold' } : { color: colors.text }}>
+              style={animalType === 'chien' ? { fontWeight: 'bold' } : { color: colors.text }}
+            >
               Chien
             </Text>
           </TouchableOpacity>
@@ -262,7 +269,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Blessé'
                 value={animalState.includes('blesse')}
-                onValueChange={checked => toggleState('blesse', checked)}
+                onValueChange={(checked) => toggleState('blesse', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -270,7 +277,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Affaibli'
                 value={animalState.includes('affaibli')}
-                onValueChange={checked => toggleState('affaibli', checked)}
+                onValueChange={(checked) => toggleState('affaibli', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -278,7 +285,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='En danger'
                 value={animalState.includes('danger')}
-                onValueChange={checked => toggleState('danger', checked)}
+                onValueChange={(checked) => toggleState('danger', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -286,7 +293,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Coincé'
                 value={animalState.includes('coince')}
-                onValueChange={checked => toggleState('coince', checked)}
+                onValueChange={(checked) => toggleState('coince', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -294,7 +301,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Bébés'
                 value={animalState.includes('petits')}
-                onValueChange={checked => toggleState('petits', checked)}
+                onValueChange={(checked) => toggleState('petits', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -304,7 +311,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Agressif'
                 value={animalState.includes('agressif')}
-                onValueChange={checked => toggleState('agressif', checked)}
+                onValueChange={(checked) => toggleState('agressif', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -312,7 +319,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Peureux'
                 value={animalState.includes('peureux')}
-                onValueChange={checked => toggleState('peureux', checked)}
+                onValueChange={(checked) => toggleState('peureux', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -320,7 +327,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Animal jeune'
                 value={animalState.includes('jeune')}
-                onValueChange={checked => toggleState('jeune', checked)}
+                onValueChange={(checked) => toggleState('jeune', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -328,7 +335,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Sociable'
                 value={animalState.includes('sociable')}
-                onValueChange={checked => toggleState('sociable', checked)}
+                onValueChange={(checked) => toggleState('sociable', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -336,7 +343,7 @@ export default function ReportScreen() {
               <AdvancedCheckbox
                 label='Bonne santé'
                 value={animalState.includes('sain')}
-                onValueChange={checked => toggleState('sain', checked)}
+                onValueChange={(checked) => toggleState('sain', checked)}
                 checkedColor={colors.softOrange}
                 Style={{ fontFamily: 'Manrope', marginRight: 20 }}
               />
@@ -353,7 +360,7 @@ export default function ReportScreen() {
             icon='information-circle'
             placeholder='Titre de votre signalement'
             value={reportTitle}
-            onChangeText={value => setReportTitle(value)}
+            onChangeText={(value) => setReportTitle(value)}
           />
 
           <View className='w-11/12'>
@@ -365,7 +372,7 @@ export default function ReportScreen() {
               maxLength={280}
               className='w-11/12 p-3 h-36 mx-auto mb-2 rounded-xl border-[1px] border-deepSage text-small font-manrope focus:border-softOrange focus:border-[2px]'
               value={description}
-              onChangeText={value => setDescription(value)}
+              onChangeText={(value) => setDescription(value)}
             />
           </View>
         </View>

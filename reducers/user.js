@@ -7,7 +7,7 @@ const initialState = {
     lastName: null,
     email: null,
     role: null,
-    token: null,
+    token: null, //JWT token
     establishmentRef: null,
   },
 };

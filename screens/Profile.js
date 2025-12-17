@@ -61,9 +61,10 @@ export default function Profile() {
 
     fetch(`${BACKEND}/users/updateProfile`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`, //JWT Token 
+       },
       body: JSON.stringify({
-        token: user.token,
         firstName: form.firstname,
         lastName: form.lastname,
         email: form.email,
