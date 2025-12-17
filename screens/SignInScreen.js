@@ -42,12 +42,12 @@ export default function SignInScreen({ navigation }) {
     }
     //check if email is valid
     if (!EMAIL_REGEX.test(email)) {
-      setErrors((prev) => ({ ...prev, email: 'Email invalide.' }));
+      setErrors(prev => ({ ...prev, email: 'Email invalide.' }));
       setIsLoading(false);
       return;
     }
     if (password.length < 6) {
-      setErrors((prev) => ({
+      setErrors(prev => ({
         ...prev,
         password: 'Votre mot de passe doit contenir au moins 6 caractères.',
       }));
@@ -85,7 +85,7 @@ export default function SignInScreen({ navigation }) {
           return;
         }
         // console.log(animalsResults);
-        console.log(establishmentsResults);
+        // console.log(establishmentsResults);
 
         dispatch(getReports(animalsResults.userReports));
         dispatch(getEstablishments(establishmentsResults.result));
@@ -99,7 +99,7 @@ export default function SignInScreen({ navigation }) {
           setIsLoading(false);
           return;
         }
-       // console.log('animalsresults', animalsResults);
+        // console.log('animalsresults', animalsResults);
 
         dispatch(getReports(animalsResults.reports));
       }
@@ -127,8 +127,7 @@ export default function SignInScreen({ navigation }) {
           enableOnAndroid
           keyboardShouldPersistTaps='handled'
           contentContainerStyle={{ paddingTop: 60, flexGrow: 1 }}
-          style={{ backgroundColor: colors.offwhite }}
-        >
+          style={{ backgroundColor: colors.offwhite }}>
           <View className='flex-1 justify-between items-center bg-offwhite'>
             <Text className='text-h2 text-deepSage mt-4'>Se connecter</Text>
             {/* BUTTONS DEV MODE  */}
@@ -153,7 +152,7 @@ export default function SignInScreen({ navigation }) {
                 type='email'
                 icon='mail'
                 placeholder='example@pawconnect.xyz'
-                onChangeText={(value) => setEmail(value)}
+                onChangeText={value => setEmail(value)}
                 value={email}
                 error={errors.email}
               />
@@ -162,7 +161,7 @@ export default function SignInScreen({ navigation }) {
                 type='password'
                 icon='key'
                 placeholder='••••••••'
-                onChangeText={(value) => setPassword(value)}
+                onChangeText={value => setPassword(value)}
                 value={password}
                 error={errors.password}
               />

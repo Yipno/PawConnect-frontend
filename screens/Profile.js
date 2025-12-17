@@ -40,7 +40,7 @@ export default function Profile({ navigation }) {
           keyboardShouldPersistTaps='handled'>
           <Text className='text-h2 font-manrope font-bold text-deepSage mb-1'>Menu</Text>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
-            <SquaredButton
+            {/* <SquaredButton
               title={'Mes\nsignalements'}
               icon='paw'
               onPress={() =>
@@ -48,7 +48,7 @@ export default function Profile({ navigation }) {
                   ? navigation.navigate('MyReports')
                   : navigation.navigate('Report')
               }
-            />
+            /> */}
 
             {user.role === 'civil' ? (
               <SquaredButton title='Mes associations' icon='people-circle' />
