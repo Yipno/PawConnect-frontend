@@ -1,8 +1,9 @@
-import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/ui/Button';
 import useTheme from '../hooks/useTheme';
 import MapView, { Callout, Marker } from 'react-native-maps';
+import CustomModal from '../components/ui/CustomModal';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +15,7 @@ moment.locale('fr');
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
-export default function MapScreen({ navigation }) {
+export default function MapScreen({ navigation, visible, onClose }) {
   const { colors } = useTheme();
   const dispatch = useDispatch();
 
@@ -151,20 +152,45 @@ export default function MapScreen({ navigation }) {
 
   /*--- 4. MAP DISPLAY ---*/
 
+  // MARKERS COLORS
+
+  // PRIORITY LABEL
+  const priorityValues = {
+    urgent: {
+      label: 'Urgent',
+      color: '#FECACA',
+    },
+    important: {
+      label: 'Important',
+      color: '#FED7AA',
+    },
+    modere: {
+      label: 'Modéré',
+      color: '#BFDBFE',
+    },
+    faible: {
+      label: 'Faible',
+      color: '#BBF7D0',
+    },
+  };
+
   // MARKERS DATA ON CONDITION
   let markers;
   // CIVIL USER MARKERS: ESTABLISHMENTS
   if (user.role === 'civil') {
     markers = establishments?.map((data, i) => {
       const distance = currentLocation
-        ? getDistanceLabel(currentLocation, { latitude: data.location.lat, longitude: data.location.long })
+        ? getDistanceLabel(currentLocation, {
+            latitude: data.location.lat,
+            longitude: data.location.long,
+          })
         : '';
       return (
         <Marker
           key={i}
           coordinate={{ latitude: data.location.lat, longitude: data.location.long }}
-          title={data.name}
-          description={distance}
+          title={`${data.name} - ${distance}`}
+          description={`${data.address.street} ${data.address.zipCode} ${data.address.city} `}
         />
       );
     });
@@ -173,12 +199,26 @@ export default function MapScreen({ navigation }) {
     markers = locations
       .filter((e) => e.status === 'nouveau')
       .map((data, i) => {
+        // DISPLAY PRIORITY AND COLORS ON MARKERS
+        const priorityData = priorityValues[data?.priority] ?? {
+          label: 'Priority',
+          color: '#FECACA',
+        };
+
+        const reportPinColor = priorityData.color;
+
+        // DISPLAY STATUS INFO
+        const hasHandlers = data.currentHandler !== null;
+        const reportStatus = hasHandlers ? `Pris en charge` : 'En attente de prise en charge';
+
         return (
           <Marker
             key={i}
+            pinColor={reportPinColor}
+            onCalloutPress={() => navigation.navigate('Signalements')}
             coordinate={{ latitude: data.location.lat, longitude: data.location.long }}
-            title={data.animalType}
-            description={data.distance}
+            title={`${data.title} à ${data.distance} (${moment(data.date).fromNow()})`}
+            description={`Statut : ${reportStatus} | Priorité : ${priorityData.label} `}
           />
         );
       });
@@ -186,23 +226,26 @@ export default function MapScreen({ navigation }) {
 
   let civilReportMarkers;
   if (user.role === 'civil') {
-    civilReportMarkers = animals.map((data, i) => {
-      const hasHandlers = Array.isArray(data.handlers) && data.handlers.length > 0;
-      // console.log("hashandlers", hasHandlers);
+    // console.log(animals);
 
-      /* const distance = currentLocation
-        ? getDistanceLabel(currentLocation, { latitude: data.lat, longitude: data.long })
-        : ''; 
-        */
+    civilReportMarkers = animals?.map((data, i) => {
+      const hasHandlers = data.currentHandler !== null;
+      // console.log('hashandlers', hasHandlers);
+
+      // DISPLAY STATUS INFO
+      const reportStatus = hasHandlers
+        ? `Pris en charge par ${data?.establishment?.name}`
+        : 'En attente de prise en charge';
+
       return (
         <Marker
           key={i}
           coordinate={{ latitude: data.location.lat, longitude: data.location.long }}
-          title={`${data.title}`}
           pinColor={`${hasHandlers ? '#00FF00' : '#FF8000'}`}
-          description={`${data.status} / ${moment(data.date).format('LLL')}`}
-          // description={distance}
-        />
+          title={`${data.title} (${moment(data.date).fromNow()})`}
+          description={`${reportStatus}`}
+          onCalloutPress={() => navigation.navigate('Signalements')}
+        ></Marker>
       );
     });
   }
@@ -236,12 +279,6 @@ export default function MapScreen({ navigation }) {
         >
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
-        {/* <Button
-          bg={colors.softOrange}
-          textColor={colors.offwhite}
-          title='Données animaux reducers'
-          onPress={handleData}
-        /> */}
       </View>
     );
 
