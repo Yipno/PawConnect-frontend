@@ -10,6 +10,7 @@ import Input from '../components/ui/Input';
 import useTheme from '../hooks/useTheme';
 import SplashScreen from '../components/SplashScreen';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { getEstablishments } from '../reducers/establishments';
 
 const EMAIL_REGEX =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
@@ -41,12 +42,12 @@ export default function SignInScreen({ navigation }) {
     }
     //check if email is valid
     if (!EMAIL_REGEX.test(email)) {
-      setErrors(prev => ({ ...prev, email: 'Email invalide.' }));
+      setErrors((prev) => ({ ...prev, email: 'Email invalide.' }));
       setIsLoading(false);
       return;
     }
     if (password.length < 6) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         password: 'Votre mot de passe doit contenir au moins 6 caractères.',
       }));
@@ -72,17 +73,24 @@ export default function SignInScreen({ navigation }) {
       if (userResult.user.role === 'civil') {
         const animalsResponse = await fetch(`${BACKEND}/animals/${userResult.user.id}`);
         const animalsResults = await animalsResponse.json();
-        if (!animalsResponse.ok) {
+        const establishmentsResponse = await fetch(`${BACKEND}/establishments`);
+        const establishmentsResults = await establishmentsResponse.json();
+        if (!animalsResponse.ok || !establishmentsResponse.ok) {
           setBackendError(
-            animalsResults.error || 'Erreur lors de la recuperation des signalements.'
+            animalsResults.error ||
+              establishmentsResults.error ||
+              'Erreur lors de la recuperation des signalements.'
           );
           setIsLoading(false);
           return;
         }
         // console.log(animalsResults);
+        console.log(establishmentsResults);
+
         dispatch(getReports(animalsResults.userReports));
+        dispatch(getEstablishments(establishmentsResults.result));
       } else if (userResult.user.role === 'agent') {
-        const animalsResponse = await fetch(`${BACKEND}/animals`);
+        const animalsResponse = await fetch(`${BACKEND}/animals/agent/${userResult.user.id}`);
         const animalsResults = await animalsResponse.json();
         if (!animalsResponse.ok) {
           setBackendError(
@@ -91,6 +99,8 @@ export default function SignInScreen({ navigation }) {
           setIsLoading(false);
           return;
         }
+       // console.log('animalsresults', animalsResults);
+
         dispatch(getReports(animalsResults.reports));
       }
       dispatch(login(userResult.user));
@@ -117,7 +127,8 @@ export default function SignInScreen({ navigation }) {
           enableOnAndroid
           keyboardShouldPersistTaps='handled'
           contentContainerStyle={{ paddingTop: 60, flexGrow: 1 }}
-          style={{ backgroundColor: colors.offwhite }}>
+          style={{ backgroundColor: colors.offwhite }}
+        >
           <View className='flex-1 justify-between items-center bg-offwhite'>
             <Text className='text-h2 text-deepSage mt-4'>Se connecter</Text>
             {/* BUTTONS DEV MODE  */}
@@ -142,7 +153,7 @@ export default function SignInScreen({ navigation }) {
                 type='email'
                 icon='mail'
                 placeholder='example@pawconnect.xyz'
-                onChangeText={value => setEmail(value)}
+                onChangeText={(value) => setEmail(value)}
                 value={email}
                 error={errors.email}
               />
@@ -151,7 +162,7 @@ export default function SignInScreen({ navigation }) {
                 type='password'
                 icon='key'
                 placeholder='••••••••'
-                onChangeText={value => setPassword(value)}
+                onChangeText={(value) => setPassword(value)}
                 value={password}
                 error={errors.password}
               />

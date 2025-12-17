@@ -11,7 +11,7 @@ export default function SquaredButton({ title, onPress, icon, style }) {
     transform: [{ scale: scale.value }],
   }));
   const iconName = icon && icon + '-outline';
-  const defaultStyle = { height: 150 };
+  const defaultStyle = { height: 140 };
 
   return (
     <Pressable

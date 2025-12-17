@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, Text, View, Alert, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
 import { useEffect, useMemo, useState } from 'react';
@@ -12,12 +12,11 @@ import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 export default function Reports() {
   const dispatch = useDispatch();
 
-  // URL du backend
+  // Backend
   const url = process.env.EXPO_PUBLIC_BACKEND;
 
-  /* -------------------- REDUX (données) -------------------- */
+  /* -------------------- REDUX -------------------- */
   const reports = useSelector((state) => state.animals?.value) ?? [];
-
   const user = useSelector((state) => state.user?.value) ?? {};
   const userRole = user?.role ?? null;
 
@@ -27,21 +26,21 @@ export default function Reports() {
   /* -------------------- UI STATES -------------------- */
   const [filtre, setFiltre] = useState(false);
 
-  // filtres en LISTES
+  //Filtres en LISTES (multi)
   const [selectedPriorities, setSelectedPriorities] = useState([]);
   const [selectedStatuses, setSelectedStatuses] = useState([]);
-
-  // Description ajoutée par l'agent dans la modal
-  const [description, setDescription] = useState('');
 
   // Modal
   const [modalVisible, setModalVisible] = useState(false);
   const [dataReport, setDataReport] = useState(null);
 
-  // Localisation user
+  // Description agent
+  const [description, setDescription] = useState('');
+
+  // Position user
   const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude: 0 });
 
-  /* -------------------- HELPERS (filtres) -------------------- */
+  /* -------------------- HELPERS filtres -------------------- */
   const togglePriority = (value) => {
     setSelectedPriorities((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
@@ -108,10 +107,12 @@ export default function Reports() {
   const filteredList = useMemo(() => {
     let result = [...reports];
 
+    // PRIORITÉS
     if (selectedPriorities.length > 0) {
       result = result.filter((r) => selectedPriorities.includes(r?.priority));
     }
 
+    // STATUTS
     if (selectedStatuses.length > 0) {
       result = result.filter((r) => selectedStatuses.includes(r?.status));
     }
@@ -119,20 +120,19 @@ export default function Reports() {
     return result;
   }, [reports, selectedPriorities, selectedStatuses]);
 
-  /* -------------------- MODAL: ouverture + update -------------------- */
+  /* -------------------- MODAL -------------------- */
   const handleClick = (report) => {
     setDataReport(report);
     setModalVisible(true);
   };
 
   const handleActualiser = ({ description, cours, cloturer }) => {
-    if (!cours && !cloturer) {
+    const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
+
+    if (!status) {
       Alert.alert('Statut manquant', 'Choisis "En cours" ou "Clôturer" avant d’actualiser.');
       return;
     }
-
-    const status = cours ? 'en cours' : 'terminé';
-
     if (!url) {
       Alert.alert('Erreur', 'Backend non configuré (EXPO_PUBLIC_BACKEND manquant).');
       return;
@@ -153,8 +153,6 @@ export default function Reports() {
     })
       .then(async (res) => {
         const json = await res.json().catch(() => ({}));
-        console.log('PUT status:', res.status, json);
-
         if (!res.ok) {
           Alert.alert('Erreur', json?.error || json?.message || `Erreur ${res.status}`);
           return null;
@@ -177,7 +175,7 @@ export default function Reports() {
       });
   };
 
-  /* -------------------- DATA LISTES (filtres) -------------------- */
+  /* -------------------- DATA FILTRES -------------------- */
   const PRIORITIES = [
     { label: 'Modéré', value: 'modere' },
     { label: 'Important', value: 'important' },
@@ -211,10 +209,9 @@ export default function Reports() {
   /* -------------------- UI -------------------- */
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, position: 'relative' }} className='bg-offwhite'>
-      {/* Titre */}
       <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
 
-      {/* Bouton Filtres (seulement pour agent) */}
+      {/* Bouton Filtres (agents uniquement) */}
       {userRole === 'agent' && (
         <View className='flex-col items-center'>
           <View className='mt-2 w-[350px]'>
@@ -229,7 +226,7 @@ export default function Reports() {
         </View>
       )}
 
-      {/* Liste des cartes */}
+      {/* Cartes */}
       <ScrollView style={{ flex: 1, width: '100%' }}>
         {filteredList.map((r) => (
           <Card
@@ -256,7 +253,7 @@ export default function Reports() {
         onActualiser={handleActualiser}
       />
 
-      {/* Overlay filtres (en listes) */}
+      {/* Overlay filtres */}
       {filtre && (
         <View
           style={{
@@ -270,10 +267,10 @@ export default function Reports() {
           className='items-center'
         >
           <View className='bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg'>
-            {/* PRIORITÉS */}
+            {/* Priorités */}
             {PRIORITIES.map((item) => renderFilterButton(item, selectedPriorities, togglePriority))}
 
-            {/* STATUTS */}
+            {/* Statuts */}
             {STATUSES.map((item) => renderFilterButton(item, selectedStatuses, toggleStatus))}
 
             {/* Reset */}
