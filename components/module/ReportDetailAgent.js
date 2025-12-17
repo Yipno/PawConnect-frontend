@@ -5,11 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
-// import { getEstablishments } from '../../reducers/establishments';
-import moment from 'moment'; //module for Format date
+import moment from 'moment';
 import 'moment/locale/fr';
 import Establishments from '../ui/Establishments';
 moment.locale('fr');
@@ -85,34 +83,37 @@ export default function ReportDetail({
   }, [visible]);
 
   // ESTABLISHMENTS DISPLAY
+  // console.log('report', report);
 
   // ESTABLISHMENTS MODAL DISPLAY ON CONDITION
   const reportHasCurrentHandler = Boolean(report?.currentHandler);
   // console.log('reporthashandler', reportHasCurrentHandler);
-
   const [showOrgaInfo, setShowOrgaInfo] = useState(false);
 
-  // REPORT ANIMALS/POPULATE/:ID
-  const [populatedReport, setPopulatedReport] = useState([]);
+  // PRIORITY LABEL
+  const priorityValues = {
+    urgent: {
+      label: 'Urgent',
+      className: 'border-red-600 bg-red-200',
+    },
+    important: {
+      label: 'Important',
+      className: 'border-orange-400 bg-orange-200',
+    },
+    modere: {
+      label: 'Modéré',
+      className: 'border-blue-500 bg-blue-200',
+    },
+    faible: {
+      label: 'Faible',
+      className: 'border-green-500 bg-green-200',
+    },
+  };
 
-  const populatedCurrentReport = populatedReport?.find((r) => r._id === report?._id);
-  // console.log('populated report', populatedCurrentReport);
-
-  // FETCH GET REPORT INFO
-  useEffect(() => {
-    if (!visible || !report) return;
-
-    fetch(`${BACKEND}/animals/populate/${report.reporter}`)
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log("data fetch", data);
-        if (data.result) {
-          setPopulatedReport(data.reports);
-        } else {
-          console.log(data.message);
-        }
-      });
-  }, [visible, report]);
+  const priorityData = priorityValues[report?.priority] ?? {
+    label: 'Priority',
+    className: 'border-gray-400 bg-gray-200 text-gray-800',
+  };
 
   return (
     <CustomModal
@@ -125,33 +126,35 @@ export default function ReportDetail({
         report ? (
           showOrgaInfo ? (
             <>
-              <Establishments populatedReport={populatedCurrentReport} />
+              <Establishments populatedReport={report} />
             </>
           ) : (
             <View className='w-11/12 justify-center'>
-              <View className='w-full aspect-[4/3] my-4'>
+              <View className='w-full aspect-[4/3] mt-4'>
                 <Image
                   source={{ uri: report.photoUrl }}
                   className='w-full h-full rounded-2xl object-cover'
                 />
               </View>
-
-              {/* Title */}
-              <Text className='text-xl font-bold mb-2 text-left'>{report.title}</Text>
-
+              <View className='w-full flex-row justify-between mt-2 mb-1'>
+                {/* Title */}
+                <Text className='text-xl font-bold text-left'>{report.title}</Text>
+                {/* Priority*/}
+                <View className={`border rounded-2xl px-3 ${priorityData.className}`}>
+                  <Text>{priorityData.label}</Text>
+                </View>
+              </View>
               {/* Place & Date */}
-              <View className='w-full flex-row justify-between mb-3'>
+              <View className='w-full flex-row justify-between'>
                 {distanceLabel ? (
                   <Text className='mb-2 text-gray-700'>Distance: {distanceLabel}</Text>
                 ) : (
                   <Text className='mb-2 text-gray-500'>Calcul de la distance...</Text>
                 )}
-                <Text>{moment(report.date).format('LLL')}</Text>
-              </View>
-
-              {/* Priority*/}
-              <View className='bg-deepSage/20 border border-deepSage rounded-2xl px-3 py-1 self-start mb-4'>
-                <Text>{report.priority}</Text>
+                <Text>
+                  {moment(report?.history[0]?.date).format('LL')} à{' '}
+                  {moment(report?.history[0]?.date).format('LT')}
+                </Text>
               </View>
 
               {/* Tag */}
@@ -175,23 +178,23 @@ export default function ReportDetail({
 
               {/* Display establishments */}
               <View className='mt-4'>
+                <View className='border-[0.5px] black my-2' />
                 {reportHasCurrentHandler ? (
                   <View className='mt-3'>
-                    <View className='border-[0.5px] black my-2 '></View>
                     <Text>
-                      Signalement pris en charge le{' '}
-                      {moment(populatedCurrentReport?.history[0]?.date).format('LL')} à{' '}
-                      {moment(populatedCurrentReport?.history[0]?.date).format('LT')} par :
+                      Pris en charge le {moment(report?.history[0]?.date).format('LL')} à{' '}
+                      {moment(report?.history[0]?.date).format('LT')} par :
                     </Text>
-                    <TouchableOpacity
-                      className='bg-deepSage w-3/4 justify-between items-center rounded-2xl mr-2 mb-2 px-9 py-4 mt-4'
-                      // ouvre la page de l'organisation
-                      onPress={() => setShowOrgaInfo(true)}
-                    >
-                      <Text className='text-white font-extrabold'>
-                        {populatedCurrentReport?.establishment?.name}
+
+                    {agent === 'civil' ? (
+                      <TouchableOpacity onPress={() => setShowOrgaInfo(true)}>
+                        <Text className='underline'>{report?.establishment?.name}</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <Text className='underline'>
+                        {`${report?.currentHandler?.firstName} ${report?.currentHandler?.lastName}`}
                       </Text>
-                    </TouchableOpacity>
+                    )}
                   </View>
                 ) : (
                   <Text>En attente de prise en charge</Text>
@@ -234,8 +237,8 @@ export default function ReportDetail({
                     )}
 
                     <TextInput
-                      className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4 mb-2'
-                      placeholder='Ajouter une description'
+                      className='border border-gray rounded-2xl h-[100] w-full  justify-between px-4 mb-2'
+                      placeholder='Décrivez votre action'
                       onChangeText={onChangeDescription}
                       value={description}
                     ></TextInput>
