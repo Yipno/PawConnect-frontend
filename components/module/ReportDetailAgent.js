@@ -1,11 +1,10 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import CustomModal from '../ui/CustomModal';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
 // import { getEstablishments } from '../../reducers/establishments';
@@ -30,8 +29,10 @@ export default function ReportDetail({
   const [cloturer, setCloturer] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [distanceLabel, setDistanceLabel] = useState('');
+  const [showOrgaInfo, setShowOrgaInfo] = useState(false);
 
-  const { colors } = useTheme();
+  const user = useSelector(state => state.user.value);
+
 
   useEffect(() => {
     (async () => {
@@ -75,6 +76,7 @@ export default function ReportDetail({
     setCours(false);
   };
 
+
   useEffect(() => {
     if (!visible) {
       setCours(false);
@@ -90,8 +92,6 @@ export default function ReportDetail({
   const reportHasCurrentHandler = Boolean(report?.currentHandler);
   // console.log('reporthashandler', reportHasCurrentHandler);
 
-  const [showOrgaInfo, setShowOrgaInfo] = useState(false);
-
   // REPORT ANIMALS/POPULATE/:ID
   const [populatedReport, setPopulatedReport] = useState([]);
 
@@ -102,7 +102,11 @@ export default function ReportDetail({
   useEffect(() => {
     if (!visible || !report) return;
 
-    fetch(`${BACKEND}/animals/populate/${report.reporter}`)
+    fetch(`${BACKEND}/animals/populate/${report.reporter}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`, // token JWT
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
         // console.log("data fetch", data);
@@ -122,14 +126,13 @@ export default function ReportDetail({
       statut
       agent=''
       content={
-        report ? (
-          showOrgaInfo ? (
-            <>
+          report ? (
+            showOrgaInfo ? (
               <Establishments populatedReport={populatedCurrentReport} />
-            </>
-          ) : (
+            ) : (
             <ScrollView>
-            <View className='w-11/12 justify-center'>
+             <View className='w-11/12 justify-center'>
+
                 <View className='w-full aspect-[4/3] my-4'>
                   <Image
                     source={{ uri: report.photoUrl }}
@@ -201,6 +204,7 @@ export default function ReportDetail({
                 )}
                 </View>
 
+                {/* Agent actions */}
                 {agent === 'agent' && (
                   <View>
                     <View className='flex-col justify-center items-center gap-2 mt-2 w-full'>
@@ -257,8 +261,8 @@ export default function ReportDetail({
                   </View>
                 )}
               </View>
-          )
           </ScrollView>
+          )
         ) : (
           <Text>Aucun détail disponible.</Text>
         )

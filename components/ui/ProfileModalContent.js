@@ -59,19 +59,23 @@ export default function ProfileModalContent() {
   };
 
   const updateProfile = () => {
+    console.log('updateProfile appelé');
+    console.log('Formulaire envoyé :', form);
+    console.log('Token :', user.token);
     console.log({
-      token: user.token,
       firstName: form.firstname,
       lastName: form.lastname,
       email: form.email,
       password: form.password,
-      establishmentRef: form.establishmentRef,
+      establishment: form.establishment,
     });
     fetch(`${BACKEND}/users/updateProfile`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${user.token}`,// token JWT
+  },
       body: JSON.stringify({
-        token: user.token,
         firstName: form.firstname,
         lastName: form.lastname,
         email: form.email,
@@ -80,6 +84,7 @@ export default function ProfileModalContent() {
     })
       .then(res => res.json())
       .then(data => {
+  
         if (!data.result) {
           Alert.alert('Erreur', data.error);
           return;
@@ -103,9 +108,11 @@ export default function ProfileModalContent() {
   const deleteUser = () => {
     fetch(`${BACKEND}/users/delete`, {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      },
       body: JSON.stringify({
-        token: user.token,
       }),
     })
       .then(res => res.json())

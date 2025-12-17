@@ -8,7 +8,7 @@ const initialState = {
     email: null,
     role: null,
     token: null, //JWT token
-    establishmentRef: null,
+    establishment: null,
   },
 };
 
@@ -17,11 +17,11 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      const { id, firstName, lastName, email, role, token, establishmentRef } = action.payload;
-      state.value = { id, firstName, lastName, email, role, token, establishmentRef };
+      const { id, firstName, lastName, email, role, token, establishment } = action.payload;
+      state.value = { id, firstName, lastName, email, role, token, establishment };
       console.log('user:', state.value.firstName, 'logged');
     },
-    logout: state => {
+    logout: (state) => {
       state.value = {
         id: null,
         firstName: null,
@@ -29,17 +29,24 @@ const userSlice = createSlice({
         email: null,
         role: null,
         token: null,
-        establishmentRef: null,
+        establishment: null,
       };
       console.log('user logged out');
     },
     updateUser: (state, action) => {
+      const { firstName, lastName, email, role, establishment } = action.payload;
+
       state.value = {
-        ...state.value, // je garde tout ce qui existait
-        ...action.payload, // je remplace juste ce qu’on m’a donné
+        ...state.value,
+        firstName,
+        lastName,
+        email,
+        role,
+        establishment: establishment ?? state.value.establishment,
       };
       console.log('user:', state.value.firstName, 'profil mis à jour');
     },
+  
   },
 });
 

@@ -38,8 +38,8 @@ export default function Reports() {
   const [currentLocation, setCurrentLocation] = useState({ latitude: 0, longitude: 0 });
 
   const dispatch = useDispatch();
-  const reports = useSelector(((state)) => state.animals.value) || []; //add security for undefined
-  const userRole = useSelector(((state)) => state.user.value.role);
+  const reports = useSelector((state) => state.animals.value) || []; //add security for undefined
+  const userRole = useSelector((state) => state.user.value.role);
   const user = useSelector((state) => state.user.value);
 
   // Debug reports
@@ -160,7 +160,7 @@ export default function Reports() {
 
         if (json.result) {
           //recharge les signalements
-          fetch(`${url}/animals`)
+          fetch(`${BACKEND_URL}/animals`)
             .then((res) => res.json())
             .then((data) => {
             //  console.log('data', data);

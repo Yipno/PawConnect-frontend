@@ -1,21 +1,22 @@
-import { Text, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
 import SquaredButton from '../components/ui/SquaredButton';
 import CustomModal from '../components/ui/CustomModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../reducers/user';
 import { emptyAnimals } from '../reducers/animals';
 import ResourcesModalContent from '../components/ui/ResourcesModalContent';
 import ProfileModalContent from '../components/ui/ProfileModalContent';
 import FaqModalContent from '../components/ui/FaqModalContent';
+import { updateUser } from '../reducers/user';
 
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
 
-  const user = useSelector(state => state.user.value);
+  const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
   const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
@@ -26,7 +27,7 @@ export default function Profile({ navigation }) {
   const [profileVisible, setProfileVisible] = useState(false);
   const [resourcesVisible, setResourcesVisible] = useState(false);
   const [faqVisible, setFaqVisible] = useState(false);
-  
+
   const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
   const [form, setForm] = useState({
     lastname: user.lastName || '',
@@ -34,10 +35,8 @@ export default function Profile({ navigation }) {
     phone: user.phone || '',
     email: user.email || '',
     password: '',
-    establishmentRef: user.establishmentRef || '',
+    establishment: user.establishment || '',
   });
-
-  const { colors } = useTheme();
 
   useEffect(() => {
     setForm({
@@ -46,7 +45,7 @@ export default function Profile({ navigation }) {
       email: user.email || '',
       password: '', // toujours vide pour le password
       confirmPassword: '',
-      establishmentRef: user.establishmentRef || '',
+      establishment: user.establishment || '',
     });
   }, [user]);
 
@@ -61,42 +60,59 @@ export default function Profile({ navigation }) {
     ]);
   };
 
-  const updateProfile = () => {
+
+ 
+
+  const updateProfile = async () => {
+
     if (form.password.length > 0 && form.password !== form.confirmPassword) {
       Alert.alert('Erreur', 'Les mots de passe ne correspondent pas');
       return;
     }
 
-    fetch(`${BACKEND}/users/updateProfile`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`, //JWT Token 
-       },
-      body: JSON.stringify({
+  if (!user.token) {
+    Alert.alert('Erreur', 'Token manquant, reconnectez-vous');
+    return;
+  }
 
+  try {
+    const response = await fetch(`${BACKEND}/users/updateProfile`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`, // token JWT
+      },
+      body: JSON.stringify({
         firstName: form.firstname,
         lastName: form.lastname,
         email: form.email,
         password: form.password || undefined,
-        establishmentRef: form.establishmentRef,
+        establishment: form.establishment,
       }),
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.result) {
-          console.log('Profil mis à jour !', data.user);
+    });
 
-          dispatch(updateUser(data.user));
+      console.log('Status fetch :', response.status);
+    console.log('Headers envoyés :', {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user.token}`,
+    });
 
-          Alert.alert('Profil mis à jour');
-        } else {
-          console.log('Erreur update :', data.error);
-        }
-      })
-      .catch(err => {
-        console.log('Erreur réseau :', err);
-      });
-  };
+    const data = await response.json();
+    console.log('Réponse serveur :', data);
+
+    if (data.result) {
+      console.log('Profil mis à jour !', data.user);
+      dispatch(updateUser(data.user));
+      Alert.alert('Profil mis à jour');
+    } else {
+      console.log('Erreur update :', data.error);
+      Alert.alert('Erreur', data.error);
+    }
+  } catch (err) {
+    console.log('Erreur réseau :', err);
+    Alert.alert('Erreur réseau', err.message);
+  }
+};
 
   const logoutUser = () => {
     dispatch(logout());
