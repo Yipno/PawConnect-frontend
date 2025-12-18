@@ -1,17 +1,17 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import CustomModal from '../ui/CustomModal';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
-// import { getEstablishments } from '../../reducers/establishments';
+import Button from '../ui/Button';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
 import Establishments from '../ui/Establishments';
+
 moment.locale('fr');
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
@@ -95,16 +95,17 @@ export default function ReportDetail({
   // REPORT ANIMALS/POPULATE/:ID
   const [populatedReport, setPopulatedReport] = useState([]);
 
-  const populatedCurrentReport = populatedReport?.find((r) => r._id === report?._id);
+  const populatedCurrentReport = populatedReport?.find(r => r._id === report?._id);
   // console.log('populated report', populatedCurrentReport);
 
-  // FETCH GET REPORT INFO
+  //FETCH GET REPORT INFO
+  //! A ENLEVER CAR FETCH SE FAIT AU SIGNIN ET RECUP INFO DE REDUX
   useEffect(() => {
     if (!visible || !report) return;
 
     fetch(`${BACKEND}/animals/populate/${report.reporter}`)
-      .then((res) => res.json())
-      .then((data) => {
+      .then(res => res.json())
+      .then(data => {
         // console.log("data fetch", data);
         if (data.result) {
           setPopulatedReport(data.reports);
@@ -128,7 +129,14 @@ export default function ReportDetail({
               <Establishments populatedReport={populatedCurrentReport} />
             </>
           ) : (
-            <View className='w-11/12 justify-center'>
+            <KeyboardAwareScrollView
+              enableOnAndroid
+              extraScrollHeight={100}
+              keyboardShouldPersistTaps='handled'
+              contentContainerStyle={{ paddingBottom: 40 }}
+              style={{ flex: 1 }}
+              className='w-full px-6 py-4 bg-offwhite'>
+              {/* Photo */}
               <View className='w-full aspect-[4/3] my-4'>
                 <Image
                   source={{ uri: report.photoUrl }}
@@ -159,8 +167,7 @@ export default function ReportDetail({
                 {report.state.map((tag, index) => (
                   <View
                     key={index}
-                    className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'
-                  >
+                    className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
                     <Text className='text-white font-bold'>{tag}</Text>
                   </View>
                 ))}
@@ -186,8 +193,7 @@ export default function ReportDetail({
                     <TouchableOpacity
                       className='bg-deepSage w-3/4 justify-between items-center rounded-2xl mr-2 mb-2 px-9 py-4 mt-4'
                       // ouvre la page de l'organisation
-                      onPress={() => setShowOrgaInfo(true)}
-                    >
+                      onPress={() => setShowOrgaInfo(true)}>
                       <Text className='text-white font-extrabold'>
                         {populatedCurrentReport?.establishment?.name}
                       </Text>
@@ -203,21 +209,28 @@ export default function ReportDetail({
                   <View className='flex-col justify-center items-center gap-2 mt-2 w-full'>
                     <TouchableOpacity
                       className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
-                      onPress={onPress}
-                    >
-                      <Text>Statut</Text>
-                      <Ionicons name='chevron-down-outline' color='#000000' size={20} />
+                      onPress={onPress}>
+                      <Text className='font-manrope'>
+                        {cours ? 'En cours' : cloturer ? 'Clôturer' : 'Changer le statut ?'}
+                      </Text>
+                      <Ionicons
+                        name={statut ? 'chevron-up-outline' : 'chevron-down-outline'}
+                        color='#000'
+                        size={20}
+                      />
                     </TouchableOpacity>
                     {statut && (
-                      <View className='border border-gray rounded-2xl  w-full flex-col justify-center items-center '>
+                      <View className='absolute top-[42px] z-10 border border-gray rounded-2xl bg-white w-full flex-col justify-center items-center '>
                         <TouchableOpacity
                           className={
                             cours
                               ? 'rounded-t-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
                               : 'h-12 w-full rounded-t-2xl flex-col justify-center items-center'
                           }
-                          onPress={() => handleCours()}
-                        >
+                          onPress={() => {
+                            handleCours();
+                            onPress();
+                          }}>
                           <Text className={cours ? 'text-white' : 'text-black'}>En cours</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -226,29 +239,32 @@ export default function ReportDetail({
                               ? 'border-gray border-t-[1px] rounded-b-2xl h-12 w-full flex-col justify-center items-center bg-deepSage'
                               : 'border-gray border-t-[1px] h-12 w-full flex-col justify-center items-center'
                           }
-                          onPress={() => handleCloturer()}
-                        >
+                          onPress={() => {
+                            handleCloturer();
+                            onPress();
+                          }}>
                           <Text className={cloturer ? 'text-white' : 'text-black'}>Clôturer</Text>
                         </TouchableOpacity>
                       </View>
                     )}
 
                     <TextInput
-                      className='border border-gray rounded-2xl h-[150] w-full  justify-between px-4 mb-2'
-                      placeholder='Ajouter une description'
+                      multiline={true}
+                      className='border border-gray rounded-2xl h-[150] w-full justify-between px-4 mb-2 focus:border-softOrange focus:border-2'
+                      placeholder='Renseignez les actions effectuées...'
+                      placeholderTextColor='#9b9b9b'
                       onChangeText={onChangeDescription}
                       value={description}
-                    ></TextInput>
-                    <TouchableOpacity
-                      className='border border-gray bg-deepSage rounded-2xl h-12 w-full flex-col justify-center items-center  px-4'
+                    />
+                    <Button
+                      title='Actualiser'
+                      width={'w-full'}
                       onPress={() => onActualiser({ description, cours, cloturer })}
-                    >
-                      <Text className='text-white'>Actualiser</Text>
-                    </TouchableOpacity>
+                    />
                   </View>
                 </View>
               )}
-            </View>
+            </KeyboardAwareScrollView>
           )
         ) : (
           <Text>Aucun détail disponible.</Text>

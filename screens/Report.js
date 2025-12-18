@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
 import { useEffect, useMemo, useState } from 'react';
@@ -11,7 +11,7 @@ import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
 export default function Reports() {
   const dispatch = useDispatch();
-
+  const [refreshing, setRefreshing] = useState(false);
   // Backend
   const url = process.env.EXPO_PUBLIC_BACKEND;
 
@@ -65,8 +65,8 @@ export default function Reports() {
       console.log('EXPO_PUBLIC_BACKEND manquant');
       return;
     }
-
-    fetch(`${url}/animals`)
+    setRefreshing(true);
+    fetch(`${url}/animals/agent/${userId}`)
       .then(res => res.json())
       .then(json => {
         const list =
@@ -74,6 +74,7 @@ export default function Reports() {
           (Array.isArray(json?.data) && json.data) ||
           [];
         dispatch(getReports(list));
+        setRefreshing(false);
       })
       .catch(err => {
         console.log('Erreur GET /animals', err);
@@ -81,10 +82,10 @@ export default function Reports() {
       });
   };
 
-  useEffect(() => {
-    fetchReports();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, url]);
+  // useEffect(() => {
+  //   fetchReports();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [dispatch, url]);
 
   /* -------------------- GEOLOCATION -------------------- */
   useEffect(() => {
@@ -128,7 +129,6 @@ export default function Reports() {
 
   const handleActualiser = ({ description, cours, cloturer }) => {
     const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
-
     if (!status) {
       Alert.alert('Statut manquant', 'Choisis "En cours" ou "Clôturer" avant d’actualiser.');
       return;
@@ -149,7 +149,7 @@ export default function Reports() {
     fetch(`${url}/animals/${dataReport._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, description, userId }),
+      body: JSON.stringify({ status, description, userId, establishment: user.establishment }),
     })
       .then(async res => {
         const json = await res.json().catch(() => ({}));
@@ -196,8 +196,8 @@ export default function Reports() {
         key={value}
         className={
           isSelected
-            ? 'bg-deepSage h-12 w-[300px] rounded-2xl justify-center items-center self-center'
-            : 'bg-gray h-12 w-[300px] rounded-2xl justify-center items-center self-center'
+            ? 'bg-deepSage h-12 w-10/12 rounded-2xl justify-center items-center self-center'
+            : 'bg-gray h-12 w-10/12 rounded-2xl justify-center items-center self-center'
         }
         onPress={() => onToggle(value)}>
         <Text className={isSelected ? 'text-white' : 'text-black'}>{label}</Text>
@@ -208,17 +208,21 @@ export default function Reports() {
   /* -------------------- UI -------------------- */
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, position: 'relative' }} className='bg-offwhite'>
-      <Text className='text-h1 font-manrope text-center mt-4'>Signalements</Text>
+      <Text className='text-h2 font-manrope text-deepSage text-center mt-4'>Signalements</Text>
 
       {/* Bouton Filtres (agents uniquement) */}
       {userRole === 'agent' && (
         <View className='flex-col items-center'>
-          <View className='mt-2 w-[350px]'>
+          <View className='mt-2 w-9/12'>
             <TouchableOpacity
               className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
               onPress={() => setFiltre(prev => !prev)}>
               <Text>Filtres</Text>
-              <Ionicons name='chevron-down-outline' color='#000000' size={20} />
+              <Ionicons
+                name={filtre ? 'chevron-up-outline' : 'chevron-down-outline'}
+                color='#000000'
+                size={20}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -228,6 +232,8 @@ export default function Reports() {
       <View style={{ flex: 1, width: '100%' }}>
         <FlatList
           data={filteredList}
+          refreshing={refreshing}
+          onRefresh={fetchReports}
           keyExtractor={item => item._id}
           renderItem={({ item }) => (
             <Card
@@ -260,14 +266,14 @@ export default function Reports() {
         <View
           style={{
             position: 'absolute',
-            top: 140,
+            top: 170,
             left: 0,
             right: 0,
             zIndex: 50,
             elevation: 50,
           }}
           className='items-center'>
-          <View className='bg-white rounded-2xl border border-gray w-[350px] py-4 gap-4 shadow-lg'>
+          <View className='bg-white rounded-2xl border border-gray w-9/12 py-4 gap-4 shadow-lg'>
             {/* Priorités */}
             {PRIORITIES.map(item => renderFilterButton(item, selectedPriorities, togglePriority))}
 
@@ -276,20 +282,20 @@ export default function Reports() {
 
             {/* Reset */}
             <TouchableOpacity
-              className='bg-gray h-10 w-[200px] rounded-2xl justify-center items-center self-center mt-2'
+              className='bg-gray h-10 w-1/2 rounded-2xl justify-center items-center self-center mt-2'
               onPress={() => {
                 setSelectedPriorities([]);
                 setSelectedStatuses([]);
                 setFiltre(false);
               }}>
-              <Text className='text-white text-lg'>Réinitialiser</Text>
+              <Text className='text-text text-lg'>Réinitialiser</Text>
             </TouchableOpacity>
 
             {/* Fermer */}
             <TouchableOpacity
-              className='bg-gray h-10 w-[200px] rounded-2xl justify-center items-center self-center'
+              className='bg-gray h-10 w-1/2 rounded-2xl justify-center items-center self-center'
               onPress={() => setFiltre(false)}>
-              <Text className='text-white text-lg'>Fermer</Text>
+              <Text className='text-text text-lg'>Fermer</Text>
             </TouchableOpacity>
           </View>
         </View>

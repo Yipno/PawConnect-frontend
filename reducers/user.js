@@ -17,8 +17,8 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      const { id, firstName, lastName, email, role, token, establishmentRef } = action.payload;
-      state.value = { id, firstName, lastName, email, role, token, establishmentRef };
+      const { id, firstName, lastName, email, role, token, establishment } = action.payload;
+      state.value = { id, firstName, lastName, email, role, token, establishment };
       console.log('user:', state.value.firstName, 'logged');
     },
     logout: state => {
@@ -29,7 +29,7 @@ const userSlice = createSlice({
         email: null,
         role: null,
         token: null,
-        establishmentRef: null,
+        establishment: null,
       };
       console.log('user logged out');
     },
