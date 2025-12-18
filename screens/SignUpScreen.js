@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import {
   Switch,
   StyleSheet,
@@ -8,12 +7,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import { login } from '../reducers/user';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
@@ -21,7 +20,6 @@ const EMAIL_REGEX =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
 
 export default function SignUp({ navigation }) {
-  const dispatch = useDispatch();
   const { colors } = useTheme();
 
   const [signUpFirstName, setSignUpFirstName] = useState('');
@@ -141,9 +139,6 @@ export default function SignUp({ navigation }) {
       const data = await response.json();
 
       if (data.result) {
-        //Stock in reducer/user
-        dispatch(login({ ...data.user, token: data.token }));
-
         //reset inputs
         setSignUpFirstName('');
         setSignUpLastName('');
@@ -153,6 +148,15 @@ export default function SignUp({ navigation }) {
         setAccountType('user');
         setSignUpEstablishment('');
         setIsLoading(false);
+
+        Alert.alert(
+          'Compte créé',
+          'Votre compte a bien été créé. Vous pouvez maintenant vous connecter',
+          [{ 
+            text: 'OK',
+            onPress: () => navigation.navigate('SignIn') 
+          }]
+        );
       } else {
         //erreur backend
         setBackendError(data.error || 'Une erreur est survenue.');
