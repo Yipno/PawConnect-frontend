@@ -148,20 +148,25 @@ export default function ReportDetail({
               </View>
               <View className='w-full flex-row justify-between mt-2 mb-1'>
                 {/* Title */}
-                <Text className='text-xl font-bold text-left'>{report.title}</Text>
+                <Text className='text-xl font-manrope font-bold text-left'>{report.title}</Text>
                 {/* Priority*/}
-                <View className={`border rounded-2xl px-3 ${priorityData.className}`}>
+                <View
+                  className={`border justify-center items-center font-manrope rounded-2xl px-3 ${priorityData.className}`}>
                   <Text>{priorityData.label}</Text>
                 </View>
               </View>
               {/* Place & Date */}
               <View className='w-full flex-row justify-between'>
                 {distanceLabel ? (
-                  <Text className='mb-2 text-gray-700'>Distance: {distanceLabel}</Text>
+                  <Text className='font-manrope mb-2 text-sm text-gray-700'>
+                    Distance: {distanceLabel}
+                  </Text>
                 ) : (
-                  <Text className='mb-2 text-gray-500'>Calcul de la distance...</Text>
+                  <Text className='font-manrope font-sm text-gray-500'>
+                    Calcul de la distance...
+                  </Text>
                 )}
-                <Text>
+                <Text className='font-manrope mb-2 text-sm text-gray-700'>
                   {moment(report?.history[0]?.date).format('LL')} à{' '}
                   {moment(report?.history[0]?.date).format('LT')}
                 </Text>
@@ -174,40 +179,49 @@ export default function ReportDetail({
                     <View
                       key={index}
                       className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
-                      <Text className='text-white font-bold'>{tag}</Text>
+                      <Text className='text-white font-manrope font-bold'>{tag}</Text>
                     </View>
                   ))}
               </View>
 
               {/* Description */}
               <View>
-                <Text className='text-base text-gray-800 leading-5 text-justify'>
+                <Text className='text-base text-gray-800 font-manrope leading-5'>
                   {report.desc}
                 </Text>
               </View>
 
               {/* Display establishments */}
               <View className='mt-4'>
-                <View className='border-[0.5px] black my-2' />
+                <View className='border-b-[1px] black my-2' />
                 {reportHasCurrentHandler ? (
-                  <View className='mt-3'>
-                    <Text>
+                  <View className='mt-1'>
+                    <Text className='font-manrope text-center text-small mb-1'>
                       Pris en charge le {moment(report?.history[0]?.date).format('LL')} à{' '}
                       {moment(report?.history[0]?.date).format('LT')} par :
                     </Text>
 
                     {agent === 'civil' ? (
-                      <TouchableOpacity onPress={() => setShowOrgaInfo(true)}>
-                        <Text className='underline'>{report?.establishment?.name}</Text>
-                      </TouchableOpacity>
+                      <>
+                        <TouchableOpacity onPress={() => setShowOrgaInfo(true)}>
+                          <Text className='text-center font-manrope text-danger text-small mb-1 underline'>
+                            {report?.establishment?.name}
+                          </Text>
+                        </TouchableOpacity>
+                        <Text className='font-manrope text-small mt-2'>
+                          Note de notre agent : "{report.history[0].action}"
+                        </Text>
+                      </>
                     ) : (
-                      <Text className='underline'>
+                      <Text className='text-center font-manrope text-danger text-small mb-1 underline'>
                         {`${report?.currentHandler?.firstName} ${report?.currentHandler?.lastName}`}
                       </Text>
                     )}
                   </View>
                 ) : (
-                  <Text>En attente de prise en charge</Text>
+                  <Text className='font-manrope text-small mb-1 text-center'>
+                    En attente de prise en charge
+                  </Text>
                 )}
               </View>
 
@@ -257,7 +271,7 @@ export default function ReportDetail({
 
                     <TextInput
                       multiline={true}
-                      className='border border-gray rounded-2xl h-[150] w-full justify-between px-4 mb-2 focus:border-softOrange focus:border-2'
+                      className='border border-gray rounded-2xl h-[150] w-full justify-between p-3 mb-2 focus:border-softOrange focus:border-2'
                       placeholder='Renseignez les actions effectuées...'
                       placeholderTextColor='#9b9b9b'
                       onChangeText={onChangeDescription}

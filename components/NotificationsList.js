@@ -28,7 +28,7 @@ export default function NotificationsList({ ...props }) {
 
   return (
     <View className='absolute top-32 left-0 right-0 w-full items-center pt-2'>
-      <View className='w-10/12 justify-start items-center bg-deepSage/80 rounded-3xl p-2 border border-deepSage'>
+      <View className='w-10/12 justify-start items-center bg-offwhite rounded-3xl p-2 border border-deepSage'>
         {unreadCount === 0 ? (
           <Text className='text-offwhite font-manrope text-center text-lg font-bold'>
             Aucune nouvelle notification
@@ -55,7 +55,7 @@ export default function NotificationsList({ ...props }) {
               className='w-11/12 border border-stone-300 rounded-lg mb-2'
             />
             <TouchableOpacity
-              className='pt-1.5 px-2 border border-danger bg-softOrange items-center justify-center rounded-full'
+              className='pt-1.5 px-2 border border-darkSage bg-deepSage items-center justify-center rounded-full'
               onPress={handleMarkAllAsRead}>
               <Text className='text-offwhite font-manrope text-sm font-bold mb-2'>
                 Tout marquer comme lu

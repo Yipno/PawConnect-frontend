@@ -9,13 +9,11 @@ import ReportDetailAgent from '../components/module/ReportDetailAgent';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
-
 export default function Reports() {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   // Backend
-  const url = process.env.EXPO_PUBLIC_BACKEND;
+  const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
 
   /* -------------------- REDUX -------------------- */
   const reports = useSelector(state => state.animals?.value) ?? [];
@@ -63,12 +61,12 @@ export default function Reports() {
 
   /* -------------------- FETCH REPORTS -------------------- */
   const fetchReports = () => {
-    if (!url) {
+    if (!BACKEND_URL) {
       console.log('EXPO_PUBLIC_BACKEND manquant');
       return;
     }
     setRefreshing(true);
-    fetch(`${url}/animals/agent`, {
+    fetch(`${BACKEND_URL}/animals/agent`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${user.token}` },
     })
@@ -138,7 +136,7 @@ export default function Reports() {
       Alert.alert('Statut manquant', 'Choisis "En cours" ou "Clôturer" avant d’actualiser.');
       return;
     }
-    if (!url) {
+    if (!BACKEND_URL) {
       Alert.alert('Erreur', 'Backend non configuré (EXPO_PUBLIC_BACKEND manquant).');
       return;
     }
@@ -151,7 +149,7 @@ export default function Reports() {
       return;
     }
 
-    fetch(`${url}/animals/${dataReport._id}`, {
+    fetch(`${BACKEND_URL}/animals/${dataReport._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
       body: JSON.stringify({ status, description, establishment: user.establishment }),

@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-
+import { useEffect } from 'react';
 import TabBarButton from './TabBarButton';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 export default function CustomTabBar({ state, descriptors, navigation }) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [position, setPosition] = useState(0);
+
+  useEffect(() => {
+    // Set initial position
+    tabPositionX.value = withSpring(buttonWidth * state.index, { damping: 100, stiffness: 1600 });
+    setPosition(state.index);
+  }, [state.index]);
 
   const buttonWidth = dimensions.width / state.routes.length;
   const onTabBarLayout = e => {
@@ -45,7 +51,7 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
 
         const isFocused = state.index === index;
         const onPress = () => {
-          tabPositionX.value = withSpring(buttonWidth * index, { damping: 100, stiffness: 1600 });
+          // tabPositionX.value = withSpring(buttonWidth * index, { damping: 100, stiffness: 1600 });
           setPosition(index);
           navigation.navigate(route.name);
         };
