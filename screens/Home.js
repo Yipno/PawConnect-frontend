@@ -38,7 +38,7 @@ export default function HomeScreen({ navigation }) {
       </View>
       <View className='h-1/3 w-full items-center justify-end pb-12'>
         <Button
-          title='Connection'
+          title='Connexion'
           textColor={colors.test}
           onPress={() => navigation.navigate('SignIn')}
         />
