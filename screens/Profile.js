@@ -51,70 +51,7 @@ export default function Profile({ navigation }) {
     });
   }, [user]);
 
-  const showModalProfil = () => {
-    setFullscreenModalVisible(true);
-  };
-
-  const askUpdateConfirmation = () => {
-    Alert.alert('Confirmer la modification', 'Voulez-vous enregistrer vos modifications ?', [
-      { text: 'Annuler', style: 'cancel' },
-      { text: 'Modifier', onPress: () => updateProfile() },
-    ]);
-  };
-
-
- 
-
-  const updateProfile = async () => {
-
-    if (form.password.length > 0 && form.password !== form.confirmPassword) {
-      Alert.alert('Erreur', 'Les mots de passe ne correspondent pas');
-      return;
-    }
-
-  if (!user.token) {
-    Alert.alert('Erreur', 'Token manquant, reconnectez-vous');
-    return;
-  }
-
-  try {
-    const response = await fetch(`${BACKEND}/users/updateProfile`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`, // token JWT
-      },
-      body: JSON.stringify({
-        firstName: form.firstname,
-        lastName: form.lastname,
-        email: form.email,
-        password: form.password || undefined,
-        establishment: form.establishment,
-      }),
-    });
-
-      console.log('Status fetch :', response.status);
-    console.log('Headers envoyés :', {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${user.token}`,
-    });
-
-    const data = await response.json();
-    console.log('Réponse serveur :', data);
-
-    if (data.result) {
-      console.log('Profil mis à jour !', data.user);
-      dispatch(updateUser(data.user));
-      Alert.alert('Profil mis à jour');
-    } else {
-      console.log('Erreur update :', data.error);
-      Alert.alert('Erreur', data.error);
-    }
-  } catch (err) {
-    console.log('Erreur réseau :', err);
-    Alert.alert('Erreur réseau', err.message);
-  }
-};
+  
 
   const logoutUser = () => {
     dispatch(logout());
@@ -149,11 +86,7 @@ export default function Profile({ navigation }) {
               }
             /> */}
 
-            {user.role === 'civil' ? (
-              <SquaredButton title='Mes associations' icon='people-circle' />
-            ) : (
-              <SquaredButton title='Mon organisation' icon='business' />
-            )}
+         
             <SquaredButton
               title='Mon profil'
               icon='person'

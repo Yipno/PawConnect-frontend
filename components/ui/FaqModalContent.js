@@ -34,9 +34,9 @@ export default function FaqModalContent() {
   ];
 
   return (
-    <ScrollView  stickyHeaderIndices={[0]} contentContainerStyle={{ paddingHorizontal: 24}}>
-        {/* HEADER STICKY */}
-      <View style={{ backgroundColor: '#FAF9F7', paddingVertical: 16 }}>
+    <ScrollView  contentContainerStyle={{ paddingHorizontal: 24}}>
+       
+      <View >
         <Text className='text-h2 text-center font-manrope font-bold text-deepSage'>
           FAQ
         </Text>
@@ -46,7 +46,7 @@ export default function FaqModalContent() {
           <Text className='font-manrope font-bold text-deepSage text-base mb-2'>
             {faq.question}
           </Text>
-          <Text className='font-manrope text-sm text-gray-800 leading-5'>{faq.answer}</Text>
+          <Text className='font-manrope text-sm  leading-5'>{faq.answer}</Text>
         </View>
       ))}
     </ScrollView>
