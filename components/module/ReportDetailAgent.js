@@ -5,6 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
 import Button from '../ui/Button';
@@ -33,7 +34,6 @@ export default function ReportDetail({
   const [showOrgaInfo, setShowOrgaInfo] = useState(false);
 
   const user = useSelector(state => state.user.value);
-
 
   useEffect(() => {
     (async () => {
@@ -77,7 +77,6 @@ export default function ReportDetail({
     setCours(false);
   };
 
-
   useEffect(() => {
     if (!visible) {
       setCours(false);
@@ -100,25 +99,25 @@ export default function ReportDetail({
   // console.log('populated report', populatedCurrentReport);
 
   //FETCH GET REPORT INFO
-  //! A ENLEVER CAR FETCH SE FAIT AU SIGNIN ET RECUP INFO DE REDUX
-  useEffect(() => {
-    if (!visible || !report) return;
+  // //! A ENLEVER CAR FETCH SE FAIT AU SIGNIN ET RECUP INFO DE REDUX
+  // useEffect(() => {
+  //   if (!visible || !report) return;
 
-    fetch(`${BACKEND}/animals/populate/${report.reporter}`, {
-      headers: {
-        Authorization: `Bearer ${user.token}`, // token JWT
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log("data fetch", data);
-        if (data.result) {
-          setPopulatedReport(data.reports);
-        } else {
-          console.log(data.message);
-        }
-      });
-  }, [visible, report]);
+  //   fetch(`${BACKEND}/animals/populate/${report.reporter}`, {
+  //     headers: {
+  //       Authorization: `Bearer ${user.token}`, // token JWT
+  //     },
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       // console.log("data fetch", data);
+  //       if (data.result) {
+  //         setPopulatedReport(data.reports);
+  //       } else {
+  //         console.log(data.message);
+  //       }
+  //     });
+  // }, [visible, report]);
 
   return (
     <CustomModal
@@ -128,8 +127,9 @@ export default function ReportDetail({
       statut
       agent=''
       content={
-          report ? (
-            showOrgaInfo ? (
+        report ? (
+          showOrgaInfo ? (
+            <>
               <Establishments populatedReport={populatedCurrentReport} />
             </>
           ) : (
@@ -168,22 +168,20 @@ export default function ReportDetail({
 
               {/* Tag */}
               <View className='flex-row flex-wrap mb-4'>
-               {Array.isArray(report.state) && report.state.map((tag, index) => (
-              <View
-              key={index}
-               className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'
-                >
-               <Text className='text-white font-bold'>{tag}</Text>
-               </View>
-                ))}
+                {Array.isArray(report.state) &&
+                  report.state.map((tag, index) => (
+                    <View
+                      key={index}
+                      className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
+                      <Text className='text-white font-bold'>{tag}</Text>
+                    </View>
+                  ))}
               </View>
 
-                {/* Description */}
-                <View>
-                  <Text className='text-base text-gray-800 leading-5 text-justify'>
-                  
+              {/* Description */}
+              <View>
+                <Text className='text-base text-gray-800 leading-5 text-justify'>
                   {report.desc}
-                
                 </Text>
               </View>
 
@@ -209,7 +207,7 @@ export default function ReportDetail({
                 ) : (
                   <Text>En attente de prise en charge</Text>
                 )}
-                </View>
+              </View>
 
               {agent === 'agent' && (
                 <View>

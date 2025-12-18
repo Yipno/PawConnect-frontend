@@ -68,7 +68,10 @@ export default function Reports() {
       return;
     }
     setRefreshing(true);
-    fetch(`${url}/animals/agent/${userId}`)
+    fetch(`${url}/animals/agent}`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${user.token}` },
+    })
       .then(res => res.json())
       .then(json => {
         const list =
