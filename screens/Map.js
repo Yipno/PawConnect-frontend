@@ -253,8 +253,7 @@ export default function MapScreen({ navigation, visible, onClose }) {
           pinColor={`${hasHandlers ? '#00FF00' : '#FF8000'}`}
           title={`${data.title} (${moment(data.date).fromNow()})`}
           description={`${reportStatus}`}
-          onCalloutPress={() => navigation.navigate('Signalements')}
-        ></Marker>
+          onCalloutPress={() => navigation.navigate('Signalements')}></Marker>
       );
     });
   }
@@ -319,19 +318,19 @@ export default function MapScreen({ navigation, visible, onClose }) {
       {/* BUTTON TOGGLE NOTIFICATIONS */}
       <View className='absolute top-16 right-5 flex-row justify-end'>
         <TouchableOpacity
-          className={`bg-white rounded-full items-center justify-center size-16 border-2 ${
-            unreadCount > 0 ? 'border-danger' : 'border-transparent'
+          className={` rounded-full items-center justify-center size-16 border-2 ${
+            unreadCount > 0 ? 'bg-danger border-danger' : 'bg-white border-transparent'
           }`}
           onPress={toggleNotifications}>
           <Ionicons
             name={unreadCount > 0 ? 'notifications' : 'notifications-outline'}
             size={32}
-            color={unreadCount ? colors.danger : colors.black}
+            color={unreadCount > 0 ? colors.offwhite : colors.black}
           />
         </TouchableOpacity>
         {unreadCount > 0 && (
-          <View className='absolute top-0 right-0 bg-danger rounded-full items-center justify-center size-6'>
-            <Text className='text-offwhite bg-danger font-manrope text-sm font-extrabold'>
+          <View className='absolute top-0 right-0 bg-offwhite border border-danger rounded-full items-center justify-center size-6'>
+            <Text className='text-danger bg-offwhite font-manrope text-sm font-extrabold'>
               {unreadCount}
             </Text>
           </View>

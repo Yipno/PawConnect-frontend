@@ -2,9 +2,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { markAsRead, markAllAsRead } from '../reducers/notifications';
 import { useDispatch, useSelector } from 'react-redux';
-import useTheme from '../hooks/useTheme';
 import { markNotificationAsRead, markAllNotificationsAsRead } from '../api/notifications';
-const { colors } = useTheme();
 
 // recupere les data des notifications du reducer et les affiche dans une liste
 // onclick sur une notifications, ouvre la notification et la marque comme lue
@@ -15,6 +13,8 @@ export default function NotificationsList({ ...props }) {
   const unreadCount = useSelector(state => state.notifications.unreadCount);
   const user = useSelector(state => state.user.value);
   const dispatch = useDispatch();
+
+  const unreadNotifications = notifications.filter(n => !n.read);
 
   const handleMarkAsRead = id => {
     dispatch(markAsRead(id));
@@ -41,7 +41,7 @@ export default function NotificationsList({ ...props }) {
               </Text>
             </View>
             <FlatList
-              data={notifications}
+              data={unreadNotifications}
               keyExtractor={item => item._id}
               renderItem={({ item }) => (
                 <View className='p-4 bg-white border-b border-stone-300'>

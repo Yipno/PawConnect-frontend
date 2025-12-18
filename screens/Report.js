@@ -66,29 +66,44 @@ export default function Reports() {
       return;
     }
     setRefreshing(true);
-    fetch(`${BACKEND_URL}/animals/agent`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
-      .then(res => res.json())
-      .then(json => {
-        const list =
-          (Array.isArray(json?.reports) && json.reports) ||
-          (Array.isArray(json?.data) && json.data) ||
-          [];
-        dispatch(getReports(list));
-        setRefreshing(false);
+    if (userRole === 'agent') {
+      fetch(`${BACKEND_URL}/animals/agent`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch(err => {
-        console.log('Erreur GET /animals', err);
-        dispatch(getReports([]));
-      });
+        .then(res => res.json())
+        .then(json => {
+          const list =
+            (Array.isArray(json?.reports) && json.reports) ||
+            (Array.isArray(json?.data) && json.data) ||
+            [];
+          dispatch(getReports(list));
+          setRefreshing(false);
+        })
+        .catch(err => {
+          console.log('Erreur GET /animals', err);
+          dispatch(getReports([]));
+        });
+    } else if (userRole === 'civil') {
+      fetch(`${BACKEND_URL}/animals/populate/`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+        .then(res => res.json())
+        .then(json => {
+          const list =
+            (Array.isArray(json?.reports) && json.reports) ||
+            (Array.isArray(json?.data) && json.data) ||
+            [];
+          dispatch(getReports(list));
+          setRefreshing(false);
+        })
+        .catch(err => {
+          console.log('Erreur GET /animals', err);
+          dispatch(getReports([]));
+        });
+    }
   };
-
-  // useEffect(() => {
-  //   fetchReports();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [dispatch, url]);
 
   /* -------------------- GEOLOCATION -------------------- */
   useEffect(() => {
@@ -235,8 +250,8 @@ export default function Reports() {
       <View style={{ flex: 1, width: '100%' }}>
         <FlatList
           data={filteredList}
-          refreshing={user.role === 'agent' ? refreshing : false}
-          onRefresh={user.role === 'agent' ? fetchReports : null}
+          refreshing={refreshing}
+          onRefresh={fetchReports}
           keyExtractor={item => item._id}
           renderItem={({ item }) => (
             <Card

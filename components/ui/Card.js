@@ -27,26 +27,46 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
           shadowOpacity: 0.3,
         }}>
         <View className='w-2/5'>
-          {status === 'nouveau' && (
+          {/* {status === 'nouveau' && (
             <View className='absolute top-1 left-1 flex-row items-center justify-center z-10 bg-danger rounded-full px-1 py-0.5'>
               <Ionicons name='alert-circle-outline' color={colors.offwhite} size={20} />
-              <Text className='text-offwhite font-manrope text-xs font-extrabold mr-1'>
+              <Text className='text-offwhite font-manrope text-xs font-extrabold mx-1'>
                 NOUVEAU
               </Text>
             </View>
-          )}
-          {status === 'en cours' && (
-            <View className='absolute top-1 left-1 flex-row items-center justify-center z-10 bg-deepSage rounded-full px-1 py-0.5'>
-              <Ionicons name='alert-circle-outline' color={colors.offwhite} size={20} />
-              <Text className='text-offwhite font-manrope text-xs font-bold mx-1'>En cours</Text>
-            </View>
-          )}
+          )} */}
+
+          <View
+            className={`absolute top-1 left-1 flex-row items-center justify-center z-10 rounded-full px-1 py-0.5 ${
+              status === 'nouveau'
+                ? 'bg-danger'
+                : status === 'en cours'
+                ? 'bg-deepSage'
+                : 'bg-neutral-400'
+            }`}>
+            <Ionicons
+              name={
+                status === 'nouveau'
+                  ? 'alert-circle-outline'
+                  : status === 'en cours'
+                  ? 'time-outline'
+                  : 'checkmark-circle-outline'
+              }
+              color={colors.offwhite}
+              size={20}
+            />
+            <Text className='text-offwhite font-manrope text-xs font-bold mx-1'>
+              {status === 'nouveau' ? 'NOUVEAU' : status === 'en cours' ? 'En cours' : 'Cloturé'}
+            </Text>
+          </View>
+
           <Image
             source={photoUrl ? { uri: photoUrl } : require('../../assets/placeholder.jpg')}
             alt={'animal'}
             className='w-full h-4/5 rounded-2xl mb-2 object-cover'
             width={10}
             height={10}
+            style={{ opacity: status === 'terminé' ? 0.3 : 1 }}
           />
           <View
             className={`h-1/6 border-[1px] rounded-2xl items-center justify-center ${priorityColor.join(

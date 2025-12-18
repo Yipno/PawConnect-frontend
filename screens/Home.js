@@ -1,6 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import { Text, View, Image, ImageBackground } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { Text, View, ImageBackground } from 'react-native';
 import Button from '../components/ui/Button';
 import useTheme from '../hooks/useTheme';
 
