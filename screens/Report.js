@@ -9,6 +9,8 @@ import ReportDetailAgent from '../components/module/ReportDetailAgent';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
+const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
+
 export default function Reports() {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
@@ -253,7 +255,7 @@ export default function Reports() {
       {/* Modal détail */}
       <ReportDetailAgent
         visible={modalVisible}
-        onClose={closeModal}
+        onClose={() => setModalVisible(false)}
         report={dataReport}
         agent={userRole}
         description={description}

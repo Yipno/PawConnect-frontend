@@ -142,7 +142,9 @@ export default function SignUp({ navigation }) {
 
       if (data.result) {
         //Stock in reducer/user
-        dispatch(login(data.user));
+        dispatch(login({...data.user,
+          token: data.token
+      }));
 
         //reset inputs
         setSignUpFirstName('');

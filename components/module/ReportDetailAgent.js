@@ -30,8 +30,10 @@ export default function ReportDetail({
   const [cloturer, setCloturer] = useState(false);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [distanceLabel, setDistanceLabel] = useState('');
+  const [showOrgaInfo, setShowOrgaInfo] = useState(false);
 
-  const { colors } = useTheme();
+  const user = useSelector(state => state.user.value);
+
 
   useEffect(() => {
     (async () => {
@@ -75,6 +77,7 @@ export default function ReportDetail({
     setCours(false);
   };
 
+
   useEffect(() => {
     if (!visible) {
       setCours(false);
@@ -90,8 +93,6 @@ export default function ReportDetail({
   const reportHasCurrentHandler = Boolean(report?.currentHandler);
   // console.log('reporthashandler', reportHasCurrentHandler);
 
-  const [showOrgaInfo, setShowOrgaInfo] = useState(false);
-
   // REPORT ANIMALS/POPULATE/:ID
   const [populatedReport, setPopulatedReport] = useState([]);
 
@@ -103,9 +104,13 @@ export default function ReportDetail({
   useEffect(() => {
     if (!visible || !report) return;
 
-    fetch(`${BACKEND}/animals/populate/${report.reporter}`)
-      .then(res => res.json())
-      .then(data => {
+    fetch(`${BACKEND}/animals/populate/${report.reporter}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`, // token JWT
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
         // console.log("data fetch", data);
         if (data.result) {
           setPopulatedReport(data.reports);
@@ -123,9 +128,8 @@ export default function ReportDetail({
       statut
       agent=''
       content={
-        report ? (
-          showOrgaInfo ? (
-            <>
+          report ? (
+            showOrgaInfo ? (
               <Establishments populatedReport={populatedCurrentReport} />
             </>
           ) : (
@@ -164,19 +168,22 @@ export default function ReportDetail({
 
               {/* Tag */}
               <View className='flex-row flex-wrap mb-4'>
-                {report.state.map((tag, index) => (
-                  <View
-                    key={index}
-                    className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
-                    <Text className='text-white font-bold'>{tag}</Text>
-                  </View>
+               {Array.isArray(report.state) && report.state.map((tag, index) => (
+              <View
+              key={index}
+               className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'
+                >
+               <Text className='text-white font-bold'>{tag}</Text>
+               </View>
                 ))}
               </View>
 
-              {/* Description */}
-              <View>
-                <Text className='text-base text-gray-800 leading-5 text-justify'>
+                {/* Description */}
+                <View>
+                  <Text className='text-base text-gray-800 leading-5 text-justify'>
+                  
                   {report.desc}
+                
                 </Text>
               </View>
 
@@ -202,7 +209,7 @@ export default function ReportDetail({
                 ) : (
                   <Text>En attente de prise en charge</Text>
                 )}
-              </View>
+                </View>
 
               {agent === 'agent' && (
                 <View>
