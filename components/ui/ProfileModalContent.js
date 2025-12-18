@@ -95,7 +95,7 @@ export default function ProfileModalContent() {
   };
 
   const handleDeleteUser = () => {
-    Alert.alert('Supprimer mon compte', 'Cette action est définitive. Continuer ?', [
+    Alert.alert('Supprimer mon compte', 'Cette action est définitive. Etes-vous sûre de vouloir supprimer votre compte ?', [
       { text: 'Annuler', style: 'cancel' },
       { text: 'Supprimer', style: 'destructive', onPress: deleteUser },
     ]);
@@ -124,17 +124,30 @@ export default function ProfileModalContent() {
   };
 
   return (
-    <View className='w-full py-4'>
+    <KeyboardAvoidingView
+      className='bg-offwhite'
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+     <ScrollView>
+        <SafeAreaView 
+          style={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}>
+    
       <Text className='text-h2 text-center font-manrope font-bold text-deepSage mb-4'>
         Mon Profil
       </Text>
-
+ <View className='w-auto mb-4 mt-4'>
+  
       <Input
         label={'Nom'}
         placeholder={'Ecrivez votre nom'}
         onChangeText={value => setForm({ ...form, lastname: value })}
         value={form.lastname}
         error={form.lastname.length === 0 ? 'Nom obligatoire' : ''}
+       
       />
 
       <Input
@@ -144,6 +157,7 @@ export default function ProfileModalContent() {
         value={form.firstname}
         onChangeText={value => setForm({ ...form, firstname: value })}
         error={form.firstname.length === 0 ? 'Prénom obligatoire' : ''}
+       
       />
 
       <Input
@@ -168,8 +182,8 @@ export default function ProfileModalContent() {
                 )}*/}
 
       <Input
-        label='Mot de passe'
-        placeholder='modifier mon mot de passe'
+        label='Mot de passe modifiable'
+        placeholder=' nouveau'
         type='password'
         icon='lock-closed'
         value={form.password}
@@ -213,5 +227,9 @@ export default function ProfileModalContent() {
         />
       </View>
     </View>
+
+     </SafeAreaView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
