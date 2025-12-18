@@ -68,7 +68,7 @@ export default function Reports() {
       return;
     }
     setRefreshing(true);
-    fetch(`${url}/animals/agent}`, {
+    fetch(`${url}/animals/agent`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${user.token}` },
     })
@@ -153,8 +153,8 @@ export default function Reports() {
 
     fetch(`${url}/animals/${dataReport._id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, description, userId, establishment: user.establishment }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
+      body: JSON.stringify({ status, description, establishment: user.establishment }),
     })
       .then(async res => {
         const json = await res.json().catch(() => ({}));
@@ -237,8 +237,8 @@ export default function Reports() {
       <View style={{ flex: 1, width: '100%' }}>
         <FlatList
           data={filteredList}
-          refreshing={refreshing}
-          onRefresh={fetchReports}
+          refreshing={user.role === 'agent' ? refreshing : false}
+          onRefresh={user.role === 'agent' ? fetchReports : null}
           keyExtractor={item => item._id}
           renderItem={({ item }) => (
             <Card
