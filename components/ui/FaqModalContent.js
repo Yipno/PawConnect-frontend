@@ -34,14 +34,19 @@ export default function FaqModalContent() {
   ];
 
   return (
-    <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 16 }}>
-      <Text className='text-h2 text-center font-manrope font-bold text-deepSage mb-6'>FAQ</Text>
+    <ScrollView  contentContainerStyle={{ paddingHorizontal: 24}}>
+       
+      <View >
+        <Text className='text-h2 text-center font-manrope font-bold text-deepSage'>
+          FAQ
+        </Text>
+      </View>
       {faqs.map((faq, i) => (
         <View key={i} className={`bg-offwhite border border-lightGray rounded-2xl p-5 mb-3`}>
           <Text className='font-manrope font-bold text-deepSage text-base mb-2'>
             {faq.question}
           </Text>
-          <Text className='font-manrope text-sm text-gray-800 leading-5'>{faq.answer}</Text>
+          <Text className='font-manrope text-sm  leading-5'>{faq.answer}</Text>
         </View>
       ))}
     </ScrollView>
