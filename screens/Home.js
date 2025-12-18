@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { Text, StyleSheet, View, Image, ImageBackground } from 'react-native';
+import { Text, View, Image, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/ui/Button';
 import useTheme from '../hooks/useTheme';
 
@@ -54,5 +53,3 @@ export default function HomeScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

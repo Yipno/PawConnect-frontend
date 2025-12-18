@@ -189,7 +189,7 @@ export default function SignInScreen({ navigation }) {
                 bg={isLoading && 'lightgrey'}
                 onPress={handleLogIn}
               />
-              <View className='border-[1px] border-deepSage my-2 w-3/4'></View>
+              <View className='border-b-2 border-deepSage my-2 w-3/4' />
               <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
               <Button
                 title='Inscrivez vous'

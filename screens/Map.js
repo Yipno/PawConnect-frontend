@@ -1,13 +1,16 @@
-import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/ui/Button';
 import useTheme from '../hooks/useTheme';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, use, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getReports } from '../reducers/animals';
+import { useFocusEffect } from '@react-navigation/native';
 import { getDistanceLabel } from '../helpers/getDistance';
+import NotificationsList from '../components/NotificationsList';
+import { fetchNotifications } from '../api/notifications';
+import { setNotifications } from '../reducers/notifications';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
 moment.locale('fr');
@@ -16,6 +19,11 @@ const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
 export default function MapScreen({ navigation }) {
   const { colors } = useTheme();
+  // NOTIFICATIONS TOGGLE
+  const [showNotifications, setShowNotifications] = useState(false);
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
   const dispatch = useDispatch();
 
   /*--- 1. GEOLOCATION SETUP ---*/
@@ -99,9 +107,9 @@ export default function MapScreen({ navigation }) {
   /*--- 2. MARKERS SETUP ---*/
 
   // GET DATA FROM REDUCER
-  const user = useSelector((state) => state.user.value);
-  const animals = useSelector((state) => state.animals.value);
-  const establishments = useSelector((state) => state.establishments.value);
+  const user = useSelector(state => state.user.value);
+  const animals = useSelector(state => state.animals.value);
+  const establishments = useSelector(state => state.establishments.value);
 
   // OK console.log('map - animals', animals);
   // console.log('map - establishments', establishments);
@@ -122,7 +130,7 @@ export default function MapScreen({ navigation }) {
     if (user.role === 'civil') {
       // REDUCER CODE
 
-      const newLocations = establishments?.map((data) => {
+      const newLocations = establishments?.map(data => {
         const establishmentLocation = {
           latitude: data.location.lat,
           longitude: data.location.long,
@@ -134,7 +142,7 @@ export default function MapScreen({ navigation }) {
 
       // DISTANCE FOR AGENT TO ANIMALS
     } else {
-      const newLocations = animals?.map((data) => {
+      const newLocations = animals?.map(data => {
         const animalLocation = {
           latitude: data.location.lat,
           longitude: data.location.long,
@@ -157,7 +165,10 @@ export default function MapScreen({ navigation }) {
   if (user.role === 'civil') {
     markers = establishments?.map((data, i) => {
       const distance = currentLocation
-        ? getDistanceLabel(currentLocation, { latitude: data.location.lat, longitude: data.location.long })
+        ? getDistanceLabel(currentLocation, {
+            latitude: data.location.lat,
+            longitude: data.location.long,
+          })
         : '';
       return (
         <Marker
@@ -171,7 +182,7 @@ export default function MapScreen({ navigation }) {
   } else {
     // AGENT MARKERS: ANIMALS
     markers = locations
-      .filter((e) => e.status === 'nouveau')
+      .filter(e => e.status === 'nouveau')
       .map((data, i) => {
         return (
           <Marker
@@ -206,6 +217,15 @@ export default function MapScreen({ navigation }) {
       );
     });
   }
+  /*--- 5. NOTIFICATIONS SETUP ---*/
+  const unreadCount = useSelector(state => state.notifications.unreadCount);
+  const token = user.token;
+  useFocusEffect(
+    useCallback(() => {
+      // if(!user.token) return;
+      fetchNotifications(token).then(res => dispatch(setNotifications(res)));
+    }, [token, dispatch])
+  );
 
   // DISPLAY USER MAP BUTTONS DEPENDING ROLES
   let userMapButtons =
@@ -214,8 +234,7 @@ export default function MapScreen({ navigation }) {
         <View className='w-full items-end px-4'>
           <TouchableOpacity
             className='rounded-full bg-white items-center justify-center size-12 '
-            onPress={onPressLocation}
-          >
+            onPress={onPressLocation}>
             <Ionicons name='locate-sharp' size={36} color='black' />
           </TouchableOpacity>
         </View>
@@ -232,8 +251,7 @@ export default function MapScreen({ navigation }) {
       <View className='absolute w-full bottom-36 items-end p-4'>
         <TouchableOpacity
           className='rounded-full size-12 bg-white justify-center items-center'
-          onPress={onPressLocation}
-        >
+          onPress={onPressLocation}>
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
         {/* <Button
@@ -259,11 +277,33 @@ export default function MapScreen({ navigation }) {
           longitudeDelta: 0.01,
         }}
         showsUserLocation
-        showsMyLocationButton={false}
-      >
+        showsMyLocationButton={false}>
         {markers}
         {civilReportMarkers}
       </MapView>
+      {/* BUTTON TOGGLE NOTIFICATIONS */}
+      <View className='absolute top-16 right-5 flex-row justify-end'>
+        <TouchableOpacity
+          className={`bg-white rounded-full items-center justify-center size-16 border-2 ${
+            unreadCount > 0 ? 'border-danger' : 'border-transparent'
+          }`}
+          onPress={toggleNotifications}>
+          <Ionicons
+            name={unreadCount > 0 ? 'notifications' : 'notifications-outline'}
+            size={32}
+            color={unreadCount ? colors.danger : colors.black}
+          />
+        </TouchableOpacity>
+        {unreadCount > 0 && (
+          <View className='absolute top-0 right-0 bg-danger rounded-full items-center justify-center size-6'>
+            <Text className='text-offwhite bg-danger font-manrope text-sm font-extrabold'>
+              {unreadCount}
+            </Text>
+          </View>
+        )}
+      </View>
+      {/* NOTIFICATIONS LIST DISPLAY */}
+      {showNotifications && <NotificationsList />}
       {userMapButtons}
     </View>
   );

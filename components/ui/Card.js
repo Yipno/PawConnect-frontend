@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import useTheme from '../../hooks/useTheme';
+const { colors } = useTheme();
 import moment from 'moment';
 import 'moment/locale/fr';
 moment.locale('fr');
 
-export default function Card({ title, desc, date, place, priority, photoUrl, onPress }) {
+export default function Card({ title, desc, date, place, priority, photoUrl, onPress, status }) {
   const priorityValues = {
     urgent: { label: 'Urgent', color: ['border-red-600', 'bg-red-200'] },
     important: { label: 'Important', color: ['border-orange-400', 'bg-orange-200'] },
@@ -25,6 +27,12 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
           shadowOpacity: 0.3,
         }}>
         <View className='w-2/5'>
+          {status === 'nouveau' && (
+            <View className='absolute top-1 left-1 flex-row items-center justify-center z-10 bg-danger rounded-full px-1 py-0.5'>
+              <Ionicons name='alert-circle-outline' color={colors.offwhite} size={20} />
+              <Text className='text-offwhite font-manrope text-xs font-extrabold mr-1'>NEW</Text>
+            </View>
+          )}
           <Image
             source={photoUrl ? { uri: photoUrl } : require('../../assets/placeholder.jpg')}
             alt={'animal'}
@@ -46,12 +54,15 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
               className='text-h4 my-0 mx-2 text-text font-manrope leading-tight'>
               {title || 'Title Card'}
             </Text>
-            <Text numberOfLines={6} ellipsizeMode='tail' className='text-small text-text mx-2 mt-1'>
+            <Text
+              numberOfLines={5}
+              ellipsizeMode='tail'
+              className='text-small text-text mx-2 mt-[2px] font-manrope leading-tight'>
               {desc ||
-                'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur.'}
+                'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Irure cillum excepteur incididunt excepteur cillum excepteur excepteur excepteur.'}
             </Text>
           </View>
-          <View className='h-1/5 flex-row justify-between items-center mx-2 mt-1'>
+          <View className='h-1/5 justify-center items-start mx-2 mb-1'>
             <View className='flex-row items-center'>
               <Ionicons name='location-outline' size={14} className='mr-1' />
               <Text className='text-small text-text font-manrope '>{place || '2 km'}</Text>
