@@ -19,15 +19,15 @@ const animalsSlice = createSlice({
     updateReport: (state, action) => {
       const { id, updatedStatus, newHistory } = action.payload;
 
-      const report = state.value.find(r => r.id === id);
+      const report = state.value.find(r => r._id === id);
       if (!report) return;
 
       report.status = updatedStatus;
-      report.history.push(newHistory);
+      report.history.unshift(newHistory);
     },
     deleteReport: (state, action) => {
       const id = action.payload;
-      state.value = state.value.filter(r => r.id !== id);
+      state.value = state.value.filter(r => r._id !== id);
     },
     emptyAnimals: state => {
       state.value = [];

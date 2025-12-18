@@ -134,7 +134,7 @@ export default function SignUp({ navigation }) {
           email: signUpEmail,
           password: signUpPassword,
           role: roleNewUser,
-          establishmentRef: establishmentNewUser,
+          establishment: establishmentNewUser,
         }),
       });
 
@@ -142,9 +142,7 @@ export default function SignUp({ navigation }) {
 
       if (data.result) {
         //Stock in reducer/user
-        dispatch(login({...data.user,
-          token: data.token
-      }));
+        dispatch(login({ ...data.user, token: data.token }));
 
         //reset inputs
         setSignUpFirstName('');
@@ -281,7 +279,7 @@ export default function SignUp({ navigation }) {
           {/* ligne  */}
           <View className='border-b-2 border-deepSage my-2 w-3/4' />
           <View className='w-full items-center'>
-            <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
+            <Text className='font-manrope text-h4 text-deepSage'>Déjà inscrit ?</Text>
             <Button
               bg={colors.offwhite}
               textColor={colors.deepSage}

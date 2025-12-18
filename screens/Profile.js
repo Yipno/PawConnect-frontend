@@ -16,7 +16,7 @@ import { updateUser } from '../reducers/user';
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
 
-  const user = useSelector((state) => state.user.value);
+  const user = useSelector(state => state.user.value);
   const dispatch = useDispatch();
 
   const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
@@ -60,59 +60,55 @@ export default function Profile({ navigation }) {
     ]);
   };
 
-
- 
-
   const updateProfile = async () => {
-
     if (form.password.length > 0 && form.password !== form.confirmPassword) {
       Alert.alert('Erreur', 'Les mots de passe ne correspondent pas');
       return;
     }
 
-  if (!user.token) {
-    Alert.alert('Erreur', 'Token manquant, reconnectez-vous');
-    return;
-  }
+    if (!user.token) {
+      Alert.alert('Erreur', 'Token manquant, reconnectez-vous');
+      return;
+    }
 
-  try {
-    const response = await fetch(`${BACKEND}/users/updateProfile`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`, // token JWT
-      },
-      body: JSON.stringify({
-        firstName: form.firstname,
-        lastName: form.lastname,
-        email: form.email,
-        password: form.password || undefined,
-        establishment: form.establishment,
-      }),
-    });
+    try {
+      const response = await fetch(`${BACKEND}/users/updateProfile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`, // token JWT
+        },
+        body: JSON.stringify({
+          firstName: form.firstname,
+          lastName: form.lastname,
+          email: form.email,
+          password: form.password || undefined,
+          establishment: form.establishment,
+        }),
+      });
 
       console.log('Status fetch :', response.status);
-    console.log('Headers envoyés :', {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${user.token}`,
-    });
+      console.log('Headers envoyés :', {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      });
 
-    const data = await response.json();
-    console.log('Réponse serveur :', data);
+      const data = await response.json();
+      console.log('Réponse serveur :', data);
 
-    if (data.result) {
-      console.log('Profil mis à jour !', data.user);
-      dispatch(updateUser(data.user));
-      Alert.alert('Profil mis à jour');
-    } else {
-      console.log('Erreur update :', data.error);
-      Alert.alert('Erreur', data.error);
+      if (data.result) {
+        console.log('Profil mis à jour !', data.user);
+        dispatch(updateUser(data.user));
+        Alert.alert('Profil mis à jour');
+      } else {
+        console.log('Erreur update :', data.error);
+        Alert.alert('Erreur', data.error);
+      }
+    } catch (err) {
+      console.log('Erreur réseau :', err);
+      Alert.alert('Erreur réseau', err.message);
     }
-  } catch (err) {
-    console.log('Erreur réseau :', err);
-    Alert.alert('Erreur réseau', err.message);
-  }
-};
+  };
 
   const logoutUser = () => {
     dispatch(logout());
@@ -167,7 +163,10 @@ export default function Profile({ navigation }) {
               title='Me déconnecter'
               bg={colors.softOrange}
               textColor={colors.offwhite}
-              onPress={() => dispatch(logout())}
+              onPress={() => {
+                dispatch(emptyAnimals());
+                dispatch(logout());
+              }}
             />
           </View>
 

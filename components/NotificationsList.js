@@ -30,7 +30,7 @@ export default function NotificationsList({ ...props }) {
     <View className='absolute top-32 left-0 right-0 w-full items-center pt-2'>
       <View className='w-10/12 justify-start items-center bg-offwhite rounded-3xl p-2 border border-deepSage'>
         {unreadCount === 0 ? (
-          <Text className='text-offwhite font-manrope text-center text-lg font-bold'>
+          <Text className='text-deepSage font-manrope text-center text-lg font-bold'>
             Aucune nouvelle notification
           </Text>
         ) : (
