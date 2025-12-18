@@ -12,6 +12,7 @@ import ResourcesModalContent from '../components/ui/ResourcesModalContent';
 import ProfileModalContent from '../components/ui/ProfileModalContent';
 import FaqModalContent from '../components/ui/FaqModalContent';
 import { updateUser } from '../reducers/user';
+import EstablishmentsModalContent from '../components/ui/EstablishmentsModalContent';
 
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
@@ -27,6 +28,7 @@ export default function Profile({ navigation }) {
   const [profileVisible, setProfileVisible] = useState(false);
   const [resourcesVisible, setResourcesVisible] = useState(false);
   const [faqVisible, setFaqVisible] = useState(false);
+  const [establishmentsVisible, setEstablishmentsVisible] = useState(false);
 
   const [fullscreenModalVisible, setFullscreenModalVisible] = useState(false);
   const [form, setForm] = useState({
@@ -133,6 +135,11 @@ export default function Profile({ navigation }) {
           <Text className='text-h2 font-manrope font-bold text-deepSage mb-1'>Menu</Text>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
             {/* <SquaredButton
+          keyboardShouldPersistTaps='handled'
+        >
+          <Text className='text-h2 font-manrope font-bold text-deepSage mt-4 mb-4'>Menu</Text>
+          <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
+           {/* <SquaredButton
               title={'Mes\nsignalements'}
               icon='paw'
               onPress={() =>
@@ -152,6 +159,12 @@ export default function Profile({ navigation }) {
               icon='person'
               onPress={() => setProfileVisible(true)}
             />
+            {user.role === 'civil' ? (
+              <SquaredButton title='Associations' icon='people-circle' onPress={() => setEstablishmentsVisible(true)} />
+            ) : (
+              <SquaredButton title='Mon organisation' icon='business' onPress={() => setEstablishmentsVisible(true)} />
+            )}
+           
             <SquaredButton title='FAQ' icon='help-circle' onPress={() => setFaqVisible(true)} />
             <SquaredButton
               title='Ressources utiles'
@@ -159,7 +172,7 @@ export default function Profile({ navigation }) {
               onPress={() => setResourcesVisible(true)}
             />
             <SquaredButton title='Paramètres' icon='cog' />
-            <Text className='w-11/12 text-center mt-4 font-bold'>
+            <Text className='w-11/12 text-center mt-4 mb-6 font-bold'>
               Signaler un problème avec l'application
             </Text>
 
@@ -189,6 +202,13 @@ export default function Profile({ navigation }) {
             visible={faqVisible}
             onClose={() => setFaqVisible(false)}
             content={<FaqModalContent />}
+            fullscreen
+            animationType={'slide'}
+          />
+           <CustomModal
+            visible={establishmentsVisible}
+            onClose={() => setEstablishmentsVisible(false)}
+            content={<EstablishmentsModalContent />}
             fullscreen
             animationType={'slide'}
           />
