@@ -188,6 +188,7 @@ export default function MapScreen({ navigation, visible, onClose }) {
       return (
         <Marker
           key={i}
+          image={require('../assets/shop-s.png')}
           coordinate={{ latitude: data.location.lat, longitude: data.location.long }}
           title={`${data.name} - ${distance}`}
           description={`${data.address.street} ${data.address.zipCode} ${data.address.city} `}
