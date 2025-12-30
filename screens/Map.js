@@ -166,19 +166,19 @@ export default function MapScreen({ navigation, visible, onClose }) {
   const priorityValues = {
     urgent: {
       label: 'Urgent',
-      color: '#FECACA',
+      color: '#FE0000',
     },
     important: {
       label: 'Important',
-      color: '#FED7AA',
+      color: '#ffaa11',
     },
     modere: {
       label: 'Modéré',
-      color: '#BFDBFE',
+      color: '#2b99ff',
     },
     faible: {
       label: 'Faible',
-      color: '#BBF7D0',
+      color: '#2da84e',
     },
   };
 

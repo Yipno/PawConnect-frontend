@@ -56,7 +56,7 @@ export default function CustomModal({
           )}
 
           {/* Contenu */}
-          <View className='mb-4'>
+          <View className='flex-1 w-full mb-4'>
             {content || (
               <Text className='text-center' style={{ color: colors.text }}>
                 Default content

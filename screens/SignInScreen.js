@@ -141,21 +141,6 @@ export default function SignInScreen({ navigation }) {
           style={{ backgroundColor: colors.offwhite }}>
           <View className='flex-1 justify-between items-center bg-offwhite'>
             <Text className='text-h2 text-deepSage mt-4'>Se connecter</Text>
-            {/* BUTTONS DEV MODE  */}
-            <Button
-              title={'cheatcode civil'}
-              onPress={() => {
-                setEmail('luke@mi.io');
-                setPassword('007007');
-              }}
-            />
-            <Button
-              title={'cheatcode agent'}
-              onPress={() => {
-                setEmail('bond@mi.io');
-                setPassword('007007');
-              }}
-            />
 
             <View className='flex-1 w-full justify-center items-center pb-20'>
               <Input

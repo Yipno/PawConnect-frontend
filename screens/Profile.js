@@ -115,7 +115,7 @@ export default function Profile({ navigation }) {
             </Text>
 
             <Button
-              title='Me déconnecter'
+              title='Se déconnecter'
               bg={colors.softOrange}
               textColor={colors.offwhite}
               onPress={() => {
