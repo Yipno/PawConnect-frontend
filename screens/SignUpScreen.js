@@ -123,7 +123,7 @@ export default function SignUp({ navigation }) {
     const establishmentNewUser = accountType === 'pro' ? signUpEstablishment : null;
 
     try {
-      const response = await fetch(`${BACKEND}/users/signup`, {
+      const response = await fetch(`${BACKEND}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -132,13 +132,13 @@ export default function SignUp({ navigation }) {
           email: signUpEmail,
           password: signUpPassword,
           role: roleNewUser,
-          establishment: establishmentNewUser,
+          establishmentId: establishmentNewUser,
         }),
       });
 
       const data = await response.json();
 
-      if (data.result) {
+      if (response.ok && data?.created) {
         //reset inputs
         setSignUpFirstName('');
         setSignUpLastName('');
@@ -152,14 +152,16 @@ export default function SignUp({ navigation }) {
         Alert.alert(
           'Compte créé',
           'Votre compte a bien été créé. Vous pouvez maintenant vous connecter',
-          [{ 
-            text: 'OK',
-            onPress: () => navigation.navigate('SignIn') 
-          }]
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('SignIn'),
+            },
+          ],
         );
       } else {
         //erreur backend
-        setBackendError(data.error || 'Une erreur est survenue.');
+        setBackendError(data?.error || 'Une erreur est survenue.');
         setIsLoading(false);
         return;
       }

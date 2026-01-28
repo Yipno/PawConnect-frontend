@@ -56,7 +56,7 @@ export default function SignInScreen({ navigation }) {
     }
     // post user info for login
     try {
-      const userResponse = await fetch(`${BACKEND}/users/auth`, {
+      const userResponse = await fetch(`${BACKEND}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
