@@ -12,8 +12,8 @@ import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 import { useSelector } from 'react-redux';
 import { addReport } from '../reducers/animals';
 import { useDispatch } from 'react-redux';
-
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND;
+import * as animalAPI from '../api/animals.api';
+import * as uploadAPI from '../api/upload.api';
 
 export default function ReportScreen() {
   const navigation = useNavigation();
@@ -44,7 +44,7 @@ export default function ReportScreen() {
 
   const toggleState = (state, checked) => {
     setAnimalState(prevState =>
-      checked ? [...prevState, state] : prevState.filter(s => s !== state)
+      checked ? [...prevState, state] : prevState.filter(s => s !== state),
     );
   };
 
@@ -84,30 +84,10 @@ export default function ReportScreen() {
     return true;
   };
 
-  // Confirmation avant envoi
-  // const confirmSend = () => {
-  //   Alert.alert(
-  //     'Envoi du signalement',
-  //     'Voulez-vous envoyer ce signalement ? Vous ne pourrez plus le modifer par la suite.',
-  //     [
-  //       { text: 'Annuler', style: 'destructive', onPress: () => setIsLoading(false) },
-  //       { text: 'Confirmer', onPress: () => sendReport() },
-  //     ]
-  //   );
-  // };
-
   // Envoi du signalement au backend
   const sendReport = async () => {
     setShowLoader(true);
 
-    console.log('Photo URI:', photoUri); //test debug
-
-    const formData = new FormData();
-    formData.append('photoReport', {
-      uri: photoUri,
-      name: 'report_photo.jpg',
-      type: 'image/jpeg',
-    });
     const reportPayload = {
       location: {
         lat: currentLocation.latitude,
@@ -118,16 +98,20 @@ export default function ReportScreen() {
       title: reportTitle,
       desc: description,
     };
-    formData.append('data', JSON.stringify(reportPayload));
 
-    const response = await fetch(`${BACKEND_URL}/animals/add`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${user.token}` }, // JWT token
-      body: formData,
+    const photoData = new FormData();
+    photoData.append('file', {
+      uri: photoUri,
+      name: 'report_photo.jpg',
+      type: 'image/jpeg',
     });
 
-    const report = await response.json();
-    if (report.result) {
+    const reportId = await animalAPI.postNewReport(reportPayload, user.token);
+    const sign = await uploadAPI.getSignature(user.token);
+    const photoURL = await uploadAPI.uploadPhotoToCloudinary(sign, photoData);
+    const newReport = await animalAPI.addPhotoUrlToReport(reportId, photoURL, user.token);
+
+    if (newReport) {
       setShowLoader(false);
       setSendResult(
         <>
@@ -141,12 +125,12 @@ export default function ReportScreen() {
               width={'w-3/5'}
               onPress={() => {
                 setIsLoading(false);
-                dispatch(addReport(report.animal));
+                dispatch(addReport(newReport));
                 navigation.navigate('Map');
               }}
             />
           </View>
-        </>
+        </>,
       );
     } else {
       setShowLoader(false);
@@ -165,7 +149,7 @@ export default function ReportScreen() {
               }}
             />
           </View>
-        </>
+        </>,
       );
     }
   };
@@ -387,14 +371,12 @@ export default function ReportScreen() {
         visible={isLoading}
         content={
           <View className='mt-12 justify-center'>
-            {showLoader ? (
+            {showLoader ?
               <SplashScreen text='Envoi des données...' />
-            ) : (
-              <>
-                {sendResult ? (
+            : <>
+                {sendResult ?
                   sendResult
-                ) : (
-                  <>
+                : <>
                     <Text className='text-h4 text-center text-text font-manrope'>
                       Voulez vous envoyer ce signalement ? Vous ne pourrez plus le modifier ensuite.
                     </Text>
@@ -408,9 +390,9 @@ export default function ReportScreen() {
                       <Button title='Oui' width={'w-5/12'} onPress={sendReport} />
                     </View>
                   </>
-                )}
+                }
               </>
-            )}
+            }
           </View>
         }
       />

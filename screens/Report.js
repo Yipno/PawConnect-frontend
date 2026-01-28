@@ -43,13 +43,13 @@ export default function Reports() {
   /* -------------------- HELPERS filtres -------------------- */
   const togglePriority = value => {
     setSelectedPriorities(prev =>
-      prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]
+      prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value],
     );
   };
 
   const toggleStatus = value => {
     setSelectedStatuses(prev =>
-      prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]
+      prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value],
     );
   };
 
@@ -146,7 +146,10 @@ export default function Reports() {
   };
 
   const handleActualiser = ({ description, cours, cloturer }) => {
-    const status = cours ? 'en cours' : cloturer ? 'terminé' : null;
+    const status =
+      cours ? 'en cours'
+      : cloturer ? 'terminé'
+      : null;
     if (!status) {
       Alert.alert('Statut manquant', 'Choisis "En cours" ou "Clôturer" avant d’actualiser.');
       return;
@@ -166,8 +169,10 @@ export default function Reports() {
 
     fetch(`${BACKEND_URL}/animals/${dataReport._id}`, {
       method: 'PUT',
+      // method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
-      body: JSON.stringify({ status, description, establishment: user.establishment }),
+      body: JSON.stringify({ status, action: description, establishment: user.establishment }),
+      // body: JSON.stringify({ status, action: description }),
     })
       .then(async res => {
         const json = await res.json().catch(() => ({}));
@@ -213,9 +218,9 @@ export default function Reports() {
       <TouchableOpacity
         key={value}
         className={
-          isSelected
-            ? 'bg-deepSage h-12 w-10/12 rounded-2xl justify-center items-center self-center'
-            : 'bg-gray h-12 w-10/12 rounded-2xl justify-center items-center self-center'
+          isSelected ?
+            'bg-deepSage h-12 w-10/12 rounded-2xl justify-center items-center self-center'
+          : 'bg-gray h-12 w-10/12 rounded-2xl justify-center items-center self-center'
         }
         onPress={() => onToggle(value)}>
         <Text className={isSelected ? 'text-white' : 'text-black'}>{label}</Text>
@@ -258,7 +263,7 @@ export default function Reports() {
               {...item}
               place={getDistanceBetweenTwoPoints(
                 { latitude: item.location.lat, longitude: item.location.long },
-                currentLocation
+                currentLocation,
               )}
               onPress={() => handleClick(item)}
             />
