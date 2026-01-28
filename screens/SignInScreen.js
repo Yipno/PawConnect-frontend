@@ -56,7 +56,7 @@ export default function SignInScreen({ navigation }) {
     }
     // post user info for login
     try {
-      const userResponse = await fetch(`${BACKEND}/users/auth`, {
+      const userResponse = await fetch(`${BACKEND}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -72,48 +72,48 @@ export default function SignInScreen({ navigation }) {
       const token = userResult.token; // JWT token
 
       // FETCH  REPORTS AND DISPATCH TO REDUX
-      if (userResult.user.role === 'civil') {
-        const animalsResponse = await fetch(`${BACKEND}/animals/populate`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const animalsResults = await animalsResponse.json();
-        const establishmentsResponse = await fetch(`${BACKEND}/establishments`);
-        const establishmentsResults = await establishmentsResponse.json();
-        if (!animalsResponse.ok || !establishmentsResponse.ok) {
-          setBackendError(
-            animalsResults.error ||
-              establishmentsResults.error ||
-              'Erreur lors de la recuperation des signalements.'
-          );
-          setIsLoading(false);
-          return;
-        }
-        // console.log(animalsResults);
-        // console.log(establishmentsResults);
+      // if (userResult.user.role === 'civil') {
+      //   const animalsResponse = await fetch(`${BACKEND}/animals/populate`, {
+      //     headers: { Authorization: `Bearer ${token}` },
+      //   });
+      //   const animalsResults = await animalsResponse.json();
+      //   const establishmentsResponse = await fetch(`${BACKEND}/establishments`);
+      //   const establishmentsResults = await establishmentsResponse.json();
+      //   if (!animalsResponse.ok || !establishmentsResponse.ok) {
+      //     setBackendError(
+      //       animalsResults.error ||
+      //         establishmentsResults.error ||
+      //         'Erreur lors de la recuperation des signalements.'
+      //     );
+      //     setIsLoading(false);
+      //     return;
+      //   }
+      //   // console.log(animalsResults);
+      //   // console.log(establishmentsResults);
 
-        dispatch(getReports(animalsResults.reports));
-        dispatch(getEstablishments(establishmentsResults.result));
-      } else if (userResult.user.role === 'agent') {
-        const animalsResponse = await fetch(`${BACKEND}/animals/agent`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const animalsResults = await animalsResponse.json();
-        if (!animalsResponse.ok) {
-          setBackendError(
-            animalsResults.error || 'Erreur lors de la recuperation des signalements.'
-          );
-          setIsLoading(false);
-          return;
-        }
-        // console.log('animalsresults', animalsResults);
+      //   dispatch(getReports(animalsResults.reports));
+      //   dispatch(getEstablishments(establishmentsResults.result));
+      // } else if (userResult.user.role === 'agent') {
+      //   const animalsResponse = await fetch(`${BACKEND}/animals/agent`, {
+      //     headers: { Authorization: `Bearer ${token}` },
+      //   });
+      //   const animalsResults = await animalsResponse.json();
+      //   if (!animalsResponse.ok) {
+      //     setBackendError(
+      //       animalsResults.error || 'Erreur lors de la recuperation des signalements.'
+      //     );
+      //     setIsLoading(false);
+      //     return;
+      //   }
+      //   // console.log('animalsresults', animalsResults);
 
-        dispatch(getReports(animalsResults.reports));
-      }
+      //   dispatch(getReports(animalsResults.reports));
+      // }
       dispatch(
         login({
           ...userResult.user,
           token,
-        })
+        }),
       ); //put token JWT in redux
       setPassword('');
       setEmail('');
@@ -129,12 +129,11 @@ export default function SignInScreen({ navigation }) {
 
   return (
     <>
-      {isLoading ? (
+      {isLoading ?
         <View className='flex-1 justify-center bg-offwhite'>
           <SplashScreen />
         </View>
-      ) : (
-        <KeyboardAwareScrollView
+      : <KeyboardAwareScrollView
           enableOnAndroid
           keyboardShouldPersistTaps='handled'
           contentContainerStyle={{ paddingTop: 60, flexGrow: 1 }}
@@ -186,7 +185,7 @@ export default function SignInScreen({ navigation }) {
             </View>
           </View>
         </KeyboardAwareScrollView>
-      )}
+      }
     </>
   );
 }
