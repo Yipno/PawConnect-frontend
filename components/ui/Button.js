@@ -1,5 +1,4 @@
-import React from 'react';
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
@@ -27,32 +26,16 @@ export default function Button({ title, bg, onPress, textColor, width, border, m
         shadowOpacity: 0.4,
       }}>
       <Animated.View
-        className={`h-16 w-full my-2 rounded-2xl justify-center items-center bg-deepSage text-deepSage ${borders.join(
-          ' '
+        className={`h-16 w-full my-2 rounded-full justify-center items-center bg-deepSage text-deepSage ${borders.join(
+          ' ',
         )}`}
         style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle, margin]}>
         <Text
           style={{ color: textColor || colors.offwhite, flexShrink: 1, maxWidth: '100%' }}
-          className='font-manrope text-h3 '>
+          className='font-manrope text-3xl font-semibold mt-0.5'>
           {title}
         </Text>
       </Animated.View>
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  btn: {
-    width: '100%',
-    height: 52,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 6,
-    shadowColor: '#5b5b5b8e',
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-});
