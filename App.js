@@ -15,7 +15,12 @@ const store = configureStore({
 });
 
 export default function App() {
-  const loaded = useFonts({ Manrope: require('./assets/fonts/Manrope-VariableFont.ttf') });
+  const loaded = useFonts({
+    'Manrope-Regular': require('./assets/fonts/manrope.regular.otf'),
+    'Manrope-Bold': require('./assets/fonts/manrope.bold.otf'),
+  });
+
+  if (!loaded) return null;
 
   return (
     // RootNavigator => NAVIGATEUR RACINE qui a acces au reducer

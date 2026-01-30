@@ -32,7 +32,7 @@ export default function Button({ title, bg, onPress, textColor, width, border, m
         style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle, margin]}>
         <Text
           style={{ color: textColor || colors.offwhite, flexShrink: 1, maxWidth: '100%' }}
-          className='font-manrope text-3xl font-bold mt-0.5'>
+          className='font-manrope-bold text-3xl mt-0.5'>
           {title}
         </Text>
       </Animated.View>

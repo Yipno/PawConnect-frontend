@@ -30,13 +30,13 @@ export default function NotificationsList({ ...props }) {
     <View className='absolute top-32 left-0 right-0 w-full items-center pt-2'>
       <View className='w-10/12 justify-start items-center bg-offwhite rounded-3xl p-2 border border-deepSage'>
         {unreadCount === 0 ? (
-          <Text className='text-deepSage font-manrope text-center text-lg font-bold'>
+          <Text className='text-deepSage font-manrope-bold text-center text-lg'>
             Aucune nouvelle notification
           </Text>
         ) : (
           <>
             <View className='w-full'>
-              <Text className='text-offwhite font-manrope text-center text-lg font-bold mb-2'>
+              <Text className='text-offwhite font-manrope-bold text-center text-lg mb-2'>
                 Notifications ({unreadCount} non lues)
               </Text>
             </View>
@@ -57,7 +57,7 @@ export default function NotificationsList({ ...props }) {
             <TouchableOpacity
               className='pt-1.5 px-2 border border-darkSage bg-deepSage items-center justify-center rounded-full'
               onPress={handleMarkAllAsRead}>
-              <Text className='text-offwhite font-manrope text-sm font-bold mb-2'>
+              <Text className='text-offwhite font-manrope-bold text-sm mb-2'>
                 Tout marquer comme lu
               </Text>
             </TouchableOpacity>

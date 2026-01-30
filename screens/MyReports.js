@@ -64,7 +64,7 @@ const [reports, setReports] = useState([]);
 
   return (
     <SafeAreaView className='flex-1 bg-offwhite justify-items-center '>
-      <Text className='text-h1 font-manrope text-center font-bold text-deepSage my-4 '>
+      <Text className='text-h1 font-manrope-bold text-center text-deepSage my-4'>
         Mes signalements
       </Text>
       <ScrollView className='flex-1 w-full'>

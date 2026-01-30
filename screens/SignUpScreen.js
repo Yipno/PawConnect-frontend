@@ -187,7 +187,7 @@ export default function SignUp({ navigation }) {
             justifyContent: 'flex-start',
             alignItems: 'center',
           }}>
-          <Text className='text-h2 text-center mb-4 mt-4' style={{ color: colors.deepSage }}>
+          <Text className='text-h2 text-center mb-4 mt-4 font-manrope-bold' style={{ color: colors.deepSage }}>
             S'enregistrer
           </Text>
 
@@ -271,7 +271,7 @@ export default function SignUp({ navigation }) {
           )}
 
           {backendError && (
-            <Text className='text-red-600 font-manrope text-center font-semibold text-body'>
+            <Text className='text-red-600 font-manrope-bold text-center text-body'>
               {backendError}
             </Text>
           )}
@@ -285,7 +285,7 @@ export default function SignUp({ navigation }) {
           {/* ligne  */}
           <View className='border-b-2 border-deepSage my-2 w-3/4' />
           <View className='w-full items-center'>
-            <Text className='font-manrope text-h4 text-deepSage'>Déjà inscrit ?</Text>
+            <Text className='font-manrope-bold text-h4 text-deepSage'>Déjà inscrit ?</Text>
             <Button
               bg={colors.offwhite}
               textColor={colors.deepSage}

@@ -139,7 +139,7 @@ export default function SignInScreen({ navigation }) {
           contentContainerStyle={{ paddingTop: 60, flexGrow: 1 }}
           style={{ backgroundColor: colors.offwhite }}>
           <View className='flex-1 justify-between items-center bg-offwhite'>
-            <Text className='text-h2 text-deepSage mt-4'>Se connecter</Text>
+            <Text className='text-h2 text-deepSage mt-4 font-manrope-bold'>Se connecter</Text>
 
             <View className='flex-1 w-full justify-center items-center pb-20'>
               <Input
@@ -162,7 +162,7 @@ export default function SignInScreen({ navigation }) {
               />
 
               {backendError && (
-                <Text className='text-red-600 font-manrope text-center font-semibold text-body'>
+                <Text className='text-red-600 font-manrope-bold text-center text-body'>
                   {backendError}
                 </Text>
               )}
@@ -174,7 +174,7 @@ export default function SignInScreen({ navigation }) {
                 onPress={handleLogIn}
               />
               <View className='border-b-2 border-deepSage my-2 w-3/4' />
-              <Text className='font-manrope text-h4 text-deepSage'>Pas encore de compte ?</Text>
+              <Text className='font-manrope-bold text-h4 text-deepSage'>Pas encore de compte ?</Text>
               <Button
                 title='Inscrivez vous'
                 bg={colors.offwhite}

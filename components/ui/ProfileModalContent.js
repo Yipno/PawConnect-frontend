@@ -143,7 +143,7 @@ export default function ProfileModalContent() {
             alignItems: 'center',
           }}>
     
-      <Text className='text-h2 text-center font-manrope font-bold text-deepSage mb-4'>
+      <Text className='text-h2 text-center font-manrope-bold text-deepSage mb-4'>
         Mon Profil
       </Text>
  <View className='w-auto mb-4 mt-4'>

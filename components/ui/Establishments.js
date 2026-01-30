@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 export default function Establishments({ populatedReport }) {
   return (
     <SafeAreaView className='flex-1 items-center bg-offwhite'>
-      <Text className='text-h2 text-deepSage font-manrope text-center'>Organisation</Text>
+      <Text className='text-h2 text-deepSage font-manrope-bold text-center'>Organisation</Text>
       <View className='h-2/3 w-11/12 justify-start items-center mt-2'>
         <View className='w-full rounded-2xl mb-2 object-cover flex-row'>
           <Image
@@ -21,7 +21,7 @@ export default function Establishments({ populatedReport }) {
             height={10}
           />
           <View className='ml-4 justify-center'>
-            <Text className='text-h3'>{populatedReport?.establishment.name || 'Name'}</Text>
+            <Text className='text-h3 font-manrope-bold'>{populatedReport?.establishment.name || 'Name'}</Text>
             <TouchableOpacity
               onPress={() => Linking.openURL(`${populatedReport?.establishment.url}`)}>
               <Text numberOfLines={4} ellipsizeMode='tail' className='underline'>
@@ -37,7 +37,7 @@ export default function Establishments({ populatedReport }) {
           <Ionicons name='navigate-circle-outline' size={44} color='black' />
 
           <View className='ml-6'>
-            <Text className='text-h4'>Adresse</Text>
+            <Text className='text-h4 font-manrope-bold'>Adresse</Text>
             <Text>{`${populatedReport?.establishment.address.street || 'Street'}`}</Text>
             <Text>{`${populatedReport?.establishment.address.zipCode || ''} ${
               populatedReport?.establishment.address.city || 'zipCode City'
@@ -47,7 +47,7 @@ export default function Establishments({ populatedReport }) {
         <View className='w-full object-cover flex-row my-4'>
           <Ionicons name='time-outline' size={44} color='black' />
           <View className='ml-6'>
-            <Text className='text-h4'>Horaires</Text>
+            <Text className='text-h4 font-manrope-bold'>Horaires</Text>
             <Text>L-V: 9h-12h 13h-18h</Text>
             <Text>S: 9-18h</Text>
           </View>

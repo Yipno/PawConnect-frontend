@@ -37,7 +37,7 @@ export default function ResourcesModalContent() {
           keyboardShouldPersistTaps="handled"
         >
           <View className="w-full px-6 py-4">
-            <Text className="text-h2 text-center font-manrope font-bold text-deepSage mb-4">
+            <Text className="text-h2 text-center font-manrope-bold text-deepSage mb-4">
               Ressources utiles
             </Text>
 

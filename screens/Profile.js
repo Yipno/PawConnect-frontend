@@ -67,12 +67,12 @@ export default function Profile({ navigation }) {
             alignItems: 'center',
           }}
           keyboardShouldPersistTaps='handled'>
-          <Text className='text-h2 font-manrope font-bold text-deepSage mb-1'>Menu</Text>
+          <Text className='text-h2 font-manrope-bold text-deepSage mb-1'>Menu</Text>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
             {/* <SquaredButton
           keyboardShouldPersistTaps='handled'
         >
-          <Text className='text-h2 font-manrope font-bold text-deepSage mt-4 mb-4'>Menu</Text>
+          <Text className='text-h2 font-manrope-bold text-deepSage mt-4 mb-4'>Menu</Text>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
            {/* <SquaredButton
               title={'Mes\nsignalements'}

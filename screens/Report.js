@@ -231,7 +231,7 @@ export default function Reports() {
   /* -------------------- UI -------------------- */
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, position: 'relative' }} className='bg-offwhite'>
-      <Text className='text-h2 font-manrope text-deepSage text-center mt-4'>Signalements</Text>
+      <Text className='text-h2 font-manrope-bold text-deepSage text-center mt-4'>Signalements</Text>
 
       {/* Bouton Filtres (agents uniquement) */}
       {userRole === 'agent' && (

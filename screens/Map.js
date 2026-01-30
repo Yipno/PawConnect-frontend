@@ -330,7 +330,7 @@ export default function MapScreen({ navigation, visible, onClose }) {
         </TouchableOpacity>
         {unreadCount > 0 && (
           <View className='absolute top-0 right-0 bg-offwhite border border-danger rounded-full items-center justify-center size-6'>
-            <Text className='text-danger bg-offwhite font-manrope text-sm font-extrabold'>
+            <Text className='text-danger bg-offwhite font-manrope-bold text-sm'>
               {unreadCount}
             </Text>
           </View>

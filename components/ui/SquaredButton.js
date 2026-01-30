@@ -34,7 +34,7 @@ export default function SquaredButton({ title, onPress, icon, style }) {
         style={[animatedStyle, defaultStyle, style]}
       >
         <Ionicons name={iconName || 'person-outline'} size={54} color={colors.offwhite} />
-        <Text className='font-manrope text-h4 text-offwhite text-center font-bold mt-1'>
+        <Text className='font-manrope-bold text-h4 text-offwhite text-center mt-1'>
           {title || 'Profile'}
         </Text>
       </Animated.View>

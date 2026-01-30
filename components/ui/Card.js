@@ -30,7 +30,7 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
           {/* {status === 'nouveau' && (
             <View className='absolute top-1 left-1 flex-row items-center justify-center z-10 bg-danger rounded-full px-1 py-0.5'>
               <Ionicons name='alert-circle-outline' color={colors.offwhite} size={20} />
-              <Text className='text-offwhite font-manrope text-xs font-extrabold mx-1'>
+              <Text className='text-offwhite font-manrope-bold text-xs mx-1'>
                 NOUVEAU
               </Text>
             </View>
@@ -55,7 +55,7 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
               color={colors.offwhite}
               size={20}
             />
-            <Text className='text-offwhite font-manrope text-xs font-bold mx-1'>
+            <Text className='text-offwhite font-manrope-bold text-xs mx-1'>
               {status === 'nouveau' ? 'NOUVEAU' : status === 'en cours' ? 'En cours' : 'Cloturé'}
             </Text>
           </View>
@@ -79,7 +79,7 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
           <View className=' h-4/5 overflow-hidden'>
             <Text
               numberOfLines={1}
-              className='text-h4 my-0 mx-2 text-text font-manrope leading-tight'>
+              className='text-h4 my-0 mx-2 text-text font-manrope-bold leading-tight'>
               {title || 'Title Card'}
             </Text>
             <Text

@@ -148,7 +148,7 @@ export default function ReportDetail({
               </View>
               <View className='w-full flex-row justify-between mt-2 mb-1'>
                 {/* Title */}
-                <Text className='text-xl font-manrope font-bold text-left'>{report.title}</Text>
+                <Text className='text-xl font-manrope-bold text-left'>{report.title}</Text>
                 {/* Priority*/}
                 <View
                   className={`border justify-center items-center font-manrope rounded-2xl px-3 ${priorityData.className}`}>
@@ -179,7 +179,7 @@ export default function ReportDetail({
                     <View
                       key={index}
                       className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
-                      <Text className='text-white font-manrope font-bold'>{tag}</Text>
+                      <Text className='text-white font-manrope-bold'>{tag}</Text>
                     </View>
                   ))}
               </View>

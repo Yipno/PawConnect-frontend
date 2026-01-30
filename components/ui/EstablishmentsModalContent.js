@@ -41,7 +41,7 @@ export default function EstablishmentsModalContent() {
       }}
       keyboardShouldPersistTaps='handled'>
       <View className='w-10/12'>
-        <Text className='text-h2 text-center font-manrope font-bold text-deepSage mb-4'>
+        <Text className='text-h2 text-center font-manrope-bold text-deepSage mb-4'>
           {user.role === 'agent' ? 'Mon organisation' : 'Associations'}
         </Text>
 
@@ -70,7 +70,7 @@ export default function EstablishmentsModalContent() {
             )}
             <View className='ml-4 mt-1 mb-2 flex-1'>
               {/* Nom */}
-              <Text className='font-manrope text-lg font-bold'>{establishment.name}</Text>
+              <Text className='font-manrope-bold text-lg'>{establishment.name}</Text>
 
               {/* Adresse */}
               {establishment.address && (

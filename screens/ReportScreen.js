@@ -115,7 +115,7 @@ export default function ReportScreen() {
       setShowLoader(false);
       setSendResult(
         <>
-          <Text className='text-deepSage text-h4 text-center'>Signalement envoyé !</Text>
+          <Text className='text-deepSage text-h4 text-center font-manrope-bold'>Signalement envoyé !</Text>
           <Text className='text-text text-body text-center mt-2'>
             Merci pour votre signalement. Nous allons l'examiner et prendre les mesures appropriées.
           </Text>
@@ -136,7 +136,7 @@ export default function ReportScreen() {
       setShowLoader(false);
       setSendResult(
         <>
-          <Text className='text-danger text-h4 text-center'>Oups...</Text>
+          <Text className='text-danger text-h4 text-center font-manrope-bold'>Oups...</Text>
           <Text className='text-text text-body text-center mt-2'>
             Une erreur est survenue lors de l'envoi du signalement. Veuillez réessayer plus tard...
           </Text>
@@ -171,7 +171,7 @@ export default function ReportScreen() {
           <Ionicons name='help-circle-outline' size={26} color={colors.textColor} />
         </TouchableOpacity>
       </View>
-      <Text className='text-h3 text-deepSage my-2 font-manrope'>Faire un signalement</Text>
+      <Text className='text-h3 text-deepSage my-2 font-manrope-bold'>Faire un signalement</Text>
       {formError && (
         <Text className='text-error mb-2 font-semibold text-body'>
           {formError || 'Unknown error'}
@@ -377,7 +377,7 @@ export default function ReportScreen() {
                 {sendResult ?
                   sendResult
                 : <>
-                    <Text className='text-h4 text-center text-text font-manrope'>
+                    <Text className='text-h4 text-center text-text font-manrope-bold'>
                       Voulez vous envoyer ce signalement ? Vous ne pourrez plus le modifier ensuite.
                     </Text>
                     <View className='w-full flex-row pt-6 justify-evenly'>

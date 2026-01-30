@@ -59,7 +59,7 @@ export default function CameraScreen({ navigation }) {
           <View
             className='flex-2 justify-end items-center mx-20 p-2 mt-20 rounded-2xl'
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-            <Text className='text-h2 text-center text-offwhite font-extrabold font-manrope'>
+            <Text className='text-h2 text-center text-offwhite font-manrope-bold'>
               Voulez vous utiliser cette photo ?
             </Text>
           </View>
@@ -69,7 +69,7 @@ export default function CameraScreen({ navigation }) {
               className='w-40 items-center p-4 rounded-2xl'
               onPress={() => setPhoto(null)}>
               <Ionicons name='trash-outline' size={60} color='#dc2626' />
-              <Text className='text-center text-2xl text-red-600 font-bold font-manrope'>
+              <Text className='text-center text-2xl text-red-600 font-manrope-bold'>
                 Reprendre
               </Text>
             </TouchableOpacity>
@@ -81,7 +81,7 @@ export default function CameraScreen({ navigation }) {
                 navigation.goBack();
               }}>
               <Ionicons name='checkmark-circle-outline' size={60} color='#22c52e' />
-              <Text className='text-center text-2xl text-green-500 font-bold font-manrope'>
+              <Text className='text-center text-2xl text-green-500 font-manrope-bold'>
                 Utiliser
               </Text>
             </TouchableOpacity>

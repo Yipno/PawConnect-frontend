@@ -32,7 +32,7 @@ export default function SplashScreen({ text }) {
         }}>
         <Ionicons name='cog-outline' size={100} color={'#a3a3a3'} />
       </Animated.View>
-      <Text className='text-h3 font-manrope text-neutral-400 font-bold'>
+      <Text className='text-h3 font-manrope-bold text-neutral-400'>
         {text || 'Chargement des données...'}
       </Text>
     </View>
