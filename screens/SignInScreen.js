@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import useTheme from '../hooks/useTheme';
 import SplashScreen from '../components/SplashScreen';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getEstablishments } from '../reducers/establishments';
+import AppText from '../components/ui/AppText';
 
 const EMAIL_REGEX =
   /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
@@ -139,7 +140,7 @@ export default function SignInScreen({ navigation }) {
           contentContainerStyle={{ paddingTop: 60, flexGrow: 1 }}
           style={{ backgroundColor: colors.offwhite }}>
           <View className='flex-1 justify-between items-center bg-offwhite'>
-            <Text className='text-h2 text-deepSage mt-4 font-manrope-bold'>Se connecter</Text>
+            <AppText className='text-h2 text-deepSage mt-4 font-manrope-bold'>Se connecter</AppText>
 
             <View className='flex-1 w-full justify-center items-center pb-20'>
               <Input
@@ -162,9 +163,9 @@ export default function SignInScreen({ navigation }) {
               />
 
               {backendError && (
-                <Text className='text-red-600 font-manrope-bold text-center text-body'>
+                <AppText className='text-red-600 font-manrope-bold text-center text-body'>
                   {backendError}
-                </Text>
+                </AppText>
               )}
 
               <Button
@@ -174,7 +175,7 @@ export default function SignInScreen({ navigation }) {
                 onPress={handleLogIn}
               />
               <View className='border-b-2 border-deepSage my-2 w-3/4' />
-              <Text className='font-manrope-bold text-h4 text-deepSage'>Pas encore de compte ?</Text>
+              <AppText className='font-manrope-bold text-h4 text-deepSage'>Pas encore de compte ?</AppText>
               <Button
                 title='Inscrivez vous'
                 bg={colors.offwhite}

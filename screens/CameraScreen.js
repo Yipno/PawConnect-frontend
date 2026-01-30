@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, CameraView, CameraType, FlashMode } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import useTheme from '../hooks/useTheme';
 import { useRoute } from '@react-navigation/native';
+import AppText from '../components/ui/AppText';
 
 export default function CameraScreen({ navigation }) {
   const { colors } = useTheme();
@@ -29,7 +30,7 @@ export default function CameraScreen({ navigation }) {
   if (!hasPermission || !isFocused) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Permission caméra requise…</Text>
+        <AppText>Permission caméra requise…</AppText>
       </View>
     );
   }
@@ -59,9 +60,9 @@ export default function CameraScreen({ navigation }) {
           <View
             className='flex-2 justify-end items-center mx-20 p-2 mt-20 rounded-2xl'
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-            <Text className='text-h2 text-center text-offwhite font-manrope-bold'>
+            <AppText className='text-h2 text-center text-offwhite font-manrope-bold'>
               Voulez vous utiliser cette photo ?
-            </Text>
+            </AppText>
           </View>
           <View className='flex-2 flex-row justify-between items-end mb-14 mx-10'>
             <TouchableOpacity
@@ -69,9 +70,9 @@ export default function CameraScreen({ navigation }) {
               className='w-40 items-center p-4 rounded-2xl'
               onPress={() => setPhoto(null)}>
               <Ionicons name='trash-outline' size={60} color='#dc2626' />
-              <Text className='text-center text-2xl text-red-600 font-manrope-bold'>
+              <AppText className='text-center text-2xl text-red-600 font-manrope-bold'>
                 Reprendre
-              </Text>
+              </AppText>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
@@ -81,9 +82,9 @@ export default function CameraScreen({ navigation }) {
                 navigation.goBack();
               }}>
               <Ionicons name='checkmark-circle-outline' size={60} color='#22c52e' />
-              <Text className='text-center text-2xl text-green-500 font-manrope-bold'>
+              <AppText className='text-center text-2xl text-green-500 font-manrope-bold'>
                 Utiliser
-              </Text>
+              </AppText>
             </TouchableOpacity>
           </View>
         </ImageBackground>

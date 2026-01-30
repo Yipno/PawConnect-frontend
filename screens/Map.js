@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/ui/Button';
 import useTheme from '../hooks/useTheme';
@@ -14,6 +14,7 @@ import { fetchNotifications } from '../api/notifications';
 import { setNotifications } from '../reducers/notifications';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
+import AppText from '../components/ui/AppText';
 moment.locale('fr');
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
@@ -330,9 +331,9 @@ export default function MapScreen({ navigation, visible, onClose }) {
         </TouchableOpacity>
         {unreadCount > 0 && (
           <View className='absolute top-0 right-0 bg-offwhite border border-danger rounded-full items-center justify-center size-6'>
-            <Text className='text-danger bg-offwhite font-manrope-bold text-sm'>
+            <AppText className='text-danger bg-offwhite font-manrope-bold text-sm'>
               {unreadCount}
-            </Text>
+            </AppText>
           </View>
         )}
       </View>

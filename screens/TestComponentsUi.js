@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
@@ -6,6 +6,7 @@ import Input from '../components/ui/Input';
 import SquaredButton from '../components/ui/SquaredButton';
 import CustomModal from '../components/ui/CustomModal';
 import { useState } from 'react';
+import AppText from '../components/ui/AppText';
 
 export default function TestComponentsUi() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,13 +46,13 @@ export default function TestComponentsUi() {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         title='Modal classique'
-        content={<Text>Message de ma modale </Text>}
+        content={<AppText>Message de ma modale </AppText>}
       />
       <CustomModal
         visible={fullscreenModalVisible}
         onClose={() => setFullscreenModalVisible(false)}
         title='Modal fullscreen'
-        content={<Text>Cette modale prend tout l'écran </Text>}
+        content={<AppText>Cette modale prend tout l'écran </AppText>}
         fullscreen={true}
       />
       <Input label='FirstName' />

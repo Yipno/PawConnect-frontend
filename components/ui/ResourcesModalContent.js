@@ -1,17 +1,10 @@
 // components/ui/ResourcesModalContent.js
 import React from 'react';
-import {
-  Text,
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
+import AppText from './AppText';
 
 export default function ResourcesModalContent() {
   const { colors } = useTheme();
@@ -37,9 +30,9 @@ export default function ResourcesModalContent() {
           keyboardShouldPersistTaps="handled"
         >
           <View className="w-full px-6 py-4">
-            <Text className="text-h2 text-center font-manrope-bold text-deepSage mb-4">
+            <AppText className="text-h2 text-center font-manrope-bold text-deepSage mb-4">
               Ressources utiles
-            </Text>
+            </AppText>
 
             {resources.map((res, i) => (
               <TouchableOpacity
@@ -54,9 +47,9 @@ export default function ResourcesModalContent() {
                   
                   style={{ marginRight: 8 }}
                 />
-                <Text className="font-bold text-deepSage underline">
+                <AppText className="font-bold text-deepSage underline">
                   {res.name}
-                </Text>
+                </AppText>
               </TouchableOpacity>
             ))}
           </View>

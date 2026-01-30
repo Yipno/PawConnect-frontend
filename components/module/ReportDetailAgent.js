@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { View, Image, TouchableOpacity, TextInput } from 'react-native';
 import CustomModal from '../ui/CustomModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import Button from '../ui/Button';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
 import Establishments from '../ui/Establishments';
+import AppText from '../ui/AppText';
 
 moment.locale('fr');
 
@@ -148,28 +149,28 @@ export default function ReportDetail({
               </View>
               <View className='w-full flex-row justify-between mt-2 mb-1'>
                 {/* Title */}
-                <Text className='text-xl font-manrope-bold text-left'>{report.title}</Text>
+                <AppText className='text-xl font-manrope-bold text-left'>{report.title}</AppText>
                 {/* Priority*/}
                 <View
                   className={`border justify-center items-center font-manrope rounded-2xl px-3 ${priorityData.className}`}>
-                  <Text>{priorityData.label}</Text>
+                  <AppText>{priorityData.label}</AppText>
                 </View>
               </View>
               {/* Place & Date */}
               <View className='w-full flex-row justify-between'>
                 {distanceLabel ? (
-                  <Text className='font-manrope mb-2 text-sm text-gray-700'>
+                  <AppText className='font-manrope mb-2 text-sm text-gray-700'>
                     Distance: {distanceLabel}
-                  </Text>
+                  </AppText>
                 ) : (
-                  <Text className='font-manrope font-sm text-gray-500'>
+                  <AppText className='font-manrope font-sm text-gray-500'>
                     Calcul de la distance...
-                  </Text>
+                  </AppText>
                 )}
-                <Text className='font-manrope mb-2 text-sm text-gray-700'>
+                <AppText className='font-manrope mb-2 text-sm text-gray-700'>
                   {moment(report?.history[0]?.date).format('LL')} à{' '}
                   {moment(report?.history[0]?.date).format('LT')}
-                </Text>
+                </AppText>
               </View>
 
               {/* Tag */}
@@ -179,16 +180,16 @@ export default function ReportDetail({
                     <View
                       key={index}
                       className='bg-softOrange border-[1px] border-orange-500 rounded-2xl mr-2 mb-2 px-3 py-1'>
-                      <Text className='text-white font-manrope-bold'>{tag}</Text>
+                      <AppText className='text-white font-manrope-bold'>{tag}</AppText>
                     </View>
                   ))}
               </View>
 
               {/* Description */}
               <View>
-                <Text className='text-base text-gray-800 font-manrope leading-5'>
+                <AppText className='text-base text-gray-800 font-manrope leading-5'>
                   {report.desc}
-                </Text>
+                </AppText>
               </View>
 
               {/* Display establishments */}
@@ -196,32 +197,32 @@ export default function ReportDetail({
                 <View className='border-b-[1px] black my-2' />
                 {reportHasCurrentHandler ? (
                   <View className='mt-1'>
-                    <Text className='font-manrope text-center text-small mb-1'>
+                    <AppText className='font-manrope text-center text-small mb-1'>
                       Pris en charge le {moment(report?.history[0]?.date).format('LL')} à{' '}
                       {moment(report?.history[0]?.date).format('LT')} par :
-                    </Text>
+                    </AppText>
 
                     {agent === 'civil' ? (
                       <>
                         <TouchableOpacity onPress={() => setShowOrgaInfo(true)}>
-                          <Text className='text-center font-manrope text-danger text-small mb-1 underline'>
+                          <AppText className='text-center font-manrope text-danger text-small mb-1 underline'>
                             {report?.establishment?.name}
-                          </Text>
+                          </AppText>
                         </TouchableOpacity>
-                        <Text className='font-manrope text-small mt-2'>
+                        <AppText className='font-manrope text-small mt-2'>
                           Note de notre agent : "{report.history[0].action}"
-                        </Text>
+                        </AppText>
                       </>
                     ) : (
-                      <Text className='text-center font-manrope text-danger text-small mb-1 underline'>
+                      <AppText className='text-center font-manrope text-danger text-small mb-1 underline'>
                         {`${report?.currentHandler?.firstName} ${report?.currentHandler?.lastName}`}
-                      </Text>
+                      </AppText>
                     )}
                   </View>
                 ) : (
-                  <Text className='font-manrope text-small mb-1 text-center'>
+                  <AppText className='font-manrope text-small mb-1 text-center'>
                     En attente de prise en charge
-                  </Text>
+                  </AppText>
                 )}
               </View>
 
@@ -231,9 +232,9 @@ export default function ReportDetail({
                     <TouchableOpacity
                       className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
                       onPress={onPress}>
-                      <Text className='font-manrope'>
+                      <AppText className='font-manrope'>
                         {cours ? 'En cours' : cloturer ? 'Clôturer' : 'Changer le statut ?'}
-                      </Text>
+                      </AppText>
                       <Ionicons
                         name={statut ? 'chevron-up-outline' : 'chevron-down-outline'}
                         color='#000'
@@ -252,7 +253,7 @@ export default function ReportDetail({
                             handleCours();
                             onPress();
                           }}>
-                          <Text className={cours ? 'text-white' : 'text-black'}>En cours</Text>
+                          <AppText className={cours ? 'text-white' : 'text-black'}>En cours</AppText>
                         </TouchableOpacity>
                         <TouchableOpacity
                           className={
@@ -264,7 +265,7 @@ export default function ReportDetail({
                             handleCloturer();
                             onPress();
                           }}>
-                          <Text className={cloturer ? 'text-white' : 'text-black'}>Clôturer</Text>
+                          <AppText className={cloturer ? 'text-white' : 'text-black'}>Clôturer</AppText>
                         </TouchableOpacity>
                       </View>
                     )}
@@ -288,7 +289,7 @@ export default function ReportDetail({
             </KeyboardAwareScrollView>
           )
         ) : (
-          <Text>Aucun détail disponible.</Text>
+          <AppText>Aucun détail disponible.</AppText>
         )
       }
     />

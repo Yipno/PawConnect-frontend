@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from './Button';
 import Input from './Input';
@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, updateUser } from '../../reducers/user';
 import useTheme from '../../hooks/useTheme';
+import AppText from './AppText';
 
 export default function ProfileModalContent() {
   const { colors } = useTheme();
@@ -143,9 +144,9 @@ export default function ProfileModalContent() {
             alignItems: 'center',
           }}>
     
-      <Text className='text-h2 text-center font-manrope-bold text-deepSage mb-4'>
+      <AppText className='text-h2 text-center font-manrope-bold text-deepSage mb-4'>
         Mon Profil
-      </Text>
+      </AppText>
  <View className='w-auto mb-4 mt-4'>
   
       <Input

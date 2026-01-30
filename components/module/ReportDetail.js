@@ -1,13 +1,14 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, Image, ActivityIndicator, Button } from 'react-native';
+import { View, Image, ActivityIndicator, Button } from 'react-native';
 import CustomModal from '../ui/CustomModal';
 import Establishments from '../ui/Establishments';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
+import AppText from '../ui/AppText';
 moment.locale('fr');
 
 export default function ReportDetail({ visible, onClose, report, handled }) {
@@ -100,16 +101,16 @@ export default function ReportDetail({ visible, onClose, report, handled }) {
             </View>
 
             {/* Title */}
-            <Text className='text-xl font-bold mb-4 text-left break-words'>{report.title}</Text>
+            <AppText className='text-xl font-bold mb-4 text-left break-words'>{report.title}</AppText>
 
             {/* Distance & Date */}
             <View className='w-full flex-row justify-between mb-3'>
               {distanceLabel ? (
-                <Text className='mb-2 text-gray-700'>Distance: {distanceLabel}</Text>
+                <AppText className='mb-2 text-gray-700'>Distance: {distanceLabel}</AppText>
               ) : (
-                <Text className='mb-2 text-gray-500'>Calcul de la distance...</Text>
+                <AppText className='mb-2 text-gray-500'>Calcul de la distance...</AppText>
               )}
-              <Text>{formatDate(report.date)}</Text>
+              <AppText>{formatDate(report.date)}</AppText>
             </View>
 
             {/* Tag */}
@@ -119,33 +120,33 @@ export default function ReportDetail({ visible, onClose, report, handled }) {
                   key={index}
                   className='bg-softOrange border-softOrange rounded-2xl px-3 py-1 self-start'
                 >
-                  <Text className='text-white font-bold'>{tag}</Text>
+                  <AppText className='text-white font-bold'>{tag}</AppText>
                 </View>
               ))}
             </View>
 
             {/* Description */}
             <View>
-              <Text
+              <AppText
                 className='text-base text-gray-800 leading-normal mb-4 break-words'
                 style={{ textAlign: 'justify' }}
               >
                 {report.desc}
-              </Text>
+              </AppText>
             </View>
 
             <View>
               {report.history?.[0] && (
-                <Text className='text-base font-medium text-gray-800 leading-relaxed break-words'>
+                <AppText className='text-base font-medium text-gray-800 leading-relaxed break-words'>
                   {`${report.history[0].action} le : ${formatDateHistory(
                     report.history[0].date
                   )} \n par ${report.history[0].handler}`}
-                </Text>
+                </AppText>
               )}
             </View>
           </View>
         ) : (
-          <Text>Aucun détail disponible.</Text>
+          <AppText>Aucun détail disponible.</AppText>
         )
       }
       fullscreen={true}

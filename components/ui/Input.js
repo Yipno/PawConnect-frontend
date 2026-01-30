@@ -1,6 +1,7 @@
-import { View, Text, TextInput, Pressable } from 'react-native';
+import { View, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
+import AppText from './AppText';
 
 export default function Input({
   label,
@@ -23,7 +24,7 @@ export default function Input({
 
   return (
     <View className={`w-10/12 ${error ? 'mb-1' : 'mb-2'}`}>
-      <Text className='font-manrope left-3 text-text'>{label || 'Label'}</Text>
+      <AppText className='font-manrope left-3 text-text'>{label || 'Label'}</AppText>
       <View
         className={`w-full h-[54px] px-3 flex-row justify-between items-center border-[1px] rounded-xl ${
           error ? 'border-error' : isFocused ? 'border-softOrange border-[2px]' : 'border-deepSage'
@@ -59,7 +60,7 @@ export default function Input({
         )}
       </View>
       {error && (
-        <Text className='left-1 text-small font-manrope-bold text-error'>{error}</Text>
+        <AppText className='left-1 text-small font-manrope-bold text-error'>{error}</AppText>
       )}
     </View>
   );

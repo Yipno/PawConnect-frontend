@@ -1,6 +1,7 @@
-import { Pressable, Text } from 'react-native';
+import { Pressable } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import AppText from './AppText';
 
 export default function Button({ title, bg, onPress, textColor, width, border, margin }) {
   const { colors } = useTheme();
@@ -30,11 +31,11 @@ export default function Button({ title, bg, onPress, textColor, width, border, m
           ' ',
         )}`}
         style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle, margin]}>
-        <Text
+        <AppText
           style={{ color: textColor || colors.offwhite, flexShrink: 1, maxWidth: '100%' }}
           className='font-manrope-bold text-3xl mt-0.5'>
           {title}
-        </Text>
+        </AppText>
       </Animated.View>
     </Pressable>
   );
