@@ -1,4 +1,4 @@
-import { Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,6 +14,7 @@ import { addReport } from '../reducers/animals';
 import { useDispatch } from 'react-redux';
 import * as animalAPI from '../api/animals.api';
 import * as uploadAPI from '../api/upload.api';
+import AppText from '../components/ui/AppText';
 
 export default function ReportScreen() {
   const navigation = useNavigation();
@@ -115,10 +116,10 @@ export default function ReportScreen() {
       setShowLoader(false);
       setSendResult(
         <>
-          <Text className='text-deepSage text-h4 text-center'>Signalement envoyé !</Text>
-          <Text className='text-text text-body text-center mt-2'>
+          <AppText className='text-deepSage text-h4 text-center font-manrope-bold'>Signalement envoyé !</AppText>
+          <AppText className='text-text text-body text-center mt-2'>
             Merci pour votre signalement. Nous allons l'examiner et prendre les mesures appropriées.
-          </Text>
+          </AppText>
           <View className='items-center mt-4'>
             <Button
               title='OK'
@@ -136,10 +137,10 @@ export default function ReportScreen() {
       setShowLoader(false);
       setSendResult(
         <>
-          <Text className='text-danger text-h4 text-center'>Oups...</Text>
-          <Text className='text-text text-body text-center mt-2'>
+          <AppText className='text-danger text-h4 text-center font-manrope-bold'>Oups...</AppText>
+          <AppText className='text-text text-body text-center mt-2'>
             Une erreur est survenue lors de l'envoi du signalement. Veuillez réessayer plus tard...
-          </Text>
+          </AppText>
           <View className='items-center mt-4'>
             <Button
               title='OK'
@@ -164,18 +165,18 @@ export default function ReportScreen() {
       <View className='w-full mt-2 px-2 flex-row items-center justify-between'>
         <TouchableOpacity className='flex-row items-center' onPress={() => navigation.goBack()}>
           <Ionicons name='caret-back-outline' size={24} color={colors.textColor} />
-          <Text className='text-body font-manrope'>Retour</Text>
+          <AppText className='text-body font-manrope'>Retour</AppText>
         </TouchableOpacity>
         <TouchableOpacity className='flex-row items-center' onPress={() => console.log('info btn')}>
-          <Text className='text-body font-manrope'>Aide</Text>
+          <AppText className='text-body font-manrope'>Aide</AppText>
           <Ionicons name='help-circle-outline' size={26} color={colors.textColor} />
         </TouchableOpacity>
       </View>
-      <Text className='text-h3 text-deepSage my-2 font-manrope'>Faire un signalement</Text>
+      <AppText className='text-h3 text-deepSage my-2 font-manrope-bold'>Faire un signalement</AppText>
       {formError && (
-        <Text className='text-error mb-2 font-semibold text-body'>
+        <AppText className='text-error mb-2 font-semibold text-body'>
           {formError || 'Unknown error'}
-        </Text>
+        </AppText>
       )}
 
       <Input
@@ -194,7 +195,7 @@ export default function ReportScreen() {
 
       {/* RADIO BOUTONS POUR SELECTION DE L'ANIMAL */}
       <View className='w-10/12 h-auto mb-5'>
-        <Text className='text-text font-manrope mx-2'>Type d'animal</Text>
+        <AppText className='text-text font-manrope mx-2'>Type d'animal</AppText>
         <View className='border-[1px] border-deepSage p-3 rounded-xl flex-row justify-evenly w-auto'>
           <TouchableOpacity className='flex-row items-center' onPress={() => setAnimalType('chat')}>
             <Ionicons
@@ -202,11 +203,11 @@ export default function ReportScreen() {
               size={32}
               color={animalType === 'chat' ? colors.softOrange : 'lightgray'}
             />
-            <Text
+            <AppText
               className='ml-1 text-center text-body font-manrope'
               style={animalType === 'chat' ? { fontWeight: 'bold' } : { color: colors.text }}>
               Chat
-            </Text>
+            </AppText>
           </TouchableOpacity>
           <TouchableOpacity
             className='flex-row items-center'
@@ -216,11 +217,11 @@ export default function ReportScreen() {
               size={32}
               color={animalType === 'chien' ? colors.softOrange : 'lightgray'}
             />
-            <Text
+            <AppText
               className='ml-1 text-center text-body font-manrope'
               style={animalType === 'chien' ? { fontWeight: 'bold' } : { color: colors.text }}>
               Chien
-            </Text>
+            </AppText>
           </TouchableOpacity>
         </View>
       </View>
@@ -242,7 +243,7 @@ export default function ReportScreen() {
 
       {/* CHECKBOXES POUR ETAT DE SANTE ET COMPORTEMENT */}
       <View className='w-10/12 h-auto mt-2'>
-        <Text className='text-text font-manrope mx-2'>Quel est son état ?</Text>
+        <AppText className='text-text font-manrope mx-2'>Quel est son état ?</AppText>
         <View className='border-[1px] border-deepSage p-1 rounded-xl flex-row justify-evenly w-auto'>
           <View className='flex-row justify-between w-10/12'>
             <View className='justify-center w-1/2'>
@@ -344,7 +345,7 @@ export default function ReportScreen() {
           />
 
           <View className='w-11/12'>
-            <Text className='text-text font-manrope mx-8'>Description</Text>
+            <AppText className='text-text font-manrope mx-8'>Description</AppText>
             <TextInput
               multiline
               placeholder='Décrivez brièvement la situation...'
@@ -377,9 +378,9 @@ export default function ReportScreen() {
                 {sendResult ?
                   sendResult
                 : <>
-                    <Text className='text-h4 text-center text-text font-manrope'>
+                    <AppText className='text-h4 text-center text-text font-manrope-bold'>
                       Voulez vous envoyer ce signalement ? Vous ne pourrez plus le modifier ensuite.
-                    </Text>
+                    </AppText>
                     <View className='w-full flex-row pt-6 justify-evenly'>
                       <Button
                         title='Non'

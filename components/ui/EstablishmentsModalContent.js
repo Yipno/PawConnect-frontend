@@ -1,17 +1,9 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  Linking,
-  Image,
-} from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Linking, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
+import AppText from './AppText';
 
 export default function EstablishmentsModalContent() {
   const { colors } = useTheme();
@@ -41,18 +33,18 @@ export default function EstablishmentsModalContent() {
       }}
       keyboardShouldPersistTaps='handled'>
       <View className='w-10/12'>
-        <Text className='text-h2 text-center font-manrope font-bold text-deepSage mb-4'>
+        <AppText className='text-h2 text-center font-manrope-bold text-deepSage mb-4'>
           {user.role === 'agent' ? 'Mon organisation' : 'Associations'}
-        </Text>
+        </AppText>
 
         {user.role === 'agent' && establishmentsToDisplay.length === 0 && (
           <View className='mt-6 p-4 bg-red-100 rounded'>
-            <Text className='text-center text-red-700 font-bold'>
+            <AppText className='text-center text-red-700 font-bold'>
               Aucune association répertoriée
-            </Text>
-            <Text className='text-center text-red-700 mt-1'>
+            </AppText>
+            <AppText className='text-center text-red-700 mt-1'>
               Veuillez contacter l'administrateur.
-            </Text>
+            </AppText>
           </View>
         )}
 
@@ -70,32 +62,32 @@ export default function EstablishmentsModalContent() {
             )}
             <View className='ml-4 mt-1 mb-2 flex-1'>
               {/* Nom */}
-              <Text className='font-manrope text-lg font-bold'>{establishment.name}</Text>
+              <AppText className='font-manrope-bold text-lg'>{establishment.name}</AppText>
 
               {/* Adresse */}
               {establishment.address && (
-                <Text className='font-manrope text-sm'>
+                <AppText className='font-manrope text-sm'>
                   {establishment.address.street}, {'\n'}
                   {establishment.address.zipCode} {establishment.address.city}
-                </Text>
+                </AppText>
               )}
 
               {/* Téléphone */}
               <TouchableOpacity>
-                <Text className='font-manrope text-small mt-1'>{establishment.phone}</Text>
+                <AppText className='font-manrope text-small mt-1'>{establishment.phone}</AppText>
               </TouchableOpacity>
 
               {/* Email */}
               <TouchableOpacity onPress={() => Linking.openURL(`mailto:${establishment.email}`)}>
-                <Text className='font-manrope text-small text-semibold text-deepSage'>
+                <AppText className='font-manrope text-small text-semibold text-deepSage'>
                   {establishment.email}
-                </Text>
+                </AppText>
               </TouchableOpacity>
 
               {/* Site web */}
               {establishment.url && (
                 <TouchableOpacity onPress={() => Linking.openURL(establishment.url)}>
-                  <Text className='text-lg font-bold text-deepSage'>Visiter le site</Text>
+                  <AppText className='text-lg font-bold text-deepSage'>Visiter le site</AppText>
                 </TouchableOpacity>
               )}
             </View>

@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import './global.css';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
@@ -15,7 +14,18 @@ const store = configureStore({
 });
 
 export default function App() {
-  const loaded = useFonts({ Manrope: require('./assets/fonts/Manrope-VariableFont.ttf') });
+  const [loaded] = useFonts({
+    'Manrope-Regular': require('./assets/fonts/manrope.regular.otf'),
+    'Manrope-Bold': require('./assets/fonts/manrope.bold.otf'),
+  });
+
+  if (!loaded) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size='large' color='#a3a3a3' />
+      </View>
+    );
+  }
 
   return (
     // RootNavigator => NAVIGATEUR RACINE qui a acces au reducer
@@ -24,5 +34,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({});

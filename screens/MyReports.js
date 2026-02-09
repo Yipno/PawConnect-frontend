@@ -1,4 +1,4 @@
-import { Text, View, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
 import { useEffect, useState } from 'react';
@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import 'moment/locale/fr';
+import AppText from '../components/ui/AppText';
 moment.locale('fr');
 
 export default function MyReports() {
@@ -64,12 +65,12 @@ const [reports, setReports] = useState([]);
 
   return (
     <SafeAreaView className='flex-1 bg-offwhite justify-items-center '>
-      <Text className='text-h1 font-manrope text-center font-bold text-deepSage my-4 '>
+      <AppText className='text-h1 font-manrope-bold text-center text-deepSage my-4'>
         Mes signalements
-      </Text>
+      </AppText>
       <ScrollView className='flex-1 w-full'>
         {reports.length === 0 ? (
-          <Text className='text-center mt-4'>Aucun signalement pour le moment.</Text>
+          <AppText className='text-center mt-4'>Aucun signalement pour le moment.</AppText>
         ) : (
           reports.map((report) => (
             <Card

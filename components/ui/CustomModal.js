@@ -1,8 +1,9 @@
 import React from 'react';
-import { Modal, View, Text, ScrollView, Pressable } from 'react-native';
+import { Modal, View, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AppText from './AppText';
 
 export default function CustomModal({
   visible,
@@ -48,19 +49,19 @@ export default function CustomModal({
 
           {/* Titre */}
           {title && (
-            <Text
+            <AppText
               className='text-xl font-bold mt-6 mb-4 text-center'
               style={{ color: colors.text }}>
               {title}
-            </Text>
+            </AppText>
           )}
 
           {/* Contenu */}
           <View className='flex-1 w-full mb-4'>
             {content || (
-              <Text className='text-center' style={{ color: colors.text }}>
+              <AppText className='text-center' style={{ color: colors.text }}>
                 Default content
-              </Text>
+              </AppText>
             )}
           </View>
 
@@ -73,7 +74,7 @@ export default function CustomModal({
             }}
             keyboardShouldPersistTaps='handled'>
             {content || (
-              <Text style={{ color: colors.text, textAlign: 'center' }}>Default content</Text>
+              <AppText style={{ color: colors.text, textAlign: 'center' }}>Default content</AppText>
             )}
           </ScrollView> */}
 

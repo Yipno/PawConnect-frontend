@@ -1,8 +1,9 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
 import React from 'react';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import useTheme from '../../hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
+import AppText from './AppText';
 
 export default function SquaredButton({ title, onPress, icon, style }) {
   const { colors } = useTheme();
@@ -34,9 +35,9 @@ export default function SquaredButton({ title, onPress, icon, style }) {
         style={[animatedStyle, defaultStyle, style]}
       >
         <Ionicons name={iconName || 'person-outline'} size={54} color={colors.offwhite} />
-        <Text className='font-manrope text-h4 text-offwhite text-center font-bold mt-1'>
+        <AppText className='font-manrope-bold text-h4 text-offwhite text-center mt-1'>
           {title || 'Profile'}
-        </Text>
+        </AppText>
       </Animated.View>
     </Pressable>
   );

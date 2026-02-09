@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { ScrollView, View, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Card from '../components/ui/Card';
 import { useEffect, useMemo, useState } from 'react';
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ReportDetailAgent from '../components/module/ReportDetailAgent';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
+import AppText from '../components/ui/AppText';
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -223,7 +224,7 @@ export default function Reports() {
           : 'bg-gray h-12 w-10/12 rounded-2xl justify-center items-center self-center'
         }
         onPress={() => onToggle(value)}>
-        <Text className={isSelected ? 'text-white' : 'text-black'}>{label}</Text>
+        <AppText className={isSelected ? 'text-white' : 'text-black'}>{label}</AppText>
       </TouchableOpacity>
     );
   };
@@ -231,7 +232,7 @@ export default function Reports() {
   /* -------------------- UI -------------------- */
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, position: 'relative' }} className='bg-offwhite'>
-      <Text className='text-h2 font-manrope text-deepSage text-center mt-4'>Signalements</Text>
+      <AppText className='text-h2 font-manrope-bold text-deepSage text-center mt-4'>Signalements</AppText>
 
       {/* Bouton Filtres (agents uniquement) */}
       {userRole === 'agent' && (
@@ -240,7 +241,7 @@ export default function Reports() {
             <TouchableOpacity
               className='border border-gray rounded-2xl h-12 w-full flex-row items-center justify-between px-4'
               onPress={() => setFiltre(prev => !prev)}>
-              <Text>Filtres</Text>
+              <AppText>Filtres</AppText>
               <Ionicons
                 name={filtre ? 'chevron-up-outline' : 'chevron-down-outline'}
                 color='#000000'
@@ -311,14 +312,14 @@ export default function Reports() {
                 setSelectedStatuses([]);
                 setFiltre(false);
               }}>
-              <Text className='text-text text-lg'>Réinitialiser</Text>
+              <AppText className='text-text text-lg'>Réinitialiser</AppText>
             </TouchableOpacity>
 
             {/* Fermer */}
             <TouchableOpacity
               className='bg-gray h-10 w-1/2 rounded-2xl justify-center items-center self-center'
               onPress={() => setFiltre(false)}>
-              <Text className='text-text text-lg'>Fermer</Text>
+              <AppText className='text-text text-lg'>Fermer</AppText>
             </TouchableOpacity>
           </View>
         </View>

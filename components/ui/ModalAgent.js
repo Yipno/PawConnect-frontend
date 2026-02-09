@@ -1,7 +1,8 @@
 import React from 'react';
-import { Modal, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Modal, View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import AppText from './AppText';
 
 export default function CustomModal({ visible, onClose, title, content }) {
   return (
@@ -20,7 +21,7 @@ export default function CustomModal({ visible, onClose, title, content }) {
           </TouchableOpacity>
 
           {/* Titre */}
-          <Text className='text-lg font-semibold text-black'>{title}</Text>
+          <AppText className='text-lg font-semibold text-black'>{title}</AppText>
         </View>
 
         {/* CONTENU */}

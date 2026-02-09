@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
@@ -7,6 +7,7 @@ import Button from './ui/Button';
 import { useDispatch } from 'react-redux';
 import { logout } from '../reducers/user';
 import useTheme from '../hooks/useTheme';
+import AppText from './ui/AppText';
 
 const rotate = {
   '0%': {
@@ -32,9 +33,9 @@ export default function SplashScreen({ text }) {
         }}>
         <Ionicons name='cog-outline' size={100} color={'#a3a3a3'} />
       </Animated.View>
-      <Text className='text-h3 font-manrope text-neutral-400 font-bold'>
+      <AppText className='text-h3 font-manrope-bold text-neutral-400'>
         {text || 'Chargement des données...'}
-      </Text>
+      </AppText>
     </View>
   );
 }

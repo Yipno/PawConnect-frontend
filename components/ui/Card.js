@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 const { colors } = useTheme();
 import moment from 'moment';
 import 'moment/locale/fr';
+import AppText from './AppText';
 moment.locale('fr');
 
 export default function Card({ title, desc, date, place, priority, photoUrl, onPress, status }) {
@@ -30,9 +31,9 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
           {/* {status === 'nouveau' && (
             <View className='absolute top-1 left-1 flex-row items-center justify-center z-10 bg-danger rounded-full px-1 py-0.5'>
               <Ionicons name='alert-circle-outline' color={colors.offwhite} size={20} />
-              <Text className='text-offwhite font-manrope text-xs font-extrabold mx-1'>
+              <AppText className='text-offwhite font-manrope-bold text-xs mx-1'>
                 NOUVEAU
-              </Text>
+              </AppText>
             </View>
           )} */}
 
@@ -55,9 +56,9 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
               color={colors.offwhite}
               size={20}
             />
-            <Text className='text-offwhite font-manrope text-xs font-bold mx-1'>
+            <AppText className='text-offwhite font-manrope-bold text-xs mx-1'>
               {status === 'nouveau' ? 'NOUVEAU' : status === 'en cours' ? 'En cours' : 'Cloturé'}
-            </Text>
+            </AppText>
           </View>
 
           <Image
@@ -72,34 +73,34 @@ export default function Card({ title, desc, date, place, priority, photoUrl, onP
             className={`h-1/6 border-[1px] rounded-2xl items-center justify-center ${priorityColor.join(
               ' '
             )}`}>
-            <Text>{priorityValues[priority]?.label || 'Priority'}</Text>
+            <AppText>{priorityValues[priority]?.label || 'Priority'}</AppText>
           </View>
         </View>
         <View className='w-3/5'>
           <View className=' h-4/5 overflow-hidden'>
-            <Text
+            <AppText
               numberOfLines={1}
-              className='text-h4 my-0 mx-2 text-text font-manrope leading-tight'>
+              className='text-h4 my-0 mx-2 text-text font-manrope-bold leading-tight'>
               {title || 'Title Card'}
-            </Text>
-            <Text
+            </AppText>
+            <AppText
               numberOfLines={5}
               ellipsizeMode='tail'
               className='text-small text-text mx-2 mt-[2px] font-manrope leading-tight'>
               {desc ||
                 'Ex qui do nisi aliqua deserunt sunt proident id ea id aliquip incididunt consectetur. Irure cillum excepteur incididunt excepteur cillum excepteur excepteur excepteur.'}
-            </Text>
+            </AppText>
           </View>
           <View className='h-1/5 justify-center items-start mx-2 mb-1'>
             <View className='flex-row items-center'>
               <Ionicons name='location-outline' size={14} className='mr-1' />
-              <Text className='text-small text-text font-manrope '>{place || '2 km'}</Text>
+              <AppText className='text-small text-text font-manrope '>{place || '2 km'}</AppText>
             </View>
             <View className='flex-row items-center'>
               <Ionicons name='time-outline' size={14} className='mr-1' />
-              <Text className='text-small text-text font-manrope'>
+              <AppText className='text-small text-text font-manrope'>
                 {moment(date).fromNow() || ''}
-              </Text>
+              </AppText>
             </View>
           </View>
         </View>

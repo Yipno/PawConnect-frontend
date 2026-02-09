@@ -1,18 +1,10 @@
 import { useState } from 'react';
-import {
-  Switch,
-  StyleSheet,
-  Text,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import { Switch, StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
+import AppText from '../components/ui/AppText';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
@@ -187,9 +179,9 @@ export default function SignUp({ navigation }) {
             justifyContent: 'flex-start',
             alignItems: 'center',
           }}>
-          <Text className='text-h2 text-center mb-4 mt-4' style={{ color: colors.deepSage }}>
+          <AppText className='text-h2 text-center mb-4 mt-4 font-manrope-bold' style={{ color: colors.deepSage }}>
             S'enregistrer
-          </Text>
+          </AppText>
 
           {/* Formulaire */}
           <Input
@@ -253,9 +245,9 @@ export default function SignUp({ navigation }) {
               thumbColor='#FAF9F7'
               trackColor={{ false: '#ccc', true: colors.deepSage }}
             />
-            <Text className='text-lg font-semibold' style={{ color: colors.deepSage }}>
+            <AppText className='text-lg font-semibold' style={{ color: colors.deepSage }}>
               Pro/Association
-            </Text>
+            </AppText>
           </View>
 
           {/* Add Input for Pro/Asso  */}
@@ -271,9 +263,9 @@ export default function SignUp({ navigation }) {
           )}
 
           {backendError && (
-            <Text className='text-red-600 font-manrope text-center font-semibold text-body'>
+            <AppText className='text-red-600 font-manrope-bold text-center text-body'>
               {backendError}
-            </Text>
+            </AppText>
           )}
 
           <Button
@@ -285,7 +277,7 @@ export default function SignUp({ navigation }) {
           {/* ligne  */}
           <View className='border-b-2 border-deepSage my-2 w-3/4' />
           <View className='w-full items-center'>
-            <Text className='font-manrope text-h4 text-deepSage'>Déjà inscrit ?</Text>
+            <AppText className='font-manrope-bold text-h4 text-deepSage'>Déjà inscrit ?</AppText>
             <Button
               bg={colors.offwhite}
               textColor={colors.deepSage}

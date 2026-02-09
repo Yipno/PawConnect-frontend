@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
 import Button from '../components/ui/Button';
@@ -13,6 +13,7 @@ import ProfileModalContent from '../components/ui/ProfileModalContent';
 import FaqModalContent from '../components/ui/FaqModalContent';
 import { updateUser } from '../reducers/user';
 import EstablishmentsModalContent from '../components/ui/EstablishmentsModalContent';
+import AppText from '../components/ui/AppText';
 
 export default function Profile({ navigation }) {
   const { colors } = useTheme();
@@ -67,12 +68,12 @@ export default function Profile({ navigation }) {
             alignItems: 'center',
           }}
           keyboardShouldPersistTaps='handled'>
-          <Text className='text-h2 font-manrope font-bold text-deepSage mb-1'>Menu</Text>
+          <AppText className='text-h2 font-manrope-bold text-deepSage mb-1'>Menu</AppText>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
             {/* <SquaredButton
           keyboardShouldPersistTaps='handled'
         >
-          <Text className='text-h2 font-manrope font-bold text-deepSage mt-4 mb-4'>Menu</Text>
+          <AppText className='text-h2 font-manrope-bold text-deepSage mt-4 mb-4'>Menu</AppText>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
            {/* <SquaredButton
               title={'Mes\nsignalements'}
@@ -110,9 +111,9 @@ export default function Profile({ navigation }) {
               onPress={() => setResourcesVisible(true)}
             />
             <SquaredButton title='Paramètres' icon='cog' />
-            <Text className='w-11/12 text-center mt-4 mb-6 font-bold'>
+            <AppText className='w-11/12 text-center mt-4 mb-6 font-bold'>
               Signaler un problème avec l'application
-            </Text>
+            </AppText>
 
             <Button
               title='Se déconnecter'
