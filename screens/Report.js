@@ -1,14 +1,15 @@
 import { ScrollView, View, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Card from '../components/ui/Card';
+import Card from '../components/report/Card';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
 import { Ionicons } from '@expo/vector-icons';
-import ReportDetailAgent from '../components/module/ReportDetailAgent';
+import ReportDetailAgent from '../components/report/ReportDetailAgent';
 import * as Location from 'expo-location';
 import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
-import AppText from '../components/ui/AppText';
+import AppText from '../components/shared/AppText';
+import * as animalAPI from '../api/animals.api';
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -61,48 +62,19 @@ export default function Reports() {
   };
 
   /* -------------------- FETCH REPORTS -------------------- */
-  const fetchReports = () => {
+  const fetchReports = async () => {
     if (!BACKEND_URL) {
       console.log('EXPO_PUBLIC_BACKEND manquant');
       return;
     }
     setRefreshing(true);
-    if (userRole === 'agent') {
-      fetch(`${BACKEND_URL}/animals/agent`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
-        .then(res => res.json())
-        .then(json => {
-          const list =
-            (Array.isArray(json?.reports) && json.reports) ||
-            (Array.isArray(json?.data) && json.data) ||
-            [];
-          dispatch(getReports(list));
-          setRefreshing(false);
-        })
-        .catch(err => {
-          console.log('Erreur GET /animals', err);
-          dispatch(getReports([]));
-        });
-    } else if (userRole === 'civil') {
-      fetch(`${BACKEND_URL}/animals/populate/`, {
-        method: 'GET',
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
-        .then(res => res.json())
-        .then(json => {
-          const list =
-            (Array.isArray(json?.reports) && json.reports) ||
-            (Array.isArray(json?.data) && json.data) ||
-            [];
-          dispatch(getReports(list));
-          setRefreshing(false);
-        })
-        .catch(err => {
-          console.log('Erreur GET /animals', err);
-          dispatch(getReports([]));
-        });
+    try {
+      const animalsReports = await animalAPI.getUserReports(user.token);
+      dispatch(getReports(animalsReports.reports));
+    } catch (error) {
+      Alert.alert('Erreur', error?.message || 'Impossible de recuperer les signalements.');
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -169,11 +141,9 @@ export default function Reports() {
     }
 
     fetch(`${BACKEND_URL}/animals/${dataReport._id}`, {
-      method: 'PUT',
-      // method: 'PATCH',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.token}` },
-      body: JSON.stringify({ status, action: description, establishment: user.establishment }),
-      // body: JSON.stringify({ status, action: description }),
+      body: JSON.stringify({ status, action: description }),
     })
       .then(async res => {
         const json = await res.json().catch(() => ({}));
@@ -186,7 +156,7 @@ export default function Reports() {
       .then(json => {
         if (!json) return;
 
-        if (json.result) {
+        if (json._id) {
           fetchReports();
           closeModal();
         } else {
@@ -232,7 +202,9 @@ export default function Reports() {
   /* -------------------- UI -------------------- */
   return (
     <SafeAreaView edges={['top']} style={{ flex: 1, position: 'relative' }} className='bg-offwhite'>
-      <AppText className='text-h2 font-manrope-bold text-deepSage text-center mt-4'>Signalements</AppText>
+      <AppText className='text-h2 font-manrope-bold text-deepSage text-center mt-4'>
+        Signalements
+      </AppText>
 
       {/* Bouton Filtres (agents uniquement) */}
       {userRole === 'agent' && (

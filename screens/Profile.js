@@ -1,19 +1,19 @@
 import { View, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
-import Button from '../components/ui/Button';
-import SquaredButton from '../components/ui/SquaredButton';
-import CustomModal from '../components/ui/CustomModal';
+import Button from '../components/shared/Button';
+import SquaredButton from '../components/shared/SquaredButton';
+import CustomModal from '../components/shared/CustomModal';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../reducers/user';
 import { emptyAnimals } from '../reducers/animals';
-import ResourcesModalContent from '../components/ui/ResourcesModalContent';
-import ProfileModalContent from '../components/ui/ProfileModalContent';
-import FaqModalContent from '../components/ui/FaqModalContent';
+import ResourcesModalContent from '../components/profile/ResourcesModalContent';
+import ProfileModalContent from '../components/profile/ProfileModalContent';
+import FaqModalContent from '../components/profile/FaqModalContent';
 import { updateUser } from '../reducers/user';
-import EstablishmentsModalContent from '../components/ui/EstablishmentsModalContent';
-import AppText from '../components/ui/AppText';
+import EstablishmentsModalContent from '../components/profile/EstablishmentsModalContent';
+import AppText from '../components/shared/AppText';
 
 export default function Profile({ navigation }) {
   const { colors } = useTheme();

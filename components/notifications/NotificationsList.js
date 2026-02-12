@@ -1,9 +1,9 @@
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { markAsRead, markAllAsRead } from '../reducers/notifications';
+import { markAsRead, markAllAsRead } from '../../reducers/notifications';
 import { useDispatch, useSelector } from 'react-redux';
-import { markNotificationAsRead, markAllNotificationsAsRead } from '../api/notifications';
-import AppText from './ui/AppText';
+import { markNotificationAsRead, markAllNotificationsAsRead } from '../../api/notifications.api';
+import AppText from '../shared/AppText';
 
 // recupere les data des notifications du reducer et les affiche dans une liste
 // onclick sur une notifications, ouvre la notification et la marque comme lue
@@ -30,12 +30,11 @@ export default function NotificationsList({ ...props }) {
   return (
     <View className='absolute top-32 left-0 right-0 w-full items-center pt-2'>
       <View className='w-10/12 justify-start items-center bg-offwhite rounded-3xl p-2 border border-deepSage'>
-        {unreadCount === 0 ? (
+        {unreadCount === 0 ?
           <AppText className='text-deepSage font-manrope-bold text-center text-lg'>
             Aucune nouvelle notification
           </AppText>
-        ) : (
-          <>
+        : <>
             <View className='w-full'>
               <AppText className='text-offwhite font-manrope-bold text-center text-lg mb-2'>
                 Notifications ({unreadCount} non lues)
@@ -63,7 +62,7 @@ export default function NotificationsList({ ...props }) {
               </AppText>
             </TouchableOpacity>
           </>
-        )}
+        }
       </View>
     </View>
   );

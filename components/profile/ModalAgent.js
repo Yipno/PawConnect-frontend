@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 
 export default function CustomModal({ visible, onClose, title, content }) {
   return (

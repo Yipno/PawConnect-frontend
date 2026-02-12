@@ -3,7 +3,7 @@ import { View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Lin
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 
 export default function EstablishmentsModalContent() {
   const { colors } = useTheme();

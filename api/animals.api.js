@@ -1,44 +1,122 @@
+import { createAppError, isAppError } from '../helpers/appError';
+
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
-export async function postNewReport(report, token) {
-  try {
-    const response = await fetch(`${BACKEND}/animals/new`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...report }),
+function getAnimalAppError({ code, details, status }) {
+  const normalizedCode = code || 'SERVER_ERROR';
+
+  if (status === 401) {
+    return createAppError({
+      kind: 'unauthorized',
+      message: 'Session invalide. Veuillez vous reconnecter.',
+      code: normalizedCode,
+      status,
+      details,
     });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`POST_REPORT_FAILED:${response.status}:${errorText}`);
-    }
-    const data = await response.json();
-    // report ID or null;
-    return data;
-  } catch (error) {
-    console.error(error);
+  }
+
+  if (status === 400) {
+    return createAppError({
+      kind: 'validation',
+      message: 'Donnees invalides.',
+      code: normalizedCode,
+      status,
+      details,
+    });
+  }
+
+  return createAppError({
+    kind: 'server',
+    message: 'Une erreur est survenue lors du traitement du signalement.',
+    code: normalizedCode,
+    status,
+    details,
+  });
+}
+
+async function readJsonSafely(response) {
+  const rawText = await response.text();
+  if (!rawText) return null;
+  try {
+    return JSON.parse(rawText);
+  } catch {
+    return null;
   }
 }
 
-export async function addPhotoUrlToReport(reportId, photoUrl, token) {
-  try {
-    const response = await fetch(`${BACKEND}/animals/${reportId}/addPhoto`, {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ photoUrl }),
+async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
+  if (!BACKEND) {
+    throw createAppError({
+      kind: 'server',
+      message: 'Configuration backend manquante.',
+      code: 'MISCONFIGURED_BACKEND',
     });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`ADD_PHOTO_FAILED:${response.status}:${errorText}`);
-    }
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error(error);
   }
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  if (payload != null) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  try {
+    const response = await fetch(`${BACKEND}${path}`, {
+      method,
+      headers,
+      body: payload != null ? JSON.stringify(payload) : undefined,
+    });
+
+    const data = await readJsonSafely(response);
+
+    if (!response.ok) {
+      throw getAnimalAppError({
+        status: response.status,
+        code: data?.error,
+        details: data?.details,
+      });
+    }
+
+    if (data == null) {
+      throw createAppError({
+        kind: 'server',
+        message: 'Reponse serveur invalide.',
+        code: 'INVALID_JSON',
+        status: response.status,
+      });
+    }
+
+    return data;
+  } catch (error) {
+    if (isAppError(error)) {
+      throw error;
+    }
+
+    throw createAppError({
+      kind: 'network',
+      message: 'Probleme de connexion au serveur.',
+      code: 'NETWORK_ERROR',
+    });
+  }
+}
+
+export async function postNewReport(report, token) {
+  return requestAnimals('/animals', {
+    method: 'POST',
+    token,
+    payload: { ...report },
+  });
+}
+
+export async function addPhotoUrlToReport(reportId, photoUrl, token) {
+  return requestAnimals(`/animals/${reportId}/photo`, {
+    method: 'PATCH',
+    token,
+    payload: { photoUrl },
+  });
+}
+
+export async function getUserReports(token) {
+  return requestAnimals('/animals/me', { token });
 }

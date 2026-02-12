@@ -3,6 +3,7 @@ import { ActivityIndicator, View } from 'react-native';
 import './global.css';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import user from './reducers/user';
 import animals from './reducers/animals';
 import establishments from './reducers/establishments';
@@ -29,8 +30,10 @@ export default function App() {
 
   return (
     // RootNavigator => NAVIGATEUR RACINE qui a acces au reducer
-    <Provider store={store}>
-      <RootNavigator />
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <RootNavigator />
+      </Provider>
+    </SafeAreaProvider>
   );
 }

@@ -1,23 +1,20 @@
 import { StyleSheet, TouchableOpacity, View, Alert, Platform, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Button from '../components/ui/Button';
+import Button from '../components/shared/Button';
 import useTheme from '../hooks/useTheme';
 import MapView, { Callout, Marker } from 'react-native-maps';
-import CustomModal from '../components/ui/CustomModal';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef, use, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 import { getDistanceLabel } from '../helpers/getDistance';
-import NotificationsList from '../components/NotificationsList';
-import { fetchNotifications } from '../api/notifications';
+import NotificationsList from '../components/notifications/NotificationsList';
+import { fetchNotifications } from '../api/notifications.api';
 import { setNotifications } from '../reducers/notifications';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
-import AppText from '../components/ui/AppText';
+import AppText from '../components/shared/AppText';
 moment.locale('fr');
-
-const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
 export default function MapScreen({ navigation, visible, onClose }) {
   const { colors } = useTheme();
@@ -65,7 +62,7 @@ export default function MapScreen({ navigation, visible, onClose }) {
                 }
               },
             },
-          ]
+          ],
         );
         // console.log('status', status);
         return;
@@ -85,7 +82,7 @@ export default function MapScreen({ navigation, visible, onClose }) {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         },
-        duration
+        duration,
       );
     }
   };
@@ -188,8 +185,9 @@ export default function MapScreen({ navigation, visible, onClose }) {
   // CIVIL USER MARKERS: ESTABLISHMENTS
   if (user.role === 'civil') {
     markers = establishments?.map((data, i) => {
-      const distance = currentLocation
-        ? getDistanceLabel(currentLocation, {
+      const distance =
+        currentLocation ?
+          getDistanceLabel(currentLocation, {
             latitude: data.location.lat,
             longitude: data.location.long,
           })
@@ -243,8 +241,9 @@ export default function MapScreen({ navigation, visible, onClose }) {
       // console.log('hashandlers', hasHandlers);
 
       // DISPLAY STATUS INFO
-      const reportStatus = hasHandlers
-        ? `Pris en charge par ${data?.establishment?.name}`
+      const reportStatus =
+        hasHandlers ?
+          `Pris en charge par ${data?.establishment?.name}`
         : 'En attente de prise en charge';
 
       return (
@@ -265,12 +264,12 @@ export default function MapScreen({ navigation, visible, onClose }) {
     useCallback(() => {
       // if(!user.token) return;
       fetchNotifications(token).then(res => dispatch(setNotifications(res)));
-    }, [token, dispatch])
+    }, [token, dispatch]),
   );
 
   // DISPLAY USER MAP BUTTONS DEPENDING ROLES
   let userMapButtons =
-    user?.role === 'civil' ? (
+    user?.role === 'civil' ?
       <View className='absolute w-full items-center bottom-36'>
         <View className='w-full items-end px-4'>
           <TouchableOpacity
@@ -288,15 +287,13 @@ export default function MapScreen({ navigation, visible, onClose }) {
           onPress={() => navigation.navigate('Report', { currentLocation })}
         />
       </View>
-    ) : (
-      <View className='absolute w-full bottom-36 items-end p-4'>
+    : <View className='absolute w-full bottom-36 items-end p-4'>
         <TouchableOpacity
           className='rounded-full size-12 bg-white justify-center items-center'
           onPress={onPressLocation}>
           <Ionicons name='locate-sharp' size={32} color='black' />
         </TouchableOpacity>
-      </View>
-    );
+      </View>;
 
   // MAP RETURN
   return (

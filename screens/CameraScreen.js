@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
 import useTheme from '../hooks/useTheme';
 import { useRoute } from '@react-navigation/native';
-import AppText from '../components/ui/AppText';
+import AppText from '../components/shared/AppText';
 
 export default function CameraScreen({ navigation }) {
   const { colors } = useTheme();

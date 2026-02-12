@@ -2,10 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: {
-    id: null,
     firstName: null,
-    lastName: null,
-    email: null,
     role: null,
     token: null, //JWT token
     establishment: null,
@@ -17,16 +14,13 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      const { id, firstName, lastName, email, role, token, establishment } = action.payload;
-      state.value = { id, firstName, lastName, email, role, token, establishment };
+      const { firstName, role, token, establishment } = action.payload;
+      state.value = { firstName, role, token, establishment };
       console.log('user:', state.value.firstName, 'logged');
     },
-    logout: (state) => {
+    logout: state => {
       state.value = {
-        id: null,
         firstName: null,
-        lastName: null,
-        email: null,
         role: null,
         token: null,
         establishment: null,
@@ -46,7 +40,6 @@ const userSlice = createSlice({
       };
       console.log('user:', state.value.firstName, 'profil mis à jour');
     },
-  
   },
 });
 

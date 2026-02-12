@@ -1,12 +1,12 @@
 import { StyleSheet, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../hooks/useTheme';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import SquaredButton from '../components/ui/SquaredButton';
-import CustomModal from '../components/ui/CustomModal';
+import Button from '../components/shared/Button';
+import Input from '../components/shared/Input';
+import SquaredButton from '../components/shared/SquaredButton';
+import CustomModal from '../components/shared/CustomModal';
 import { useState } from 'react';
-import AppText from '../components/ui/AppText';
+import AppText from '../components/shared/AppText';
 
 export default function TestComponentsUi() {
   const [modalVisible, setModalVisible] = useState(false);

@@ -2,13 +2,13 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Image, ActivityIndicator, Button } from 'react-native';
-import CustomModal from '../ui/CustomModal';
-import Establishments from '../ui/Establishments';
+import CustomModal from '../shared/CustomModal';
+import Establishments from './Establishments';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
-import AppText from '../ui/AppText';
+import AppText from '../shared/AppText';
 moment.locale('fr');
 
 export default function ReportDetail({ visible, onClose, report, handled }) {

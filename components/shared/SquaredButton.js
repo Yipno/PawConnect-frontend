@@ -1,16 +1,18 @@
 import { Pressable } from 'react-native';
-import useTheme from '../../hooks/useTheme';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import useTheme from '../../hooks/useTheme';
+import { Ionicons } from '@expo/vector-icons';
 import AppText from './AppText';
 
-export default function Button({ title, bg, onPress, textColor, width, border, margin }) {
+export default function SquaredButton({ title, onPress, icon, style }) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+  const iconName = icon && icon + '-outline';
+  const defaultStyle = { height: 140 };
 
-  const borders = border ? ['border-[3px]', `border-${border}`] : [];
   return (
     <Pressable
       onPressIn={() => {
@@ -20,21 +22,18 @@ export default function Button({ title, bg, onPress, textColor, width, border, m
         scale.value = withSpring(1);
       }}
       onPress={onPress}
-      className={`${width ? width : 'w-10/12'}`}
       style={{
         shadowOffset: { width: 2, height: 3 },
         shadowColor: 'grey',
         shadowOpacity: 0.4,
-      }}>
+      }}
+      className='w-[40%] h-auto my-3'>
       <Animated.View
-        className={`h-16 w-full my-2 rounded-full justify-center items-center bg-deepSage text-deepSage ${borders.join(
-          ' ',
-        )}`}
-        style={[{ backgroundColor: bg || colors.deepSage }, animatedStyle, margin]}>
-        <AppText
-          style={{ color: textColor || colors.offwhite, flexShrink: 1, maxWidth: '100%' }}
-          className='font-manrope-bold text-3xl mt-0.5'>
-          {title}
+        className={`w-full py-8 rounded-2xl justify-center items-center bg-deepSage`}
+        style={[animatedStyle, defaultStyle, style]}>
+        <Ionicons name={iconName || 'person-outline'} size={54} color={colors.offwhite} />
+        <AppText className='font-manrope-bold text-h4 text-offwhite text-center mt-1'>
+          {title || 'Profile'}
         </AppText>
       </Animated.View>
     </Pressable>

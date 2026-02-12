@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Button from './Button';
-import Input from './Input';
+import Button from '../shared/Button';
+import Input from '../shared/Input';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, updateUser } from '../../reducers/user';
 import useTheme from '../../hooks/useTheme';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 
 export default function ProfileModalContent() {
   const { colors } = useTheme();

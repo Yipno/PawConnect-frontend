@@ -8,7 +8,7 @@ export default function AppText({ className, bold, ...props }) {
   const fontClass =
     hasManrope ? ''
     : bold ? 'font-manrope-bold'
-    : className.includes('font-bold') ? 'font-manrope-bold'
+    : className?.includes('font-bold') ? 'font-manrope-bold'
     : 'font-manrope';
   const mergedClassName = [fontClass, className].filter(Boolean).join(' ');
 

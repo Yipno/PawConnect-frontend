@@ -3,7 +3,6 @@ import CustomTabBar from './TabBar';
 
 import Map from '../screens/Map';
 import Report from '../screens/Report';
-import ReportStack from './ReportStack';
 import Profile from '../screens/Profile';
 
 const Tab = createBottomTabNavigator();

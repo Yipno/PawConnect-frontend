@@ -1,11 +1,8 @@
 import { View, ImageBackground } from 'react-native';
-import Button from '../components/ui/Button';
-import useTheme from '../hooks/useTheme';
-import AppText from '../components/ui/AppText';
+import Button from '../components/shared/Button';
+import AppText from '../components/shared/AppText';
 
 export default function HomeScreen({ navigation }) {
-  const { colors } = useTheme();
-
   return (
     <View className='flex-1 justify-between items-center bg-offwhite'>
       <ImageBackground
@@ -28,14 +25,10 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
       <View className='h-1/3 w-full items-center justify-end pb-12'>
+        <Button title='Connexion' textColor='test' onPress={() => navigation.navigate('SignIn')} />
         <Button
-          title='Connexion'
-          textColor={colors.test}
-          onPress={() => navigation.navigate('SignIn')}
-        />
-        <Button
-          bg={colors.test}
-          textColor={colors.deepSage}
+          bg='test'
+          textColor='deepSage'
           border='deepSage'
           title={"S'enregistrer"}
           onPress={() => navigation.navigate('SignUp')}
