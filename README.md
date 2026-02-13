@@ -1,103 +1,133 @@
-# 🐾 PawConnect – Application Mobile (MVP)
+# PawConnect Frontend
 
-Bienvenue dans le dépôt frontend de PawConnect — interface mobile (React Native / Expo) destinée à faciliter le signalement et la prise en charge d’animaux en détresse, en mettant en relation citoyen·ne·s et structures d’intervention.
+Application mobile React Native (Expo) de PawConnect pour signaler des animaux en détresse et suivre leur prise en charge.
 
----
+## Fonctionnalités
 
-## 📱 Fonctionnalités clés (MVP)
+### Authentification et session
 
-1. Signalement citoyen
-   - Création d’un signalement (type d’animal, description, état)
-   - Prise d’une photo depuis la caméra
-   - Géolocalisation automatique du signalement
-   - Envoi sécurisé vers le backend
+- Inscription et connexion utilisateur (`signup` / `login`).
+- Gestion du token JWT pour sécuriser les appels backend.
+- Comportement de navigation adapté selon l'état de session.
 
-2. Gestion des rôles utilisateurs
-   - Citoyen·ne : création et suivi de ses signalements
-   - Agent / intervenant : consultation, prise en charge et mise à jour des signalements
-   - Interface adaptée selon le rôle connecté
+### Signalement côté citoyen
 
-3. Suivi des signalements
-   - Liste filtrée par statut (nouveau / en cours / terminé) et / ou par priorité.
-   - Historique des actions sur un signalement
-   - Mise à jour en temps réel côté client via Redux
-   - Envoi de notifications aux utilisateurs concernés (nouveau signalement ou mise à jour d'un signalement)
+- Création d'un signalement avec le type d'animal, un titre, une description et un état.
+- Ajout de la position GPS via `expo-location`.
+- Ajout d'une photo via signature backend puis upload Cloudinary.
 
-4. Carte interactive
-   - Visualisation des signalements sur une carte
-   - Calcul de distance entre l’utilisateur et le signalement
-   - Accès rapide aux détails depuis la carte
+### Suivi et prise en charge
 
----
+- Consultation des signalements liés à l'utilisateur connecté.
+- Vue agent pour consulter les signalements et mettre à jour leur statut.
+- Mise à jour de l'historique de prise en charge côté backend.
 
-## 🛠 Stack technique – Frontend
+### Notifications
 
-- Framework : React Native (Expo)
-- State management : Redux Toolkit
-- Navigation : React Navigation (Stack / Tabs)
-- UI : NativeWind (Tailwind pour React Native)
-- Cartographie : react-native-maps
-- Images : Expo Camera / Image Picker
-- Langage principal : JavaScript
+- Récupération des notifications utilisateur.
+- Marquage d'une notification comme lue.
+- Marquage global de toutes les notifications comme lues.
 
----
+### Carte et distance
 
-## 🚀 Installation & Lancement
+- Affichage cartographique des signalements.
+- Calcul et affichage de la distance entre utilisateur et signalement.
+- Accès rapide aux détails depuis les écrans de suivi.
 
-1. Pré-requis
-   - Node.js (v18+ recommandé)
-   - Expo CLI (ou utiliser `npx expo`)
-   - Expo Go (mobile) ou simulateur iOS / Android
-   - Backend PawConnect opérationnel (local ou déployé)
+## Stack
 
-2. Cloner le repo
+- Expo / React Native
+- React Navigation (stack + tabs)
+- Redux Toolkit + React Redux
+- NativeWind (Tailwind)
+- Expo Camera / Expo Location
+- React Native Maps
+
+## Installation
+
 ```bash
-git clone https://github.com/Yipno/PawConnect-frontend.git
-cd PawConnect-frontend
-```
-
-3. Installer les dépendances
-```bash
+cd frontend
 npm install
 ```
 
-4. Configuration des variables d’environnement
-- Créer un fichier `.env` à la racine (ne pas committer) et ajouter :
-```
-EXPO_PUBLIC_BACKEND=http://TON_IP_LOCALE:3000
-```
-⚠️ En environnement Expo Go, utiliser l’IP locale de ta machine (ex. `192.168.x.x`), pas `localhost`.
+## Variables d’environnement
 
-5. Démarrage
+Créer le fichier local depuis l’exemple:
+
 ```bash
-npx expo start
+cp .env.example .env.local
 ```
-Scanner le QR Code avec Expo Go ou lancer sur simulateur.
 
----
+Puis choisir une URL backend selon ton contexte:
 
-## 📂 Structure du projet
+```env
+EXPO_PUBLIC_BACKEND=http://192.168.x.x:3000
+# EXPO_PUBLIC_BACKEND=https://paw-connect-backend.vercel.app
+```
 
-/
-├── api/            # Fonctions d’appel API  
-├── assets/         # Images, icônes  
-├── components/     # Composants UI réutilisables  
-├── constants/      # Couleurs, thèmes, constantes globales  
-├── helpers/        # Fonctions utilitaires (distance, formatage…)  
-├── hooks/          # Hooks personnalisés
-├── navigation/     # Navigators (Stack / Tabs)  
-├── reducers/       # Redux slices  
-├── screens/        # Écrans de l’application  
-└── utils/          # Utilitaires divers
+Notes:
 
----
+- `http://192.168.x.x:3000`:
+  backend local, pratique pour développer backend et frontend en même temps.
+- `https://paw-connect-backend.vercel.app`:
+  backend déployé, utile pour tester sans backend local ou partager des tests.
+- Les fichiers `.env*` locaux sont ignorés par Git.
 
-## 🔗 Repos associés
+## Lancement
 
-- Backend : [PawConnect-backend](https://github.com/Yipno/PawConnect-backend)
+```bash
+npm start
+```
 
----
+Scripts disponibles:
 
-## ℹ️ Informations
+```bash
+npm run android
+npm run ios
+```
 
-Projet de MVP réalisé dans le cadre de fin de bootcamp de la Capsule en 13 jours maximum par une équipe de 5 developpeurs juniors. 
+## Architecture
+
+```text
+frontend/
+  api/               # appels backend (auth, animals, notifications, upload)
+  assets/            # images, icônes, fonts
+  components/        # composants UI par domaine
+  constants/         # couleurs, typo, spacing
+  helpers/           # gestion d'erreurs app et utilitaires
+  hooks/             # hooks métier/UI
+  navigation/        # root, stacks, tabs
+  reducers/          # slices Redux
+  screens/           # écrans applicatifs
+```
+
+## Contrat backend consommé par le frontend
+
+- `POST /auth/signup`
+- `POST /auth/login`
+- `POST /animals`
+- `GET /animals/me`
+- `PATCH /animals/:id/photo`
+- `GET /notifications`
+- `PATCH /notifications/:id/read`
+- `PATCH /notifications/read-all`
+- `GET /upload/signature`
+
+## Gestion des erreurs
+
+Le frontend normalise les erreurs réseau/backend avec:
+
+- `helpers/appError.js`
+- `helpers/readJsonSafely.js`
+
+Ce mécanisme permet d'unifier les messages utilisateurs et les codes backend.
+
+## Backend
+
+- Dépôt backend GitHub: https://github.com/Yipno/PawConnect-backend
+- Backend déployé (Vercel): https://paw-connect-backend.vercel.app
+- Documentation backend locale: `../backend/README.md`
+
+## Tests
+
+Aucun script `test` n'est défini actuellement.
