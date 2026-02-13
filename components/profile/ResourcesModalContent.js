@@ -1,10 +1,10 @@
-// components/ui/ResourcesModalContent.js
+// components/profile/ResourcesModalContent.js
 import React from 'react';
 import { View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 
 export default function ResourcesModalContent() {
   const { colors } = useTheme();

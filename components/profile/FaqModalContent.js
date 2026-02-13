@@ -1,7 +1,7 @@
-// components/ui/FaqModalContent.js
+// components/profile/FaqModalContent.js
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 
 export default function FaqModalContent() {
   const faqs = [

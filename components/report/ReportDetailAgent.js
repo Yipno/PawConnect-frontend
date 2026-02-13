@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableOpacity, TextInput } from 'react-native';
-import CustomModal from '../ui/CustomModal';
+import CustomModal from '../shared/CustomModal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Ionicons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import { getDistanceLabel } from '../../helpers/getDistance';
-import Button from '../ui/Button';
+import Button from '../shared/Button';
 import moment from 'moment'; //module for Format date
 import 'moment/locale/fr';
-import Establishments from '../ui/Establishments';
-import AppText from '../ui/AppText';
+import Establishments from './Establishments';
+import AppText from '../shared/AppText';
 
 moment.locale('fr');
 

@@ -2,7 +2,7 @@ import { View, Image, TouchableOpacity, Button, Input, Linking } from 'react-nat
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 
 export default function Establishments({ populatedReport }) {
   return (

@@ -3,7 +3,7 @@ import { readJsonSafely } from '../helpers/readJsonSafely';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
-async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
+async function postAuth(path, payload) {
   if (!BACKEND) {
     throw createAppError({
       kind: 'server',
@@ -12,19 +12,11 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
     });
   }
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  if (payload != null) {
-    headers['Content-Type'] = 'application/json';
-  }
-
   try {
     const response = await fetch(`${BACKEND}${path}`, {
-      method,
-      headers,
-      body: payload != null ? JSON.stringify(payload) : undefined,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
 
     const data = await readJsonSafely(response);
@@ -37,7 +29,7 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
       });
     }
 
-    if (data === null) {
+    if (data == null) {
       throw createAppError({
         kind: 'server',
         message: 'Reponse serveur invalide.',
@@ -60,22 +52,10 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
   }
 }
 
-export async function postNewReport(report, token) {
-  return requestAnimals('/animals', {
-    method: 'POST',
-    token,
-    payload: { ...report },
-  });
+export async function signUp(payload) {
+  return postAuth('/auth/signup', payload);
 }
 
-export async function addPhotoUrlToReport(reportId, photoUrl, token) {
-  return requestAnimals(`/animals/${reportId}/photo`, {
-    method: 'PATCH',
-    token,
-    payload: { photoUrl },
-  });
-}
-
-export async function getUserReports(token) {
-  return requestAnimals('/animals/me', { token });
+export async function signIn(payload) {
+  return postAuth('/auth/login', payload);
 }

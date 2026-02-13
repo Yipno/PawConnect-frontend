@@ -5,7 +5,7 @@ import useTheme from '../../hooks/useTheme';
 const { colors } = useTheme();
 import moment from 'moment';
 import 'moment/locale/fr';
-import AppText from './AppText';
+import AppText from '../shared/AppText';
 moment.locale('fr');
 
 export default function Card({ title, desc, date, place, priority, photoUrl, onPress, status }) {

@@ -1,13 +1,7 @@
 import { View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
 import Animated from 'react-native-reanimated';
-import Button from './ui/Button';
-import { useDispatch } from 'react-redux';
-import { logout } from '../reducers/user';
-import useTheme from '../hooks/useTheme';
-import AppText from './ui/AppText';
+import AppText from './AppText';
 
 const rotate = {
   '0%': {
@@ -19,9 +13,6 @@ const rotate = {
 };
 
 export default function SplashScreen({ text }) {
-  const dispatch = useDispatch();
-  const { colors } = useTheme();
-
   return (
     <View className='justify-center items-center bg-offwhite'>
       <Animated.View

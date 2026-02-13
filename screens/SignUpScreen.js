@@ -1,295 +1,173 @@
 import { useState } from 'react';
-import { Switch, StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Switch, View, Alert } from 'react-native';
+import { useSignUp } from '../hooks/useAuth';
 import useTheme from '../hooks/useTheme';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import AppText from '../components/ui/AppText';
-
-const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
-
-const EMAIL_REGEX =
-  /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@([a-z0-9][a-z0-9\-]*\.)+[a-z]{2,}$/i;
+import Button from '../components/shared/Button';
+import Input from '../components/shared/Input';
+import AppText from '../components/shared/AppText';
+import AuthLayout from '../components/auth/AuthLayout';
+import AuthBannerError from '../components/auth/AuthBannerError';
 
 export default function SignUp({ navigation }) {
   const { colors } = useTheme();
+  const { submit, status, error, fieldErrors, resetError } = useSignUp();
 
-  const [signUpFirstName, setSignUpFirstName] = useState('');
-  const [signUpLastName, setSignUpLastName] = useState('');
-  const [signUpEmail, setSignUpEmail] = useState('');
-  const [signUpPassword, setSignUpPassword] = useState('');
-  const [signUpPasswordConfirm, setSignUpPasswordConfirm] = useState('');
-  const [signUpEstablishment, setSignUpEstablishment] = useState('');
-
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [establishment, setEstablishment] = useState('');
   const [accountType, setAccountType] = useState('user');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [errors, setErrors] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    establishment: '',
-  });
-
-  const [backendError, setBackendError] = useState('');
 
   const handleRegister = async () => {
-    if (isLoading) return; // Prevent double tap
-    setErrors({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
-      establishment: '',
+    const result = await submit({
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConfirm,
+      establishment,
+      accountType,
     });
-    setBackendError('');
-    setIsLoading(true);
-
-    //check if fields are completed
-    const checkFields = {};
-
-    if (!signUpFirstName) checkFields.firstName = 'Champ requis.';
-    if (!signUpLastName) checkFields.lastName = 'Champ requis.';
-    if (!signUpEmail) checkFields.email = 'Champ requis.';
-    if (!signUpPassword) checkFields.password = 'Champ requis.';
-    if (!signUpPasswordConfirm) checkFields.passwordConfirm = 'Champ requis.';
-
-    if (
-      accountType === 'pro' &&
-      (!signUpEstablishment || signUpEstablishment.trim().length === 0)
-    ) {
-      checkFields.establishment = "L'établissement est requis pour un compte pro/association.";
-    }
-
-    if (Object.keys(checkFields).length > 0) {
-      setErrors(checkFields);
-      setIsLoading(false);
-      return;
-    }
-
-    //check the email format
-    if (!EMAIL_REGEX.test(signUpEmail)) {
-      setErrors(prev => ({ ...prev, email: 'Email invalide.' }));
-      setIsLoading(false);
-      return;
-    }
-
-    //check password length
-    if (signUpPassword.length < 6) {
-      setErrors(prev => ({
-        ...prev,
-        password: 'Votre mot de passe doit contenir au moins 6 caractères',
-      }));
-      setIsLoading(false);
-      return;
-    }
-
-    //check password confirmation
-    if (signUpPassword !== signUpPasswordConfirm) {
-      setErrors(prev => ({
-        ...prev,
-        passwordConfirm: 'Les mots de passe ne sont pas identiques',
-      }));
-      setIsLoading(false);
-      return;
-    }
-
-    //check establishment for pro account
-    if (
-      accountType === 'pro' &&
-      (!signUpEstablishment || signUpEstablishment.trim().length === 0)
-    ) {
-      setErrors(prev => ({
-        ...prev,
-        establishment: `L'établissement est requis pour un compte pro/association`,
-      }));
-      setIsLoading(false);
-      return;
-    }
-
-    //selection of role and establishment according to account type
-    const roleNewUser = accountType === 'pro' ? 'agent' : 'civil';
-    const establishmentNewUser = accountType === 'pro' ? signUpEstablishment : null;
-
-    try {
-      const response = await fetch(`${BACKEND}/auth/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: signUpFirstName,
-          lastName: signUpLastName,
-          email: signUpEmail,
-          password: signUpPassword,
-          role: roleNewUser,
-          establishmentId: establishmentNewUser,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data?.created) {
-        //reset inputs
-        setSignUpFirstName('');
-        setSignUpLastName('');
-        setSignUpEmail('');
-        setSignUpPassword('');
-        setSignUpPasswordConfirm('');
-        setAccountType('user');
-        setSignUpEstablishment('');
-        setIsLoading(false);
-
-        Alert.alert(
-          'Compte créé',
-          'Votre compte a bien été créé. Vous pouvez maintenant vous connecter',
-          [
-            {
-              text: 'OK',
-              onPress: () => navigation.navigate('SignIn'),
-            },
-          ],
-        );
-      } else {
-        //erreur backend
-        setBackendError(data?.error || 'Une erreur est survenue.');
-        setIsLoading(false);
-        return;
-      }
-    } catch (error) {
-      setBackendError('Problème de connexion au serveur');
-      setIsLoading(false);
+    if (result) {
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+      setPasswordConfirm('');
+      setEstablishment('');
+      Alert.alert(
+        'Compte créé',
+        'Votre compte a bien été créé. Vous pouvez maintenant vous connecter',
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('SignIn'),
+          },
+        ],
+      );
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      className='bg-offwhite'
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView
-        contentContainerStyle={{
-          paddingBottom: 50, //to avoid cutting of the last input
+    <AuthLayout title="S'enregistrer">
+      {/* Formulaire */}
+      <Input
+        label='Prénom'
+        placeholder='Votre prénom'
+        value={firstName}
+        onChangeText={value => {
+          setFirstName(value);
+          resetError();
         }}
-        keyboardShouldPersistTaps='handled'>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-          }}>
-          <AppText className='text-h2 text-center mb-4 mt-4 font-manrope-bold' style={{ color: colors.deepSage }}>
-            S'enregistrer
-          </AppText>
+        error={fieldErrors.firstName}
+      />
 
-          {/* Formulaire */}
-          <Input
-            label='Prénom'
-            placeholder='Votre prénom'
-            value={signUpFirstName}
-            onChangeText={setSignUpFirstName}
-            error={errors.firstName}
-          />
+      <Input
+        label='Nom'
+        placeholder='Votre nom'
+        value={lastName}
+        onChangeText={value => {
+          setLastName(value);
+          resetError();
+        }}
+        error={fieldErrors.lastName}
+      />
 
-          <Input
-            label='Nom'
-            placeholder='Votre nom'
-            value={signUpLastName}
-            onChangeText={setSignUpLastName}
-            error={errors.lastName}
-          />
+      <Input
+        label='Email'
+        placeholder='example@pawconnect...'
+        type='email'
+        icon='mail'
+        value={email}
+        onChangeText={value => {
+          setEmail(value);
+          resetError();
+        }}
+        autoCapitalize='none' //verif dans composant Input
+        autoCorrect={false} //verif dans composant Input
+        error={fieldErrors.email}
+      />
 
-          <Input
-            label='Email'
-            placeholder='example@pawconnect...'
-            type='email'
-            icon='mail'
-            value={signUpEmail}
-            onChangeText={setSignUpEmail}
-            autoCapitalize='none' //verif dans composant Input
-            autoCorrect={false} //verif dans composant Input
-            error={errors.email}
-          />
+      <Input
+        label='Password'
+        placeholder='Votre mot de passe'
+        type='password'
+        icon='key'
+        value={password}
+        onChangeText={value => {
+          setPassword(value);
+          resetError();
+        }}
+        autoCapitalize='none' //verif dans composant Input
+        autoCorrect={false} //verif dans composant Input
+        error={fieldErrors.password}
+      />
 
-          <Input
-            label='Password'
-            placeholder='Votre mot de passe'
-            type='password'
-            icon='key'
-            value={signUpPassword}
-            onChangeText={setSignUpPassword}
-            autoCapitalize='none' //verif dans composant Input
-            autoCorrect={false} //verif dans composant Input
-            error={errors.password}
-          />
+      <Input
+        label='Password'
+        placeholder='Confirmez votre mot de passe'
+        type='password'
+        icon='key'
+        value={passwordConfirm}
+        onChangeText={value => {
+          setPasswordConfirm(value);
+          resetError();
+        }}
+        autoCapitalize='none' //verif dans composant Input
+        autoCorrect={false} //verif dans composant Input
+        error={fieldErrors.passwordConfirm}
+      />
 
-          <Input
-            label='Password'
-            placeholder='Confirmez votre mot de passe'
-            type='password'
-            icon='key'
-            value={signUpPasswordConfirm}
-            onChangeText={setSignUpPasswordConfirm}
-            autoCapitalize='none' //verif dans composant Input
-            autoCorrect={false} //verif dans composant Input
-            error={errors.passwordConfirm}
-          />
+      {/* Button Switch type account  */}
+      <View className='flex-row items-center justify-center w-[360px] my-4'>
+        <Switch
+          className='mr-4'
+          value={accountType === 'pro'}
+          onValueChange={value => setAccountType(value ? 'pro' : 'user')}
+          thumbColor='#FAF9F7'
+          trackColor={{ false: '#ccc', true: colors.deepSage }}
+        />
+        <AppText className='text-lg font-bold text-deepSage'>Pro/Association</AppText>
+      </View>
 
-          {/* Button Switch type account  */}
-          <View className='flex-row items-center justify-center w-[360px] my-4'>
-            <Switch
-              className='mr-4'
-              value={accountType === 'pro'}
-              onValueChange={value => setAccountType(value ? 'pro' : 'user')}
-              thumbColor='#FAF9F7'
-              trackColor={{ false: '#ccc', true: colors.deepSage }}
-            />
-            <AppText className='text-lg font-semibold' style={{ color: colors.deepSage }}>
-              Pro/Association
-            </AppText>
-          </View>
+      {/* Add Input for Pro/Asso  */}
+      {accountType === 'pro' && (
+        <Input
+          label='Association/Etablissement'
+          placeholder='Votre association ou etablissement'
+          icon='paw'
+          value={establishment}
+          onChangeText={value => {
+            setEstablishment(value);
+            resetError();
+          }}
+          error={fieldErrors.establishment}
+        />
+      )}
 
-          {/* Add Input for Pro/Asso  */}
-          {accountType === 'pro' && (
-            <Input
-              label='Association/Etablissement'
-              placeholder='Votre association ou etablissement'
-              icon='paw'
-              value={signUpEstablishment}
-              onChangeText={setSignUpEstablishment}
-              error={errors.establishment}
-            />
-          )}
+      <AuthBannerError error={error} />
 
-          {backendError && (
-            <AppText className='text-red-600 font-manrope-bold text-center text-body'>
-              {backendError}
-            </AppText>
-          )}
+      <Button
+        title={status === 'submitting' ? 'Chargement...' : 'Créer mon compte'}
+        onPress={handleRegister}
+        disabled={status === 'submitting'}
+      />
 
-          <Button
-            title={isLoading ? 'Chargement...' : 'Créer mon compte'}
-            onPress={handleRegister}
-            disabled={isLoading}
-          />
-
-          {/* ligne  */}
-          <View className='border-b-2 border-deepSage my-2 w-3/4' />
-          <View className='w-full items-center'>
-            <AppText className='font-manrope-bold text-h4 text-deepSage'>Déjà inscrit ?</AppText>
-            <Button
-              bg={colors.offwhite}
-              textColor={colors.deepSage}
-              border='deepSage'
-              title='Se connecter'
-              onPress={() => navigation.navigate('SignIn')}
-            />
-          </View>
-        </SafeAreaView>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      {/* ligne  */}
+      <View className='border-b-2 border-deepSage my-2 w-3/4' />
+      <View className='w-full items-center'>
+        <AppText className='font-manrope-bold text-h4 text-deepSage'>Déjà inscrit ?</AppText>
+        <Button
+          bg='offwhite'
+          textColor='deepSage'
+          border='deepSage'
+          title='Se connecter'
+          onPress={() => navigation.navigate('SignIn')}
+          disabled={status === 'submitting'}
+        />
+      </View>
+    </AuthLayout>
   );
 }
-
-const styles = StyleSheet.create({});

@@ -3,10 +3,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Button from '../components/ui/Button';
-import Input from '../components/ui/Input';
-import CustomModal from '../components/ui/CustomModal';
-import SplashScreen from '../components/SplashScreen';
+import Button from '../components/shared/Button';
+import Input from '../components/shared/Input';
+import CustomModal from '../components/shared/CustomModal';
+import SplashScreen from '../components/shared/SplashScreen';
 import useTheme from '../hooks/useTheme';
 import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import { addReport } from '../reducers/animals';
 import { useDispatch } from 'react-redux';
 import * as animalAPI from '../api/animals.api';
 import * as uploadAPI from '../api/upload.api';
-import AppText from '../components/ui/AppText';
+import AppText from '../components/shared/AppText';
 
 export default function ReportScreen() {
   const navigation = useNavigation();
@@ -107,33 +107,54 @@ export default function ReportScreen() {
       type: 'image/jpeg',
     });
 
-    const reportId = await animalAPI.postNewReport(reportPayload, user.token);
-    const sign = await uploadAPI.getSignature(user.token);
-    const photoURL = await uploadAPI.uploadPhotoToCloudinary(sign, photoData);
-    const newReport = await animalAPI.addPhotoUrlToReport(reportId, photoURL, user.token);
+    try {
+      const reportId = await animalAPI.postNewReport(reportPayload, user.token);
+      const sign = await uploadAPI.getSignature(user.token);
+      const photoURL = await uploadAPI.uploadPhotoToCloudinary(sign, photoData);
+      const newReport = await animalAPI.addPhotoUrlToReport(reportId, photoURL, user.token);
 
-    if (newReport) {
-      setShowLoader(false);
-      setSendResult(
-        <>
-          <AppText className='text-deepSage text-h4 text-center font-manrope-bold'>Signalement envoyé !</AppText>
-          <AppText className='text-text text-body text-center mt-2'>
-            Merci pour votre signalement. Nous allons l'examiner et prendre les mesures appropriées.
-          </AppText>
-          <View className='items-center mt-4'>
-            <Button
-              title='OK'
-              width={'w-3/5'}
-              onPress={() => {
-                setIsLoading(false);
-                dispatch(addReport(newReport));
-                navigation.navigate('Map');
-              }}
-            />
-          </View>
-        </>,
-      );
-    } else {
+      if (newReport) {
+        setShowLoader(false);
+        setSendResult(
+          <>
+            <AppText className='text-deepSage text-h4 text-center font-manrope-bold'>Signalement envoyé !</AppText>
+            <AppText className='text-text text-body text-center mt-2'>
+              Merci pour votre signalement. Nous allons l'examiner et prendre les mesures appropriées.
+            </AppText>
+            <View className='items-center mt-4'>
+              <Button
+                title='OK'
+                width={'w-3/5'}
+                onPress={() => {
+                  setIsLoading(false);
+                  dispatch(addReport(newReport));
+                  navigation.navigate('Map');
+                }}
+              />
+            </View>
+          </>,
+        );
+      } else {
+        setShowLoader(false);
+        setSendResult(
+          <>
+            <AppText className='text-danger text-h4 text-center font-manrope-bold'>Oups...</AppText>
+            <AppText className='text-text text-body text-center mt-2'>
+              Une erreur est survenue lors de l'envoi du signalement. Veuillez réessayer plus tard...
+            </AppText>
+            <View className='items-center mt-4'>
+              <Button
+                title='OK'
+                width={'w-3/5'}
+                onPress={() => {
+                  setIsLoading(false);
+                }}
+              />
+            </View>
+          </>,
+        );
+      }
+    } catch (error) {
       setShowLoader(false);
       setSendResult(
         <>

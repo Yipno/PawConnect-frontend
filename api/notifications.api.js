@@ -3,11 +3,11 @@ import { readJsonSafely } from '../helpers/readJsonSafely';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
 
-async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
+async function requestNotifications(path, { method = 'GET', token } = {}) {
   if (!BACKEND) {
     throw createAppError({
       kind: 'server',
-      message: 'Configuration backend manquante.',
+      message: 'configuration backend manquante.',
       code: 'MISCONFIGURED_BACKEND',
     });
   }
@@ -16,15 +16,10 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
     Authorization: `Bearer ${token}`,
   };
 
-  if (payload != null) {
-    headers['Content-Type'] = 'application/json';
-  }
-
   try {
     const response = await fetch(`${BACKEND}${path}`, {
       method,
       headers,
-      body: payload != null ? JSON.stringify(payload) : undefined,
     });
 
     const data = await readJsonSafely(response);
@@ -40,7 +35,7 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
     if (data === null) {
       throw createAppError({
         kind: 'server',
-        message: 'Reponse serveur invalide.',
+        message: 'Réponse serveur invalide.',
         code: 'INVALID_JSON',
         status: response.status,
       });
@@ -60,22 +55,22 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
   }
 }
 
-export async function postNewReport(report, token) {
-  return requestAnimals('/animals', {
-    method: 'POST',
-    token,
-    payload: { ...report },
-  });
+export async function fetchNotifications(token) {
+  return requestNotifications('/notifications', { token });
 }
 
-export async function addPhotoUrlToReport(reportId, photoUrl, token) {
-  return requestAnimals(`/animals/${reportId}/photo`, {
+export async function markNotificationAsRead(id, token) {
+  const data = await requestNotifications(`/notifications/${id}/read`, {
     method: 'PATCH',
     token,
-    payload: { photoUrl },
   });
+  return data.result;
 }
 
-export async function getUserReports(token) {
-  return requestAnimals('/animals/me', { token });
+export async function markAllNotificationsAsRead(token) {
+  const data = await requestNotifications('/notifications/read-all', {
+    method: 'PATCH',
+    token,
+  });
+  return data.result;
 }
