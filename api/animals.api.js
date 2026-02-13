@@ -1,48 +1,7 @@
-import { createAppError, isAppError } from '../helpers/appError';
+import { createAppError, isAppError, mapBackendError } from '../helpers/appError';
+import { readJsonSafely } from '../helpers/readJsonSafely';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
-
-function getAnimalAppError({ code, details, status }) {
-  const normalizedCode = code || 'SERVER_ERROR';
-
-  if (status === 401) {
-    return createAppError({
-      kind: 'unauthorized',
-      message: 'Session invalide. Veuillez vous reconnecter.',
-      code: normalizedCode,
-      status,
-      details,
-    });
-  }
-
-  if (status === 400) {
-    return createAppError({
-      kind: 'validation',
-      message: 'Donnees invalides.',
-      code: normalizedCode,
-      status,
-      details,
-    });
-  }
-
-  return createAppError({
-    kind: 'server',
-    message: 'Une erreur est survenue lors du traitement du signalement.',
-    code: normalizedCode,
-    status,
-    details,
-  });
-}
-
-async function readJsonSafely(response) {
-  const rawText = await response.text();
-  if (!rawText) return null;
-  try {
-    return JSON.parse(rawText);
-  } catch {
-    return null;
-  }
-}
 
 async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
   if (!BACKEND) {
@@ -71,14 +30,14 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
     const data = await readJsonSafely(response);
 
     if (!response.ok) {
-      throw getAnimalAppError({
-        status: response.status,
-        code: data?.error,
+      throw mapBackendError({
+        error: data?.error,
         details: data?.details,
+        status: response.status,
       });
     }
 
-    if (data == null) {
+    if (data === null) {
       throw createAppError({
         kind: 'server',
         message: 'Reponse serveur invalide.',

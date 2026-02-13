@@ -1,64 +1,7 @@
-import { createAppError, isAppError } from '../helpers/appError';
+import { createAppError, isAppError, mapBackendError } from '../helpers/appError';
+import { readJsonSafely } from '../helpers/readJsonSafely';
 
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND;
-
-function getAppErrorFromBackend({ code, details, status }) {
-  const normalizedCode = code || 'SERVER_ERROR';
-
-  switch (normalizedCode) {
-    case 'INVALID_CREDENTIALS':
-      return createAppError({
-        kind: 'unauthorized',
-        message: 'Identifiants invalides.',
-        code: normalizedCode,
-        status,
-      });
-    case 'USER_ALREADY_EXISTS':
-      return createAppError({
-        kind: 'conflict',
-        message: 'Cet email est deja utilise.',
-        code: normalizedCode,
-        field: 'email',
-        status,
-      });
-    case 'INVALID_INPUT':
-      return createAppError({
-        kind: 'validation',
-        message: 'Certains champs sont invalides.',
-        code: normalizedCode,
-        details,
-        status,
-      });
-    case 'ESTABLISHMENT_REQUIRED':
-    case 'ESTABLISHMENT_NOT_FOUND':
-    case 'ESTABLISHMENT_FORBIDDEN':
-    case 'INVALID_EST_ID':
-      return createAppError({
-        kind: 'validation',
-        message: 'Etablissement invalide.',
-        code: normalizedCode,
-        field: 'establishmentId',
-        status,
-      });
-    default:
-      return createAppError({
-        kind: 'server',
-        message: 'Une erreur serveur est survenue.',
-        code: normalizedCode,
-        status,
-      });
-  }
-}
-
-async function readJsonSafely(response) {
-  const rawText = await response.text();
-  if (!rawText) return null;
-  try {
-    return JSON.parse(rawText);
-  } catch {
-    return null;
-  }
-}
 
 async function postAuth(path, payload) {
   if (!BACKEND) {
@@ -79,8 +22,8 @@ async function postAuth(path, payload) {
     const data = await readJsonSafely(response);
 
     if (!response.ok) {
-      throw getAppErrorFromBackend({
-        code: data?.error,
+      throw mapBackendError({
+        error: data?.error,
         details: data?.details,
         status: response.status,
       });
