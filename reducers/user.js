@@ -23,7 +23,6 @@ const userSlice = createSlice({
         firstName: null,
         role: null,
         token: null,
-        establishment: null,
       };
       console.log('user logged out');
     },

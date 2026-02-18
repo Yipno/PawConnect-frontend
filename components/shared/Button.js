@@ -11,7 +11,7 @@ const resolveColor = (value, colors, fallback) => {
   return colors[value] ?? fallback;
 };
 
-export default function Button({ title, bg, onPress, textColor, width, border, margin }) {
+export default function Button({ title, bg, onPress, textColor, width, border, margin, ...props }) {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
@@ -38,7 +38,8 @@ export default function Button({ title, bg, onPress, textColor, width, border, m
         shadowOffset: { width: 2, height: 3 },
         shadowColor: 'grey',
         shadowOpacity: 0.4,
-      }}>
+      }}
+      {...props}>
       <Animated.View
         className='h-16 w-full my-2 rounded-full justify-center items-center'
         style={[animatedStyle, , { backgroundColor, borderColor, borderWidth }, margin]}>

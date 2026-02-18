@@ -135,10 +135,6 @@ export default function Reports() {
       Alert.alert('Erreur', "Impossible d'identifier le signalement.");
       return;
     }
-    if (userRole === 'agent' && !userId) {
-      Alert.alert('Utilisateur non identifié', 'Reconnecte-toi (userId manquant).');
-      return;
-    }
 
     fetch(`${BACKEND_URL}/animals/${dataReport._id}`, {
       method: 'PATCH',

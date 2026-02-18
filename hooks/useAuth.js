@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import * as authAPI from '../api/auth.api';
 import { validateSignIn, validateSignUp } from '../helpers/authValidation';
 import { useReports } from './useReports';
+import { useEstablishment } from './useEstablisment';
 import { login } from '../reducers/user';
 
 export function useSignIn() {
@@ -11,6 +12,7 @@ export function useSignIn() {
   const [error, setError] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
   const { fetchReports } = useReports();
+  const { fetchEstablishment } = useEstablishment();
 
   const resetError = () => {
     setError(null);
@@ -38,15 +40,15 @@ export function useSignIn() {
         email: form.email,
         password: form.password,
       });
+      await fetchReports(data.token);
+      await fetchEstablishment(data.token);
       dispatch(
         login({
           token: data.token,
           firstName: data.user.firstName,
           role: data.user.role,
-          establishment: data.user?.establishment ?? null,
         }),
       );
-      await fetchReports(data.token);
       setStatus('success');
     } catch (error) {
       setError(error);

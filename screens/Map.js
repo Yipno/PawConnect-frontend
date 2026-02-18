@@ -128,7 +128,6 @@ export default function MapScreen({ navigation, visible, onClose }) {
     // DISTANCE FOR CIVIL TO ESTABLISHMENTS
     if (user.role === 'civil') {
       // REDUCER CODE
-
       const newLocations = establishments?.map(data => {
         const establishmentLocation = {
           latitude: data.location.lat,
