@@ -28,24 +28,26 @@ export default function CustomModal({
       <View className='flex-1 justify-center items-center bg-black/50'>
         <View
           className={` items-center relative ${
-            fullscreen
-              ? 'w-full h-full pt-24'
-              : 'rounded-2xl mt-64 w-11/12 min-h-[300px] max-h-[600px] p-10'
+            fullscreen ? 'w-full h-full pt-24' : (
+              'rounded-2xl mt-64 w-11/12 min-h-[300px] max-h-[600px] p-10'
+            )
           }`}
           style={{ backgroundColor: colors.offwhite }}>
           {/* Croix de fermeture */}
-          <Ionicons
-            name='close'
-            size={34}
-            color={colors.text}
-            onPress={onClose}
-            style={{
-              position: 'absolute',
-              top: fullscreen ? 56 : 16,
-              right: 16,
-              zIndex: 20,
-            }}
-          />
+          {onClose !== null && (
+            <Ionicons
+              name='close'
+              size={34}
+              color={colors.text}
+              onPress={onClose}
+              style={{
+                position: 'absolute',
+                top: fullscreen ? 56 : 16,
+                right: 16,
+                zIndex: 20,
+              }}
+            />
+          )}
 
           {/* Titre */}
           {title && (
@@ -64,19 +66,6 @@ export default function CustomModal({
               </AppText>
             )}
           </View>
-
-          {/*!!! COMMENTÉ CAR DOUBLON AVEC LE CODE AU DESSUS */}
-          {/* Content
-          <ScrollView
-            contentContainerStyle={{
-              padding: 16,
-              paddingBottom: button ? 90 : 24,
-            }}
-            keyboardShouldPersistTaps='handled'>
-            {content || (
-              <AppText style={{ color: colors.text, textAlign: 'center' }}>Default content</AppText>
-            )}
-          </ScrollView> */}
 
           {/* Footer buttons */}
           {button && <View className='w-full justify-center items-center mt-4'>{button}</View>}

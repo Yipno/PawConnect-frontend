@@ -1,24 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { View, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, CameraView, CameraType, FlashMode } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useIsFocused } from '@react-navigation/native';
-import useTheme from '../hooks/useTheme';
 import { useRoute } from '@react-navigation/native';
 import AppText from '../components/shared/AppText';
 
 export default function CameraScreen({ navigation }) {
-  const { colors } = useTheme();
+  const route = useRoute();
   const isFocused = useIsFocused();
   const camRef = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [flash, setFlash] = useState('off');
   const [ready, isReady] = useState(false);
   const [photo, setPhoto] = useState(null);
-
-  const route = useRoute();
-  const { onPhotoTaken } = route.params;
 
   useEffect(() => {
     (async () => {
@@ -37,17 +32,12 @@ export default function CameraScreen({ navigation }) {
 
   const toggleFlash = () => {
     setFlash(current => (current === 'off' ? 'on' : 'off'));
-    console.log('flash toggled');
   };
 
   const takePicture = async () => {
     if (camRef.current) {
       const pic = await camRef.current.takePictureAsync({ quality: 0.4 });
       setPhoto(pic);
-      if (photo) {
-        // You can navigate back with the photo data
-        onPhotoTaken(photo.uri);
-      }
     }
   };
 
@@ -78,8 +68,7 @@ export default function CameraScreen({ navigation }) {
               style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
               className='w-40 items-center p-4 rounded-2xl'
               onPress={() => {
-                onPhotoTaken(photo.uri);
-                navigation.goBack();
+                navigation.navigate('Report', { ...route.params, photoURI: photo.uri });
               }}>
               <Ionicons name='checkmark-circle-outline' size={60} color='#22c52e' />
               <AppText className='text-center text-xl text-green-500 font-manrope-bold'>
@@ -88,30 +77,34 @@ export default function CameraScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-      : <CameraView
-          ref={ref => (camRef.current = ref)}
-          style={{ flex: 1 }}
-          facing={'back'}
-          flashMode={flash}
-          onCameraReady={() => isReady(true)}>
-          <View className='flex-row justify-between items-center px-4 pt-20'>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name='close-circle-outline' size={60} color={'white'} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={toggleFlash}>
-              <Ionicons
-                name={flash === 'off' ? 'flash-outline' : 'flash'}
-                size={50}
-                color={flash === 'off' ? 'white' : 'yellow'}
-              />
-            </TouchableOpacity>
+      : <View style={{ flex: 1 }}>
+          <CameraView
+            ref={ref => (camRef.current = ref)}
+            style={{ flex: 1 }}
+            facing={'back'}
+            flash={flash}
+            onCameraReady={() => isReady(true)}
+          />
+          <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+            <View className='flex-row justify-between items-center px-4 pt-20'>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name='close-circle-outline' size={60} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={toggleFlash}>
+                <Ionicons
+                  name={flash === 'off' ? 'flash-outline' : 'flash'}
+                  size={50}
+                  color={flash === 'off' ? 'white' : 'yellow'}
+                />
+              </TouchableOpacity>
+            </View>
+            <View className='flex-1 justify-end items-center mb-10'>
+              <TouchableOpacity onPress={takePicture} disabled={!ready}>
+                <Ionicons name='radio-button-on' size={90} color={ready ? 'white' : 'gray'} />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View className='flex-1 justify-end items-center mb-10'>
-            <TouchableOpacity onPress={takePicture} disabled={!ready}>
-              <Ionicons name='radio-button-on' size={90} color={ready ? 'white' : 'gray'} />
-            </TouchableOpacity>
-          </View>
-        </CameraView>
+        </View>
       }
     </View>
   );
