@@ -8,7 +8,7 @@ async function postAuth(path, payload) {
     throw createAppError({
       kind: 'server',
       message: 'Configuration backend manquante.',
-      code: 'MISCONFIGURED_BACKEND',
+      code: 'SERVER_ERROR',
     });
   }
 
