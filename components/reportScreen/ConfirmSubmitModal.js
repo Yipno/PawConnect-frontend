@@ -37,29 +37,27 @@ function ConfirmSubmitModal({ visible, status, error, onConfirm, onClose, onSucc
       visible={visible}
       onClose={status === 'submitting' ? null : onClose}
       content={
-        status === 'confirm' && (
-          <View className='mt-12 justify-center'>
-            {status === 'submitting' ?
-              <SplashScreen text='Envoi des données...' />
-            : <>
-                {status === 'success' ?
-                  successMsg
-                : status === 'error' ?
-                  errorMsg
-                : <>
-                    <AppText className='text-h4 text-center text-text font-manrope-bold'>
-                      Voulez vous envoyer ce signalement ? Vous ne pourrez plus le modifier ensuite.
-                    </AppText>
-                    <View className='w-full flex-row pt-6 justify-evenly'>
-                      <Button title='Non' width={'w-5/12'} bg='danger' onPress={onClose} />
-                      <Button title='Oui' width={'w-5/12'} onPress={onConfirm} />
-                    </View>
-                  </>
-                }
-              </>
-            }
-          </View>
-        )
+        <View className='mt-12 justify-center'>
+          {status === 'submitting' ?
+            <SplashScreen text='Envoi des données...' />
+          : <>
+              {status === 'success' ?
+                successMsg
+              : status === 'error' ?
+                errorMsg
+              : <>
+                  <AppText className='text-h4 text-center text-text font-manrope-bold'>
+                    Voulez vous envoyer ce signalement ? Vous ne pourrez plus le modifier ensuite.
+                  </AppText>
+                  <View className='w-full flex-row pt-6 justify-evenly'>
+                    <Button title='Non' width={'w-5/12'} bg='danger' onPress={onClose} />
+                    <Button title='Oui' width={'w-5/12'} onPress={onConfirm} />
+                  </View>
+                </>
+              }
+            </>
+          }
+        </View>
       }
     />
   );
