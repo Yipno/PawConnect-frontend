@@ -53,7 +53,7 @@ export default function CameraScreen({ navigation }) {
 
   return (
     <View className='flex-1'>
-      {photo ? (
+      {photo ?
         <ImageBackground
           source={{ uri: photo.uri }}
           style={{ flex: 1, justifyContent: 'space-between' }}>
@@ -66,30 +66,29 @@ export default function CameraScreen({ navigation }) {
           </View>
           <View className='flex-2 flex-row justify-between items-end mb-14 mx-10'>
             <TouchableOpacity
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+              style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
               className='w-40 items-center p-4 rounded-2xl'
               onPress={() => setPhoto(null)}>
               <Ionicons name='trash-outline' size={60} color='#dc2626' />
-              <AppText className='text-center text-2xl text-red-600 font-manrope-bold'>
+              <AppText className='text-center text-xl text-red-600 font-manrope-bold'>
                 Reprendre
               </AppText>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+              style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
               className='w-40 items-center p-4 rounded-2xl'
               onPress={() => {
                 onPhotoTaken(photo.uri);
                 navigation.goBack();
               }}>
               <Ionicons name='checkmark-circle-outline' size={60} color='#22c52e' />
-              <AppText className='text-center text-2xl text-green-500 font-manrope-bold'>
+              <AppText className='text-center text-xl text-green-500 font-manrope-bold'>
                 Utiliser
               </AppText>
             </TouchableOpacity>
           </View>
         </ImageBackground>
-      ) : (
-        <CameraView
+      : <CameraView
           ref={ref => (camRef.current = ref)}
           style={{ flex: 1 }}
           facing={'back'}
@@ -113,7 +112,7 @@ export default function CameraScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </CameraView>
-      )}
+      }
     </View>
   );
 }

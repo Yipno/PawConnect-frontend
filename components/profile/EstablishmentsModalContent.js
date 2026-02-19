@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity, Linking, Image } from 'react-native';
+import {
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  Linking,
+  Image,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import useTheme from '../../hooks/useTheme';
@@ -11,18 +19,18 @@ export default function EstablishmentsModalContent() {
   const establishments = useSelector(state => state.establishments.value);
   const user = useSelector(state => state.user.value);
 
-  const establishmentsToDisplay = (() => {
-    if (user.role === 'agent') {
-      if (!user.establishment) {
-        return []; // agent sans association
-      }
+  // const establishmentsToDisplay = (() => {
+  //   // if (user.role === 'agent') {
+  //     // if (!user.establishment) {
+  //     //   return []; // agent sans association
+  //     // }
 
-      return establishments.filter(e => e._id === user.establishment);
-    }
+  //   //   return establishments.filter(e => e._id === user.establishment);
+  //   // }
 
-    // civil
-    return establishments;
-  })();
+  //   // civil
+  //   return establishments;
+  // })();
 
   return (
     <ScrollView
@@ -37,7 +45,7 @@ export default function EstablishmentsModalContent() {
           {user.role === 'agent' ? 'Mon organisation' : 'Associations'}
         </AppText>
 
-        {user.role === 'agent' && establishmentsToDisplay.length === 0 && (
+        {user.role === 'agent' && establishments.length === 0 && (
           <View className='mt-6 p-4 bg-red-100 rounded'>
             <AppText className='text-center text-red-700 font-bold'>
               Aucune association répertoriée
@@ -48,7 +56,7 @@ export default function EstablishmentsModalContent() {
           </View>
         )}
 
-        {establishmentsToDisplay.map(establishment => (
+        {establishments.map(establishment => (
           <View
             key={establishment._id}
             className='flex-row bg-gray-100 border-b-[1px] border-neutral-300 w-full'>
