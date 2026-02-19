@@ -8,7 +8,7 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
     throw createAppError({
       kind: 'server',
       message: 'Configuration backend manquante.',
-      code: 'MISCONFIGURED_BACKEND',
+      code: 'SERVER_ERROR',
     });
   }
 
@@ -60,7 +60,7 @@ async function requestAnimals(path, { method = 'GET', token, payload } = {}) {
   }
 }
 
-export async function postNewReport(report, token) {
+export async function createReport(report, token) {
   return requestAnimals('/animals', {
     method: 'POST',
     token,

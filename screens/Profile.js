@@ -68,41 +68,25 @@ export default function Profile({ navigation }) {
             alignItems: 'center',
           }}
           keyboardShouldPersistTaps='handled'>
-          <AppText className='text-h2 font-manrope-bold text-deepSage mb-1'>Menu</AppText>
+          <AppText className='text-h2 font-manrope-bold text-deepSage mt-4 mb-1'>Menu</AppText>
           <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
-            {/* <SquaredButton
-          keyboardShouldPersistTaps='handled'
-        >
-          <AppText className='text-h2 font-manrope-bold text-deepSage mt-4 mb-4'>Menu</AppText>
-          <View className='w-11/12 h-full flex-row flex-wrap justify-evenly'>
-           {/* <SquaredButton
-              title={'Mes\nsignalements'}
-              icon='paw'
-              onPress={() =>
-                user.role === 'civil'
-                  ? navigation.navigate('MyReports')
-                  : navigation.navigate('Report')
-              }
-            /> */}
-
             <SquaredButton
               title='Mon profil'
               icon='person'
               onPress={() => setProfileVisible(true)}
             />
-            {user.role === 'civil' ? (
+            {user.role === 'civil' ?
               <SquaredButton
                 title='Associations'
                 icon='people-circle'
                 onPress={() => setEstablishmentsVisible(true)}
               />
-            ) : (
-              <SquaredButton
+            : <SquaredButton
                 title='Mon organisation'
                 icon='business'
                 onPress={() => setEstablishmentsVisible(true)}
               />
-            )}
+            }
 
             <SquaredButton title='FAQ' icon='help-circle' onPress={() => setFaqVisible(true)} />
             <SquaredButton
