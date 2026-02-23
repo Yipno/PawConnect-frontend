@@ -1,15 +1,15 @@
-import { ScrollView, View, TouchableOpacity, FlatList, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Card from '../components/report/Card';
 import { useEffect, useMemo, useState } from 'react';
+import { View, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Location from 'expo-location';
+import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { getReports } from '../reducers/animals';
-import { Ionicons } from '@expo/vector-icons';
-import ReportDetailAgent from '../components/report/ReportDetailAgent';
-import * as Location from 'expo-location';
-import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
-import AppText from '../components/shared/AppText';
 import * as animalAPI from '../api/animals.api';
+import AppText from '../components/shared/AppText';
+import Card from '../components/report/Card';
+import ReportDetailAgent from '../components/report/ReportDetailAgent';
+import { getDistanceBetweenTwoPoints } from '../helpers/getDistance';
 
 export default function Reports() {
   const dispatch = useDispatch();
@@ -21,9 +21,6 @@ export default function Reports() {
   const reports = useSelector(state => state.animals?.value) ?? [];
   const user = useSelector(state => state.user?.value) ?? {};
   const userRole = user?.role ?? null;
-
-  const userId =
-    user?._id || user?.id || user?.userId || user?.uid || user?.user?._id || user?.user?.id || null;
 
   /* -------------------- UI STATES -------------------- */
   const [filtre, setFiltre] = useState(false);

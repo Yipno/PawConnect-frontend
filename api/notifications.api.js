@@ -8,7 +8,7 @@ async function requestNotifications(path, { method = 'GET', token } = {}) {
     throw createAppError({
       kind: 'server',
       message: 'configuration backend manquante.',
-      code: 'MISCONFIGURED_BACKEND',
+      code: 'SERVER_ERROR',
     });
   }
 
